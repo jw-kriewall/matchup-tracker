@@ -9,9 +9,8 @@ export default function SelectTextFields() {
 
     const [playerOneName, setPlayerOneName] = React.useState<string>();
     const [playerTwoName, setPlayerTwoName] = React.useState<string>();
-    const [playerOneDecklist, setPlayerOneDecklist] = React.useState<string>();
-    const [playerTwoDecklist, setPlayerTwoDecklist] = React.useState<string>();
-
+    const [playerOneDecklist, setPlayerOneDecklist] = React.useState<string>("blank");
+    const [playerTwoDecklist, setPlayerTwoDecklist] = React.useState<string>("blank");
     const [playerOneDeckName, setPlayerOneDeckName] = React.useState<string>();
     const [playerTwoDeckName, setPlayerTwoDeckName] = React.useState<string>();
 
@@ -51,6 +50,7 @@ export default function SelectTextFields() {
 			noValidate
 			autoComplete="off"
 		>
+            
 			<div>
 				<TextField
 					id="outlined-multiline-flexible"
