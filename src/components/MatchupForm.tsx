@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
@@ -13,6 +13,16 @@ export default function SelectTextFields() {
     const [playerTwoDecklist, setPlayerTwoDecklist] = React.useState<string>("blank");
     const [playerOneDeckName, setPlayerOneDeckName] = React.useState<string>();
     const [playerTwoDeckName, setPlayerTwoDeckName] = React.useState<string>();
+    const [notes, setNotes] = React.useState<string>("");
+    const [winningDeck, setWinningDeck] = React.useState<string>("");
+
+    const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<string[]>([]);
+
+    const handlePlayerOneDeckChange = (e: any) => {
+        e.preventDefault();
+        setPlayerOneDeckName(e.target.value)
+        setWinningDeckOptionsArray(winningDeckOptionsArray => winningDeckOptionsArray.concat(e.target.value));
+    }
 
 
     const handleSubmit = (e: any) => {
@@ -27,11 +37,11 @@ export default function SelectTextFields() {
             playerTwoDeck: {
                 name: playerTwoDeckName,
                 cards: playerTwoDecklist},
-            winningDeck: "???"
+            winningDeck,
+            notes
         }
         console.log(matchup)
         fetch("http://localhost:8090/matchups/add",{
-
             method: "POST",
             headers: {"Content-Type" : "application/json"},
             body: JSON.stringify(matchup)
@@ -96,14 +106,32 @@ export default function SelectTextFields() {
 				</TextField>
 			</div>
 
-			<div>
+            {/* <div>
+                <TextField
+					id="winning-deck"
+					select
+					label="Winning Deck"
+					defaultValue=""
+                    onChange={(e) => setWinningDeck(e.target.value)}
+				>
+					{winningDeckOptionsArray.map((option) => (
+						<MenuItem key={option} value={option}>
+							{option}
+						</MenuItem>
+					))}
+				</TextField>
+			</div> */}
+
+			<div className="notes-form">
 				<TextField
 					id="outlined-multiline-static"
 					label="Notes"
 					multiline
 					//   fullWidth
-					rows={4}
+					rows={3}
 					defaultValue=""
+                    fullWidth={true}
+                    onChange={(e) => setNotes(e.target.value)}
 				/>
 			</div>
 			<Button variant="outlined" onClick={handleSubmit}>Submit</Button>
