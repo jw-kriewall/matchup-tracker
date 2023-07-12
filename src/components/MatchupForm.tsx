@@ -11,8 +11,8 @@ export default function SelectTextFields() {
     const [playerTwoName, setPlayerTwoName] = React.useState<string>();
     const [playerOneDecklist, setPlayerOneDecklist] = React.useState<string>("blank");
     const [playerTwoDecklist, setPlayerTwoDecklist] = React.useState<string>("blank");
-    const [playerOneDeckName, setPlayerOneDeckName] = React.useState<string>();
-    const [playerTwoDeckName, setPlayerTwoDeckName] = React.useState<string>();
+    const [playerOneDeckName, setPlayerOneDeckName] = React.useState<string>("");
+    const [playerTwoDeckName, setPlayerTwoDeckName] = React.useState<string>("");
     const [notes, setNotes] = React.useState<string>("");
     const [winningDeck, setWinningDeck] = React.useState<string>("");
 
@@ -20,10 +20,20 @@ export default function SelectTextFields() {
 
     const handlePlayerOneDeckChange = (e: any) => {
         e.preventDefault();
-        setPlayerOneDeckName(e.target.value)
-        setWinningDeckOptionsArray(winningDeckOptionsArray => winningDeckOptionsArray.concat(e.target.value));
+        let deckName = e.target.value;
+        setPlayerOneDeckName(deckName)
+        if(!winningDeckOptionsArray.includes(deckName)) {
+            setWinningDeckOptionsArray(winningDeckOptionsArray => winningDeckOptionsArray.concat(deckName));
+        }
     }
-
+    const handlePlayerTwoDeckChange = (e: any) => {
+        e.preventDefault();
+        let deckName = e.target.value;
+        setPlayerTwoDeckName(deckName)
+        if(!winningDeckOptionsArray.includes(deckName)) {
+            setWinningDeckOptionsArray(winningDeckOptionsArray => winningDeckOptionsArray.concat(deckName));
+        }
+    }
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
@@ -82,7 +92,7 @@ export default function SelectTextFields() {
 					select
 					label="Select Deck 1"
 					defaultValue=""
-                    onChange={(e) => setPlayerOneDeckName(e.target.value)}
+                    onChange={(e) => handlePlayerOneDeckChange(e)}
 				>
 					{decks.map((option) => (
 						<MenuItem key={option.value} value={option.value}>
@@ -96,7 +106,7 @@ export default function SelectTextFields() {
 					select
 					label="Select Deck 2"
 					defaultValue=""
-                    onChange={(e) => setPlayerTwoDeckName(e.target.value)}
+                    onChange={(e) => handlePlayerTwoDeckChange(e)}
 				>
 					{decks.map((option) => (
 						<MenuItem key={option.value} value={option.value}>
@@ -106,7 +116,7 @@ export default function SelectTextFields() {
 				</TextField>
 			</div>
 
-            {/* <div>
+            <div>
                 <TextField
 					id="winning-deck"
 					select
@@ -120,7 +130,7 @@ export default function SelectTextFields() {
 						</MenuItem>
 					))}
 				</TextField>
-			</div> */}
+			</div>
 
 			<div className="notes-form">
 				<TextField
