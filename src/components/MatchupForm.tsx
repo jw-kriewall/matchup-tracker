@@ -15,23 +15,29 @@ export default function SelectTextFields() {
     const [playerTwoDeckName, setPlayerTwoDeckName] = React.useState<string>("");
     const [notes, setNotes] = React.useState<string>("");
     const [winningDeck, setWinningDeck] = React.useState<string>("");
-
     const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<string[]>([]);
+
+    // TODO: Starting player
+    // reset notes to blank after submission
 
     const handlePlayerOneDeckChange = (e: any) => {
         e.preventDefault();
         let deckName = e.target.value;
         setPlayerOneDeckName(deckName)
-        if(!winningDeckOptionsArray.includes(deckName)) {
-            setWinningDeckOptionsArray(winningDeckOptionsArray => winningDeckOptionsArray.concat(deckName));
+        if(deckName === playerTwoDeckName) {
+            setWinningDeckOptionsArray([deckName]);
+        } else {
+            setWinningDeckOptionsArray([deckName, playerTwoDeckName])
         }
     }
     const handlePlayerTwoDeckChange = (e: any) => {
         e.preventDefault();
         let deckName = e.target.value;
-        setPlayerTwoDeckName(deckName)
-        if(!winningDeckOptionsArray.includes(deckName)) {
-            setWinningDeckOptionsArray(winningDeckOptionsArray => winningDeckOptionsArray.concat(deckName));
+        setPlayerTwoDeckName(deckName);
+        if(deckName === playerOneDeckName) {
+            setWinningDeckOptionsArray([deckName]);
+        } else {
+            setWinningDeckOptionsArray([playerOneDeckName, deckName])
         }
     }
 
@@ -54,10 +60,10 @@ export default function SelectTextFields() {
         fetch("http://localhost:8090/matchups/add",{
             method: "POST",
             headers: {"Content-Type" : "application/json"},
-            body: JSON.stringify(matchup)
-        
+            body: JSON.stringify(matchup)   
     }).then(() => {
         console.log("Matchup Added : " + JSON.stringify(matchup))
+        setNotes("")
     })
 }
 
