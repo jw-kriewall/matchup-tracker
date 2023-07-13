@@ -5,28 +5,9 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import axios from 'axios';
+import { Matchup } from '../types/Matchup';
 
-
-
-type Matchup = {
-  id: number,
-  playerOneName: string,
-  playerOneDeck: {
-            name: string,
-            cards: string
-        },
-        playerTwoName: string,
-        playerTwoDeck: {
-            name: string,
-            cards: string
-        },
-        startingPlayer: string,
-      winningDeck: string,
-        format: string,
-        notes: string
-}
-
-export default function ControlledAccordions(props: any) {
+export default function ControlledAccordions() {
   const [expanded, setExpanded] = React.useState<string | false>(false);
   const [matchupArray, setMatchupArray] = React.useState<Matchup[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -60,15 +41,21 @@ export default function ControlledAccordions(props: any) {
         }
         loadMatchups();
     }, [])
+
+    //@TODO: When I submit a matchup, it must populate on the screen
     
 
   return (
     <div className="matchup-accordion">
 
-      {
-        (matchupArray.map((matchup) => 
-        <h1>{matchup.playerOneDeck.name} VS {matchup.playerTwoDeck.name}</h1>))
-      }
+      {loading ? <h3>LOADING...</h3> :
+        (matchupArray.reverse().map((matchup, index) => 
+        // <div>
+        //   <h4>{matchup.playerOneDeck.name} VS {matchup.playerTwoDeck.name}</h4>
+        //   <h3>Winning Deck: {matchup.winningDeck}</h3>
+        // </div>
+      //   ))
+      // }
 
       <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
         <AccordionSummary
@@ -77,43 +64,23 @@ export default function ControlledAccordions(props: any) {
           id="panel1bh-header"
         >
           <Typography sx={{ width: '33%', flexShrink: 0 }}>
-            Game # 
-            {/* Array of games, display array # */}
+            Game # {index + 1}
           </Typography>
           <Typography sx={{ color: 'text.secondary' }}>
-            Matchup winner: {props.winningDeck}
+            {matchup.playerOneDeck.name} VS {matchup.playerTwoDeck.name} <b>Winner: </b> {matchup.winningDeck}
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat.
-            Aliquam eget maximus est, id dignissim quam.
+            <b>Starting Player: </b>{matchup.startingPlayer}
           </Typography>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2bh-content"
-          id="panel2bh-header"
-        >
-          <Typography sx={{ width: '33%', flexShrink: 0 }}>
-            Game 
-            </Typography>
-          <Typography sx={{ color: 'text.secondary' }}>
-            Matchup winner: {props.winningDeck}
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
           <Typography>
-            Donec placerat, lectus sed mattis semper, neque lectus feugiat lectus,
-            varius pulvinar diam eros in elit. Pellentesque convallis laoreet
-            laoreet.
+            <b>Notes: </b>{matchup.notes}
           </Typography>
         </AccordionDetails>
-
-      
       </Accordion>
+      ))
+      }
     </div>
   );
 }

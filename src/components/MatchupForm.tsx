@@ -8,65 +8,67 @@ import AccordionMatchup from './AccordionMatchup'
 
 export default function SelectTextFields() {
 
-    const [playerOneName, setPlayerOneName] = React.useState<string>();
-    const [playerTwoName, setPlayerTwoName] = React.useState<string>();
-    const [playerOneDecklist, setPlayerOneDecklist] = React.useState<string>("blank");
-    const [playerTwoDecklist, setPlayerTwoDecklist] = React.useState<string>("blank");
-    const [playerOneDeckName, setPlayerOneDeckName] = React.useState<string>("");
-    const [playerTwoDeckName, setPlayerTwoDeckName] = React.useState<string>("");
-    const [notes, setNotes] = React.useState<string>("");
-    const [winningDeck, setWinningDeck] = React.useState<string>("");
-    const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<string[]>([]);
+	const [playerOneName, setPlayerOneName] = React.useState<string>();
+	const [playerTwoName, setPlayerTwoName] = React.useState<string>();
+	const [playerOneDecklist, setPlayerOneDecklist] = React.useState<string>("blank");
+	const [playerTwoDecklist, setPlayerTwoDecklist] = React.useState<string>("blank");
+	const [playerOneDeckName, setPlayerOneDeckName] = React.useState<string>("");
+	const [playerTwoDeckName, setPlayerTwoDeckName] = React.useState<string>("");
+	const [notes, setNotes] = React.useState<string>("");
+	const [winningDeck, setWinningDeck] = React.useState<string>("");
+	const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<string[]>([]);
 
-    // TODO: Starting player
-    // reset notes to blank after submission
+	// TODO: Starting player
+	// reset notes to blank after submission
 
-    const handlePlayerOneDeckChange = (e: any) => {
-        e.preventDefault();
-        let deckName = e.target.value;
-        setPlayerOneDeckName(deckName)
-        if(deckName === playerTwoDeckName) {
-            setWinningDeckOptionsArray([deckName]);
-        } else {
-            setWinningDeckOptionsArray([deckName, playerTwoDeckName])
-        }
-    }
-    const handlePlayerTwoDeckChange = (e: any) => {
-        e.preventDefault();
-        let deckName = e.target.value;
-        setPlayerTwoDeckName(deckName);
-        if(deckName === playerOneDeckName) {
-            setWinningDeckOptionsArray([deckName]);
-        } else {
-            setWinningDeckOptionsArray([playerOneDeckName, deckName])
-        }
-    }
+	const handlePlayerOneDeckChange = (e: any) => {
+		e.preventDefault();
+		let deckName = e.target.value;
+		setPlayerOneDeckName(deckName)
+		if (deckName === playerTwoDeckName) {
+			setWinningDeckOptionsArray([deckName]);
+		} else {
+			setWinningDeckOptionsArray([deckName, playerTwoDeckName])
+		}
+	}
+	const handlePlayerTwoDeckChange = (e: any) => {
+		e.preventDefault();
+		let deckName = e.target.value;
+		setPlayerTwoDeckName(deckName);
+		if (deckName === playerOneDeckName) {
+			setWinningDeckOptionsArray([deckName]);
+		} else {
+			setWinningDeckOptionsArray([playerOneDeckName, deckName])
+		}
+	}
 
-    const handleSubmit = (e: any) => {
-        e.preventDefault();
-        const matchup = {
-            // matchup schema goes here...
-            playerOneName,
-            playerOneDeck: {
-                name: playerOneDeckName,
-                cards: playerOneDecklist},
-            playerTwoName,
-            playerTwoDeck: {
-                name: playerTwoDeckName,
-                cards: playerTwoDecklist},
-            winningDeck,
-            notes
-        }
-        console.log(matchup)
-        fetch("http://localhost:8090/matchups/add",{
-            method: "POST",
-            headers: {"Content-Type" : "application/json"},
-            body: JSON.stringify(matchup)   
-    }).then(() => {
-        console.log("Matchup Added : " + JSON.stringify(matchup))
-        setNotes("")
-    })
-}
+	const handleSubmit = (e: any) => {
+		e.preventDefault();
+		const matchup = {
+			// matchup schema goes here...
+			playerOneName,
+			playerOneDeck: {
+				name: playerOneDeckName,
+				cards: playerOneDecklist
+			},
+			playerTwoName,
+			playerTwoDeck: {
+				name: playerTwoDeckName,
+				cards: playerTwoDecklist
+			},
+			winningDeck,
+			notes
+		}
+		console.log(matchup)
+		fetch("http://localhost:8090/matchups/add", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(matchup)
+		}).then(() => {
+			console.log("Matchup Added : " + JSON.stringify(matchup))
+			setNotes("")
+		})
+	}
 
 	return (
 		<Box
@@ -77,19 +79,19 @@ export default function SelectTextFields() {
 			noValidate
 			autoComplete="off"
 		>
-            
+
 			<div>
 				<TextField
 					id="outlined-multiline-flexible"
 					label="Player One"
 					multiline
-                    onChange={(e) => setPlayerOneName(e.target.value)}
+					onChange={(e) => setPlayerOneName(e.target.value)}
 				/>
 				<TextField
 					id="outlined-textarea"
 					label="Player Two"
 					multiline
-                    onChange={(e) => setPlayerTwoName(e.target.value)}
+					onChange={(e) => setPlayerTwoName(e.target.value)}
 				/>
 			</div>
 
@@ -99,7 +101,7 @@ export default function SelectTextFields() {
 					select
 					label="Select Deck 1"
 					defaultValue=""
-                    onChange={(e) => handlePlayerOneDeckChange(e)}
+					onChange={(e) => handlePlayerOneDeckChange(e)}
 				>
 					{decks.map((option) => (
 						<MenuItem key={option.value} value={option.value}>
@@ -107,13 +109,13 @@ export default function SelectTextFields() {
 						</MenuItem>
 					))}
 				</TextField>
-				
+
 				<TextField
 					id="outlined-deck-two"
 					select
 					label="Select Deck 2"
 					defaultValue=""
-                    onChange={(e) => handlePlayerTwoDeckChange(e)}
+					onChange={(e) => handlePlayerTwoDeckChange(e)}
 				>
 					{decks.map((option) => (
 						<MenuItem key={option.value} value={option.value}>
@@ -123,13 +125,13 @@ export default function SelectTextFields() {
 				</TextField>
 			</div>
 
-            <div>
-                <TextField
+			<div>
+				<TextField
 					id="winning-deck"
 					select
 					label="Winning Deck"
 					defaultValue=""
-                    onChange={(e) => setWinningDeck(e.target.value)}
+					onChange={(e) => setWinningDeck(e.target.value)}
 				>
 					{winningDeckOptionsArray.map((option) => (
 						<MenuItem key={option} value={option}>
@@ -147,15 +149,15 @@ export default function SelectTextFields() {
 					//   fullWidth
 					rows={3}
 					defaultValue=""
-                    fullWidth={true}
-                    onChange={(e) => setNotes(e.target.value)}
+					fullWidth={true}
+					onChange={(e) => setNotes(e.target.value)}
 				/>
 			</div>
 			<Button variant="outlined" onClick={handleSubmit}>Submit</Button>
-            <div className="accordion-matchup-component">
-                {/* show last 10 matchups with option to show all in second screen. Linked to which user created it */}
-                <AccordionMatchup />
-            </div>
+			<div className="accordion-matchup-component">
+				{/* show last 10 matchups with option to show all in second screen. Linked to which user created it */}
+				<AccordionMatchup />
+			</div>
 		</Box>
 	);
 }
