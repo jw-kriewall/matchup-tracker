@@ -4,6 +4,7 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import { decks } from "../constants/decks";
 import Button from "@mui/material/Button";
+import AccordionMatchup from './AccordionMatchup'
 
 export default function SelectTextFields() {
 
@@ -151,6 +152,10 @@ export default function SelectTextFields() {
 				/>
 			</div>
 			<Button variant="outlined" onClick={handleSubmit}>Submit</Button>
+            <div className="accordion-matchup-component">
+                {/* show last 10 matchups with option to show all in second screen. Linked to which user created it */}
+                <AccordionMatchup />
+            </div>
 		</Box>
 	);
 }
