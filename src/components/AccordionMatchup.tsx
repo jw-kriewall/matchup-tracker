@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import axios from "axios";
 import { Matchup } from "../types/Matchup";
+import Button from '@mui/material/Button';
 
 export default function ControlledAccordions() {
 	const [expanded, setExpanded] = React.useState<string | false>(false);
@@ -16,6 +17,21 @@ export default function ControlledAccordions() {
 		(panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
 			setExpanded(isExpanded ? panel : false);
 		};
+
+	// const deleteMatchup = (e: any) => {
+	// 	return axios.delete("http://localhost:8090/matchups/delete/" , {
+	// 		headers: {
+	// 			"Content-Type": "application/json",
+	// 		}
+	// 	})
+	// 	.then(res => { console.log("Deletion Response: " + res); return res })
+	// 	.catch(err => { console.log(err); return err })
+	// }
+
+	const deleteMatchup = (matchup: Matchup) => () =>{
+		axios.delete("http://localhost:8090/matchups/delete/" + matchup.id)
+		console.log("Deletion successful")
+	}
 
 	React.useEffect(() => {
 		const loadMatchups = async () => {
@@ -69,6 +85,8 @@ export default function ControlledAccordions() {
 								<b>Notes: </b>
 								{matchup.notes}
 							</Typography>
+							<Button variant="outlined" color="error" 
+								onClick={deleteMatchup(matchup)}>DELETE</Button>
 						</AccordionDetails>
 					</Accordion>
 				))

@@ -8,11 +8,12 @@ import Button from "@mui/material/Button";
 import AccordionMatchup from './AccordionMatchup'
 import { userInfo } from "os";
 import { v4 as uuidv4 } from 'uuid';
+import { Matchup } from "../types/Matchup";
 
 export default function SelectTextFields() {
 
-	const [playerOneName, setPlayerOneName] = React.useState<string>();
-	const [playerTwoName, setPlayerTwoName] = React.useState<string>();
+	const [playerOneName, setPlayerOneName] = React.useState<string>("");
+	const [playerTwoName, setPlayerTwoName] = React.useState<string>("");
 	const [playerOneDeckName, setPlayerOneDeckName] = React.useState<string>("");
 	const [playerTwoDeckName, setPlayerTwoDeckName] = React.useState<string>("");
 	const [playerOneDecklist, setPlayerOneDecklist] = React.useState<string>("blank");
@@ -54,12 +55,18 @@ export default function SelectTextFields() {
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
 
-		let now = ""
+		let now = new Date();
 		let username = "empty"
 		let name = "dummy name"
+		let id = 123
+		let email = "sample@gmail.com"
+		let role = "basic"
 
-		const matchup = {
+		// todo - maybe a getCurrentUser method? Pass results into Matchup.
+
+		const matchup: Matchup = {
 			// matchup schema goes here...
+			id: id,
 			playerOneName,
 			playerOneDeck: {
 				name: playerOneDeckName,
@@ -76,14 +83,14 @@ export default function SelectTextFields() {
 			createdOn: now,
 			createdBy: {
 				username: username,
-				name: name,
-				accountCreatedOn: ""},
+				role: role,
+				email: email
+			},
 			notes
 		}
-	// 	private String username;
-    // private String name;
-    // private Date accountCreatedOn;
+
 		console.log(matchup)
+
 		fetch("http://localhost:8090/matchups/add", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
