@@ -21,7 +21,10 @@ export default function ControlledAccordions() {
 		const loadMatchups = async () => {
 			setLoading(true);
 
-			const response = await axios.get("http://localhost:8090/matchups/getAll");
+			const response = await axios({
+        url:"http://localhost:8090/matchups/getAll",
+        method: "GET",
+        withCredentials: false,});
 			setMatchupArray(response.data);
 
 			console.log(response.data);
