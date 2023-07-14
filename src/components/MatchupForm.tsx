@@ -3,19 +3,28 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import { decks } from "../constants/decks";
+import { formats } from "../constants/formats"
 import Button from "@mui/material/Button";
 import AccordionMatchup from './AccordionMatchup'
+import { userInfo } from "os";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function SelectTextFields() {
 
 	const [playerOneName, setPlayerOneName] = React.useState<string>();
 	const [playerTwoName, setPlayerTwoName] = React.useState<string>();
-	const [playerOneDecklist, setPlayerOneDecklist] = React.useState<string>("blank");
-	const [playerTwoDecklist, setPlayerTwoDecklist] = React.useState<string>("blank");
 	const [playerOneDeckName, setPlayerOneDeckName] = React.useState<string>("");
 	const [playerTwoDeckName, setPlayerTwoDeckName] = React.useState<string>("");
-	const [notes, setNotes] = React.useState<string>("");
+	const [playerOneDecklist, setPlayerOneDecklist] = React.useState<string>("blank");
+	const [playerTwoDecklist, setPlayerTwoDecklist] = React.useState<string>("blank");
+	
+	const [startingPlayer, setStartingPlayer] = React.useState<string>("");
 	const [winningDeck, setWinningDeck] = React.useState<string>("");
+	const [format, setFormat] = React.useState<string>("");
+	const [notes, setNotes] = React.useState<string>("");
+
+	
+
 	const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<string[]>([]);
 
 	// TODO: Starting player
@@ -44,6 +53,11 @@ export default function SelectTextFields() {
 
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
+
+		let now = ""
+		let username = "empty"
+		let name = "dummy name"
+
 		const matchup = {
 			// matchup schema goes here...
 			playerOneName,
@@ -56,9 +70,19 @@ export default function SelectTextFields() {
 				name: playerTwoDeckName,
 				cards: playerTwoDecklist
 			},
+			startingPlayer,
 			winningDeck,
+			format,
+			createdOn: now,
+			createdBy: {
+				username: username,
+				name: name,
+				accountCreatedOn: ""},
 			notes
 		}
+	// 	private String username;
+    // private String name;
+    // private Date accountCreatedOn;
 		console.log(matchup)
 		fetch("http://localhost:8090/matchups/add", {
 			method: "POST",
