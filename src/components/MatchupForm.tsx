@@ -43,11 +43,11 @@ export default function SelectTextFields() {
 		setPlayerTwoDeckName(deckName);
 		determineWinningDeckOptions(deckName, playerOneDeckName);
 	}
+	
 
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
 
-		let now = new Date();
 		let username = "empty"
 		let name = "dummy name"
 		let id = 123
@@ -72,7 +72,7 @@ export default function SelectTextFields() {
 			startingPlayer,
 			winningDeck,
 			format,
-			createdOn: now,
+			createdOn: new Date(),
 			createdBy: {
 				username: username,
 				role: role,
@@ -102,8 +102,13 @@ export default function SelectTextFields() {
 			noValidate
 			autoComplete="off"
 		>
+			<div className="first-player-buttons">
+				{/* <Button variant="outlined">{playerOneName}</Button> */}
+				{}
+			</div>
 
 			<div>
+				
 				<TextField
 					id="outlined-multiline-flexible"
 					label="Player One"
