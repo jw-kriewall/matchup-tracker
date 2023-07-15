@@ -35,21 +35,13 @@ export default function SelectTextFields() {
 		e.preventDefault();
 		let deckName = e.target.value;
 		setPlayerOneDeckName(deckName)
-		if (deckName === playerTwoDeckName) {
-			setWinningDeckOptionsArray([deckName]);
-		} else {
-			setWinningDeckOptionsArray([deckName, playerTwoDeckName])
-		}
+		determineWinningDeckOptions(deckName, playerTwoDeckName);
 	}
 	const handlePlayerTwoDeckChange = (e: any) => {
 		e.preventDefault();
 		let deckName = e.target.value;
 		setPlayerTwoDeckName(deckName);
-		if (deckName === playerOneDeckName) {
-			setWinningDeckOptionsArray([deckName]);
-		} else {
-			setWinningDeckOptionsArray([playerOneDeckName, deckName])
-		}
+		determineWinningDeckOptions(deckName, playerOneDeckName);
 	}
 
 	const handleSubmit = (e: any) => {
@@ -191,4 +183,12 @@ export default function SelectTextFields() {
 			</div>
 		</Box>
 	);
+
+	function determineWinningDeckOptions(deckName: any, playerDeckName: any) {
+		if (deckName === playerDeckName) {
+			setWinningDeckOptionsArray([deckName]);
+		} else {
+			setWinningDeckOptionsArray([playerDeckName, deckName]);
+		}
+	}
 }
