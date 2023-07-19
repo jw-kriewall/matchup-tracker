@@ -57,7 +57,7 @@ export default function ControlledAccordions() {
 			{loading ? (
 				<h3>LOADING...</h3>
 			) : (
-				matchupArray.reverse().map((matchup, index) => (
+				matchupArray.map((matchup, index) => (
 					<Accordion
             key={index}
 						expanded={expanded === "panel" + index}
@@ -69,7 +69,7 @@ export default function ControlledAccordions() {
 							id="panel1bh-header"
 						>
 							<Typography sx={{ width: "33%", flexShrink: 0 }}>
-								Game {index + 1}
+								Game {matchupArray.length - index}
 							</Typography>
 							<Typography sx={{ color: "text.secondary" }}>
 								{matchup.playerOneDeck.name} VS {matchup.playerTwoDeck.name}{" "}
