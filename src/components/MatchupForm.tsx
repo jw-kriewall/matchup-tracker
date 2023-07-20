@@ -9,6 +9,7 @@ import AccordionMatchup from './AccordionMatchup'
 import { userInfo } from "os";
 import { v4 as uuidv4 } from 'uuid';
 import { Matchup } from "../types/Matchup";
+import Checkbox from '@mui/material/Checkbox';
 
 export default function SelectTextFields() {
 
@@ -42,6 +43,11 @@ export default function SelectTextFields() {
 		let deckName = e.target.value;
 		setPlayerTwoDeckName(deckName);
 		determineWinningDeckOptions(deckName, playerOneDeckName);
+	}
+	const handleStartingPlayerCheckbox = (e: any) => {
+		let player = e.target.checked
+		console.log(player)
+		setStartingPlayer(player)
 	}
 	
 
@@ -108,7 +114,7 @@ export default function SelectTextFields() {
 			</div>
 
 			<div>
-				
+				<Checkbox onChange={(e) => handleStartingPlayerCheckbox(e.target.checked)}/>
 				<TextField
 					id="outlined-multiline-flexible"
 					label="Player One"
@@ -121,6 +127,7 @@ export default function SelectTextFields() {
 					multiline
 					onChange={(e) => setPlayerTwoName(e.target.value)}
 				/>
+				<Checkbox/>
 			</div>
 
 			<div>
