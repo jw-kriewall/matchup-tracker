@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import NavBar from './components/NavBar';
 import MatchupForm from './components/MatchupForm';
+import LoginPage from './components/login/LoginPage';
 
 function App() {
   return (
