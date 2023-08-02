@@ -3,10 +3,16 @@ import './App.css';
 import NavBar from './components/NavBar';
 import MatchupForm from './components/MatchupForm';
 import LoginPage from './components/login/LoginPage';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
+const clientId = "946171427391-9q1lkna1ibpgq49g2fivl8m2edg6304a.apps.googleusercontent.com";
 
 function App() {
+
   return (
     <>
+    <GoogleOAuthProvider clientId={clientId}>
+
       <div className="App">
         <div className="navigation">
           <NavBar />
@@ -16,6 +22,8 @@ function App() {
           <MatchupForm />
         </div>
       </div>
+      
+    </GoogleOAuthProvider>
     </>
   );
 }
