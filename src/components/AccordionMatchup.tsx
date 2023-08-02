@@ -37,17 +37,30 @@ export default function ControlledAccordions() {
 		const loadMatchups = async () => {
 			setLoading(true);
 
+			// if(localStorage.getItem("user") !== undefined) {
+				
+			// }
 			const response = await axios({
-        url:"http://localhost:8090/matchups/getAll",
-        method: "GET",
-        withCredentials: false,});
-			setMatchupArray(response.data);
+				url:"http://localhost:8090/matchups/getAll",
+				method: "GET",
+				withCredentials: false,});
+					setMatchupArray(response.data);
 
-			console.log(response.data);
-
-			setLoading(false);
-		};
-		loadMatchups();
+					console.log(response.data);
+					console.log("From Get request" + localStorage.getItem("user"))
+				};
+				// if(1+2 === 3) {
+				// 	setLoading(false);
+				// 	loadMatchups();
+				// } else {
+				// 	setLoading(true);
+				// }
+				if(localStorage.getItem("user") ) {
+					console.log("From localStorage Conditional")
+					loadMatchups();
+					setLoading(false);
+				}
+		
 	}, []);
 
 	//@TODO: When I submit a matchup, it must populate immediately on the screen

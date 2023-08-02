@@ -17,6 +17,7 @@ import { useSelector, useDispatch, useStore } from 'react-redux';
 import { useState } from 'react';
 import { loginAction, logoutAction } from '../../actions/userActions';
 import { RootState, store } from "../../store";
+import LoginButton from "./Login";
 
 function Copyright(props: any) {
 	return (
@@ -70,7 +71,7 @@ export default function SignIn() {
 				<Typography component="h1" variant="h5">
 					Sign in
 				</Typography>
-				<Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+				{/* <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
 					<TextField
 						margin="normal"
 						required
@@ -102,8 +103,9 @@ export default function SignIn() {
 						sx={{ mt: 3, mb: 2 }}
 					>
 						Sign In
-					</Button>
-					<GoogleLogin
+					</Button> */}
+          <LoginButton/>
+					{/* <GoogleLogin
               // clientId={clientId}
 						  onSuccess={(credentialResponse) => {
               setIsUserLoggedIn(true);
@@ -112,7 +114,7 @@ export default function SignIn() {
 						onError={() => {
 							console.log("Login Failed");
 						}}
-					/>
+					/> */}
 					
 					<Grid container>
 						<Grid item xs>
@@ -127,7 +129,7 @@ export default function SignIn() {
 						</Grid>
 					</Grid>
 				</Box>
-			</Box>
+			{/* </Box> */}
 			<Copyright sx={{ mt: 8, mb: 4 }} />
 		</Container>
 	);
