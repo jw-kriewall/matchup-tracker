@@ -17,7 +17,7 @@ import { useSelector, useDispatch, useStore } from 'react-redux';
 import { useState } from 'react';
 import { loginAction, logoutAction } from '../../actions/userActions';
 import { RootState, store } from "../../store";
-import LoginButton from "./Login";
+import LoginButton from "./LoginButton";
 
 function Copyright(props: any) {
 	return (
@@ -116,7 +116,7 @@ export default function SignIn() {
 						}}
 					/> */}
 					
-					<Grid container>
+					{/* <Grid container>
 						<Grid item xs>
 							<Link href="#" variant="body2">
 								Forgot password?
@@ -127,7 +127,7 @@ export default function SignIn() {
 								{"Don't have an account? Sign Up"}
 							</Link>
 						</Grid>
-					</Grid>
+					</Grid> */}
 				</Box>
 			{/* </Box> */}
 			<Copyright sx={{ mt: 8, mb: 4 }} />
