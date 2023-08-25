@@ -44,14 +44,6 @@ export default function ControlledAccordions() {
 			}
 		const loadMatchups = async () => {
 			setLoading(true);
-			// let token = "";
-
-			// if(localStorage.getItem("user") !== null) {
-				
-			// 	let user: User = JSON.parse(localStorage.getItem("user")!)
-			// 	token = user.credential
-			// }
-
 
 			const response = await axios({
 				url:"http://localhost:8090/matchups/getAll",

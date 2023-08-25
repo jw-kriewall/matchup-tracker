@@ -1,5 +1,5 @@
 export type Matchup = {
-	id: number,
+	id: number | undefined,
 	playerOneName: string;
 	playerOneDeck: Deck;
 	playerTwoName: string;

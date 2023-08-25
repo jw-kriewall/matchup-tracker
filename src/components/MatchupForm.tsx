@@ -57,31 +57,26 @@ export default function SelectTextFields() {
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
 
-		let oauth: OAuth2Response = JSON.parse(localStorage.getItem("user")!)
-		let token = oauth.credential
+		let role = "basic"
+		let username = ''
 		let email = ''
 
+		let oauth: OAuth2Response = JSON.parse(localStorage.getItem("user")!)
+		let token = oauth.credential
+		
 		if(token) {
-
 			try {
 				const decodedToken: DecodedJwtToken = jwt_decode(token);
-				email = decodedToken.email;
+				email = decodedToken.email
+				username = decodedToken.name
 			} catch (error) {
 				console.error('Error decoding JWT: ', error);
 			}
 		}
 
-		let username = "empty"
-		let name = "dummy name"
-		let id = 123
-		// let email = "sample@gmail.com"
-		let role = "basic"
-
-		// todo - maybe a getCurrentUser method? Pass results into Matchup.
-
 		const matchup: Matchup = {
 			// matchup schema goes here...
-			id: id,
+			id: undefined,
 			playerOneName,
 			playerOneDeck: {
 				name: playerOneDeckName,
