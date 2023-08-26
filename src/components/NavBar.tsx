@@ -26,6 +26,11 @@ export default function NavBar() {
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
 
+	const handleLogout = () => {
+		if(localStorage.getItem("user")) {
+			localStorage.removeItem("user");
+		}
+	}
 	
 
 	return (
@@ -45,9 +50,20 @@ export default function NavBar() {
 						<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
 							MatchupTracker v1.0
 						</Typography>
-						<Button color="inherit" onClick={handleOpen}>
-							Login
-						</Button>
+
+						<div>
+
+						{ localStorage.getItem("user") == null ? (		
+							<Button color="inherit" onClick={handleOpen}>
+								Login
+							</Button>
+							) : 
+							<Button color="inherit" onClick={() => localStorage.removeItem("user")}>
+								Logout
+							</Button>
+						}
+						</div>
+						
 					</Toolbar>
 				</AppBar>
 			</Box>

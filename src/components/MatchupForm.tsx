@@ -10,6 +10,9 @@ import { userInfo } from "os";
 import { v4 as uuidv4 } from 'uuid';
 import { Matchup } from "../types/Matchup";
 import Checkbox from '@mui/material/Checkbox';
+import { OAuth2Response } from "../types/OAuth2Response";
+import jwt_decode from 'jwt-decode';
+import { DecodedJwtToken } from "../types/DecodedJwtToken";
 
 export default function SelectTextFields() {
 
@@ -54,17 +57,26 @@ export default function SelectTextFields() {
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
 
-		let username = "empty"
-		let name = "dummy name"
-		let id = 123
-		let email = "sample@gmail.com"
 		let role = "basic"
+		let username = ''
+		let email = ''
 
-		// todo - maybe a getCurrentUser method? Pass results into Matchup.
+		let oauth: OAuth2Response = JSON.parse(localStorage.getItem("user")!)
+		let token = oauth.credential
+		
+		if(token) {
+			try {
+				const decodedToken: DecodedJwtToken = jwt_decode(token);
+				email = decodedToken.email
+				username = decodedToken.name
+			} catch (error) {
+				console.error('Error decoding JWT: ', error);
+			}
+		}
 
 		const matchup: Matchup = {
 			// matchup schema goes here...
-			id: id,
+			id: undefined,
 			playerOneName,
 			playerOneDeck: {
 				name: playerOneDeckName,
