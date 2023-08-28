@@ -13,8 +13,12 @@ import Checkbox from '@mui/material/Checkbox';
 import { OAuth2Response } from "../types/OAuth2Response";
 import jwt_decode from 'jwt-decode';
 import { DecodedJwtToken } from "../types/DecodedJwtToken";
+import { useDispatch, useStore } from 'react-redux'
+import matchupFeedSlice from "../redux/MatchupFeedSlice";
 
-export default function SelectTextFields() {
+export default function MatchupForm() {
+
+	const store = useStore();
 
 	const [playerOneName, setPlayerOneName] = React.useState<string>("");
 	const [playerTwoName, setPlayerTwoName] = React.useState<string>("");
@@ -28,9 +32,12 @@ export default function SelectTextFields() {
 	const [format, setFormat] = React.useState<string>("");
 	const [notes, setNotes] = React.useState<string>("");
 
-	
-
 	const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<string[]>([]);
+
+	const [matchupData, setMatchupData] = React.useState<Matchup[]>([]);
+
+	const { addToMatchups } = matchupFeedSlice.actions
+	const dispatch = useDispatch();
 
 	// TODO: Starting player
 	// reset notes to blank after submission
@@ -107,7 +114,10 @@ export default function SelectTextFields() {
 			body: JSON.stringify(matchup)
 		}).then(() => {
 			console.log("Matchup Added : " + JSON.stringify(matchup))
+			console.log(store)
 			setNotes("")
+		}).catch((error) => {
+			console.log(error)
 		})
 	}
 

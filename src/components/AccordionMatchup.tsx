@@ -36,9 +36,7 @@ export default function ControlledAccordions() {
 
 	React.useEffect(() => {
 		let token = "";
-
 			if(localStorage.getItem("user")) {
-				
 				let oauth: OAuth2Response = JSON.parse(localStorage.getItem("user")!)
 				token = oauth.credential
 			}
@@ -56,9 +54,16 @@ export default function ControlledAccordions() {
 				
 				// withCredentials: true,
 			});
-					setMatchupArray(response.data);
-
-					console.log(response.data);
+					// convert to matchup array which contains list of Matchups
+					// const matchups = response.data.map(data => {
+					// 	return new Matchup(data.)
+					// })
+					const matchupData = response.data
+					setMatchupArray(matchupData);
+					console.log("Response:")
+					console.log(matchupData);
+					console.log("Matchup array " )
+					console.log(matchupArray)
 					console.log("From Get request" + localStorage.getItem("user"))
 				};
 				
