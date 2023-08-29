@@ -15,6 +15,10 @@ import jwt_decode from 'jwt-decode';
 import { DecodedJwtToken } from "../types/DecodedJwtToken";
 import { useDispatch, useStore } from 'react-redux'
 import matchupFeedSlice from "../redux/MatchupFeedSlice";
+import { addNewMatchup } from "../apiCalls/addMatchup";
+import { useAppDispatch } from "../hooks/hooks";
+import { match } from "assert";
+import { AppDispatch } from "../data/store";
 
 export default function MatchupForm() {
 
@@ -37,7 +41,7 @@ export default function MatchupForm() {
 	const [matchupData, setMatchupData] = React.useState<Matchup[]>([]);
 
 	const { addToMatchups } = matchupFeedSlice.actions
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<AppDispatch>();
 
 	// TODO: Starting player
 	// reset notes to blank after submission
@@ -61,7 +65,7 @@ export default function MatchupForm() {
 	}
 	
 
-	const handleSubmit = (e: any) => {
+	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 
 		let role = "basic"
@@ -108,17 +112,8 @@ export default function MatchupForm() {
 
 		console.log(matchup)
 
-		fetch("http://localhost:8090/matchups/add", {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify(matchup)
-		}).then(() => {
-			console.log("Matchup Added : " + JSON.stringify(matchup))
-			console.log(store)
-			setNotes("")
-		}).catch((error) => {
-			console.log(error)
-		})
+		dispatch(addNewMatchup(matchup));
+		setNotes("")
 	}
 
 	return (

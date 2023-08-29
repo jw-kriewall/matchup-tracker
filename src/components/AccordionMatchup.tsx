@@ -19,16 +19,6 @@ export default function ControlledAccordions() {
 			setExpanded(isExpanded ? panel : false);
 		};
 
-	// const deleteMatchup = (e: any) => {
-	// 	return axios.delete("http://localhost:8090/matchups/delete/" , {
-	// 		headers: {
-	// 			"Content-Type": "application/json",
-	// 		}
-	// 	})
-	// 	.then(res => { console.log("Deletion Response: " + res); return res })
-	// 	.catch(err => { console.log(err); return err })
-	// }
-
 	const deleteMatchup = (matchup: Matchup) => () =>{
 		axios.delete("http://localhost:8090/matchups/delete/" + matchup.id)
 		console.log("Deletion successful")
