@@ -11,6 +11,7 @@ import { OAuth2Response } from "../types/OAuth2Response";
 import { useAppSelector } from "../hooks/hooks";
 import { getMatchups } from "../apiCalls/getMatchups";
 import { store } from "../data/store";
+import { deleteSingleMatchup } from "../apiCalls/deleteMatchup";
 
 export default function ControlledAccordions() {
 
@@ -27,54 +28,31 @@ export default function ControlledAccordions() {
 			setExpanded(isExpanded ? panel : false);
 	};
 
-	const deleteMatchup = (matchup: Matchup) => () =>{
-		axios.delete("http://localhost:8090/matchups/delete/" + matchup.id)
-		console.log("Deletion successful")
+	const deleteMatchup = (matchup: Matchup) => () => {
+		let token = ''
+		if (user) {
+			axios.delete("http://localhost:8090/matchups/delete/" + matchup.id)
+			console.log("Deletion successful")
+			// deleteSingleMatchup(matchup)
+		}
+		let oauth: OAuth2Response = JSON.parse(localStorage.getItem("user")!)
+			token = oauth.credential
+			store.dispatch(getMatchups(token))
 	}
 
 	const getMatchupsIfAuthorized = () => {
-		let token = "";
-			if(localStorage.getItem("user")) {
+		let token = '';
+			if(user) {
 				let oauth: OAuth2Response = JSON.parse(localStorage.getItem("user")!)
 				token = oauth.credential
-				// loadMatchups(token);
 				store.dispatch(getMatchups(token))
-				.unwrap()
-				.then(handleInit)
-				.catch((error: any) => {
-					console.log(error)
+					.unwrap()
+					.then(handleInit)
+					.catch((error: any) => {
+						console.log(error)
 				})
 			}
 	}
-
-	const loadMatchups = async (token: string) => {
-		setLoading(true);
-
-		const response = await axios({
-			url:"http://localhost:8090/matchups/getAll",
-			method: "GET",
-			headers: {	
-				'Access-Control-Allow-Origin': "*",
-				"Access-Control-Allow-Methods": "GET, POST",
-				Authorization: "Bearer " + token,
-			},
-			
-			// withCredentials: true,
-		});
-				// convert to matchup array which contains list of Matchups
-				// const matchups = response.data.map(data => {
-				// 	return new Matchup(data.)
-				// })
-				const matchupData: Matchup[] = response.data
-				setMatchupArray(matchupData);
-				console.log("Response:")
-				console.log(matchupData);
-				console.log("Matchup array " )
-				console.log(matchupArray)
-				// console.log("From Get request" + localStorage.getItem("user"))
-				setLoading(false);
-				
-	};
 
 	React.useEffect(() => {
 		if(!isInitialized && user) {
@@ -90,8 +68,6 @@ export default function ControlledAccordions() {
 			setInitialized(true);
 		}
 	}
-
-	//@TODO: When I submit a matchup, it must populate immediately on the screen
 
 	return (
 		<div className="matchup-accordion">

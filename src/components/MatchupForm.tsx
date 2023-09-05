@@ -63,7 +63,6 @@ export default function MatchupForm() {
 		console.log(player)
 		setStartingPlayer(player)
 	}
-	
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
@@ -198,7 +197,6 @@ export default function MatchupForm() {
 					id="outlined-multiline-static"
 					label="Notes"
 					multiline
-					//   fullWidth
 					rows={3}
 					defaultValue=""
 					fullWidth={true}

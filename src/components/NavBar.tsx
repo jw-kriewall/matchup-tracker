@@ -32,7 +32,6 @@ export default function NavBar() {
 		}
 	}
 	
-
 	return (
 		<>
 			<Box sx={{ flexGrow: 1 }}>
@@ -58,7 +57,7 @@ export default function NavBar() {
 								Login
 							</Button>
 							) : 
-							<Button color="inherit" onClick={() => localStorage.removeItem("user")}>
+							<Button color="inherit" onClick={() => handleLogout()}>
 								Logout
 							</Button>
 						}

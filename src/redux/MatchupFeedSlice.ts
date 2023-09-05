@@ -7,40 +7,7 @@ import { getMatchups } from "../apiCalls/getMatchups";
 import { useSelector } from "react-redux";
 import { OAuth2Response } from "../types/OAuth2Response";
 import axios from "axios";
-
-// const user = localStorage.getItem('user')
-
-// let loadedMatchups: any = null
-// if(user) {
-//     let oauth: OAuth2Response = JSON.parse(localStorage.getItem("user")!)
-// 	let token = oauth.credential
-
-
-//     // try {
-//     //     store.dispatch(getMatchups(token))
-//     //     .unwrap()
-//     //     .then(loadedMatchups =)
-//     //     .catch(error => {
-//     //         console.log(error)
-//     //     })
-//     // }
-
-//     const response = await axios({
-//         url:"http://localhost:8090/matchups/getAll",
-//         method: "GET",
-//         headers: {	
-//             'Access-Control-Allow-Origin': "*",
-//             "Access-Control-Allow-Methods": "GET, POST",
-//             Authorization: "Bearer " + token,
-//         },
-        
-//         // withCredentials: true,
-//     });
-
-//     loadedMatchups = response;
-
-
-// } 
+import { deleteSingleMatchup } from "../apiCalls/deleteMatchup";
 
 export interface MatchupFeedState {
     matchups: Matchup[],
@@ -91,11 +58,28 @@ const matchupFeedSlice = createSlice({
             state.isError = false
         })
         .addCase(getMatchups.fulfilled, (state, action) => {
+            state.isError = false
+            state.status = 'success'
+            state.loading = false
             state.matchups = action.payload
+        })
+        .addCase(getMatchups.pending, (state, action) => {
+            state.loading = true
+            state.status = 'loading'
+            state.isError = false
+        })
+        .addCase(getMatchups.rejected, (state, action) => {
+            state.loading = false
+            state.status = 'failed'
+            state.isError = true
+        })
+        .addCase(deleteSingleMatchup.fulfilled, (state) => {
+            state.loading = false
+            state.status = 'success'
+            state.isError = false
         })
     }
 })
 
 export const selectMatchups = (state: RootState) => state.matchupReducer
-
 export default matchupFeedSlice.reducer
