@@ -8,62 +8,88 @@ import axios from "axios";
 import { Matchup } from "../types/Matchup";
 import Button from '@mui/material/Button';
 import { OAuth2Response } from "../types/OAuth2Response";
+import { useAppSelector } from "../hooks/hooks";
+import { getMatchups } from "../apiCalls/getMatchups";
+import { store } from "../data/store";
 
 export default function ControlledAccordions() {
+
+	const matchups = useAppSelector((state) => state.matchupReducer.matchups)
+	const user = useAppSelector((state) => state.userReducer.user)
+
 	const [expanded, setExpanded] = React.useState<string | false>(false);
 	const [matchupArray, setMatchupArray] = React.useState<Matchup[]>([]);
 	const [loading, setLoading] = React.useState<boolean>(false);
+	const [isInitialized, setInitialized] = React.useState<boolean>(false);
 
 	const handleChange =
 		(panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
 			setExpanded(isExpanded ? panel : false);
-		};
+	};
 
 	const deleteMatchup = (matchup: Matchup) => () =>{
 		axios.delete("http://localhost:8090/matchups/delete/" + matchup.id)
 		console.log("Deletion successful")
 	}
 
-	React.useEffect(() => {
+	const getMatchupsIfAuthorized = () => {
 		let token = "";
 			if(localStorage.getItem("user")) {
 				let oauth: OAuth2Response = JSON.parse(localStorage.getItem("user")!)
 				token = oauth.credential
+				// loadMatchups(token);
+				store.dispatch(getMatchups(token))
+				.unwrap()
+				.then(handleInit)
+				.catch((error: any) => {
+					console.log(error)
+				})
 			}
-		const loadMatchups = async () => {
-			setLoading(true);
+	}
 
-			const response = await axios({
-				url:"http://localhost:8090/matchups/getAll",
-				method: "GET",
-				headers: {	
-					'Access-Control-Allow-Origin': "*",
-					"Access-Control-Allow-Methods": "GET, POST",
-					Authorization: "Bearer " + token,
-				},
+	const loadMatchups = async (token: string) => {
+		setLoading(true);
+
+		const response = await axios({
+			url:"http://localhost:8090/matchups/getAll",
+			method: "GET",
+			headers: {	
+				'Access-Control-Allow-Origin': "*",
+				"Access-Control-Allow-Methods": "GET, POST",
+				Authorization: "Bearer " + token,
+			},
+			
+			// withCredentials: true,
+		});
+				// convert to matchup array which contains list of Matchups
+				// const matchups = response.data.map(data => {
+				// 	return new Matchup(data.)
+				// })
+				const matchupData: Matchup[] = response.data
+				setMatchupArray(matchupData);
+				console.log("Response:")
+				console.log(matchupData);
+				console.log("Matchup array " )
+				console.log(matchupArray)
+				// console.log("From Get request" + localStorage.getItem("user"))
+				setLoading(false);
 				
-				// withCredentials: true,
-			});
-					// convert to matchup array which contains list of Matchups
-					// const matchups = response.data.map(data => {
-					// 	return new Matchup(data.)
-					// })
-					const matchupData = response.data
-					setMatchupArray(matchupData);
-					console.log("Response:")
-					console.log(matchupData);
-					console.log("Matchup array " )
-					console.log(matchupArray)
-					console.log("From Get request" + localStorage.getItem("user"))
-				};
-				
-				if(localStorage.getItem("user") ) {
-					console.log("From localStorage Conditional")
-					loadMatchups();
-					setLoading(false);
-				}
-		
-	}, []);
+	};
+
+	React.useEffect(() => {
+		if(!isInitialized && user) {
+			getMatchupsIfAuthorized();
+			}	
+		// getMatchupsIfAuthorized();
+	}, [isInitialized]);
+
+	function handleInit() {
+		const currentState: any = store.getState();
+
+		if (currentState.matchups > 0) {
+			setInitialized(true);
+		}
+	}
 
 	//@TODO: When I submit a matchup, it must populate immediately on the screen
 
@@ -72,9 +98,9 @@ export default function ControlledAccordions() {
 			{loading ? (
 				<h3>LOADING...</h3>
 			) : (
-				matchupArray.map((matchup, index) => (
+				matchups.map((matchup, index) => (
 					<Accordion
-            key={index}
+            			key={index}
 						expanded={expanded === "panel" + index}
 						onChange={handleChange("panel" + index)}
 					>
@@ -84,7 +110,7 @@ export default function ControlledAccordions() {
 							id="panel1bh-header"
 						>
 							<Typography sx={{ width: "33%", flexShrink: 0 }}>
-								Game {matchupArray.length - index}
+								Game {matchups.length - index}
 							</Typography>
 							<Typography sx={{ color: "text.secondary" }}>
 								{matchup.playerOneDeck.name} VS {matchup.playerTwoDeck.name}{" "}

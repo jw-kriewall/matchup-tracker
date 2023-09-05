@@ -40,7 +40,7 @@ export default function MatchupForm() {
 
 	const [matchupData, setMatchupData] = React.useState<Matchup[]>([]);
 
-	const { addToMatchups } = matchupFeedSlice.actions
+	// const { addToMatchups } = matchupFeedSlice.actions
 	const dispatch = useDispatch<AppDispatch>();
 
 	// TODO: Starting player

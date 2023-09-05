@@ -18,7 +18,7 @@ export type Deck = {
 }
 
 export type User = {
-		username: string;
-		role: string;
-		email: string;
-	}
+	username: string;
+	role: string;
+	email: string;
+}
