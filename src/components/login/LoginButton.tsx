@@ -1,16 +1,17 @@
 import { GoogleLogin } from '@react-oauth/google';
 import { useStore } from 'react-redux';
 import { StandardAction } from '../../types/StandardAction';
-
+import { getMatchups } from '../../apiCalls/getMatchups';
+import { DecodedJwtToken } from '../../types/DecodedJwtToken';
+import jwt_decode from 'jwt-decode';
+import { OAuth2Response } from '../../types/OAuth2Response';
+import { useAppDispatch } from '../../hooks/hooks';
 
 
 export default function LoginButton() {
 
-    // const dispatch = useDispatch();
     const store = useStore();
     // const userState = useSelector((state) => state.user); 
-
-
 
     const onSuccess = (res: any) => {
         console.log("Login Successful! Current user: " + JSON.stringify(res))
@@ -22,7 +23,6 @@ export default function LoginButton() {
         }
 
         store.dispatch(action);
-
     
         // TODO: close modal
     }
@@ -35,7 +35,7 @@ export default function LoginButton() {
                 // clientId={clientId}
                 // buttonText="Login"
                 onSuccess={onSuccess}
-                onError={() => console.log('Login failed')}
+                onError={() => onError}
                 // cookiePolicy={'single_host_origin'}
                 // isSignedIn={true}
             />

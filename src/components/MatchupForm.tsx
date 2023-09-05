@@ -13,8 +13,16 @@ import Checkbox from '@mui/material/Checkbox';
 import { OAuth2Response } from "../types/OAuth2Response";
 import jwt_decode from 'jwt-decode';
 import { DecodedJwtToken } from "../types/DecodedJwtToken";
+import { useDispatch, useStore } from 'react-redux'
+import matchupFeedSlice from "../redux/MatchupFeedSlice";
+import { addNewMatchup } from "../apiCalls/addMatchup";
+import { useAppDispatch } from "../hooks/hooks";
+import { match } from "assert";
+import { AppDispatch } from "../data/store";
 
-export default function SelectTextFields() {
+export default function MatchupForm() {
+
+	const store = useStore();
 
 	const [playerOneName, setPlayerOneName] = React.useState<string>("");
 	const [playerTwoName, setPlayerTwoName] = React.useState<string>("");
@@ -28,9 +36,12 @@ export default function SelectTextFields() {
 	const [format, setFormat] = React.useState<string>("");
 	const [notes, setNotes] = React.useState<string>("");
 
-	
-
 	const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<string[]>([]);
+
+	const [matchupData, setMatchupData] = React.useState<Matchup[]>([]);
+
+	// const { addToMatchups } = matchupFeedSlice.actions
+	const dispatch = useDispatch<AppDispatch>();
 
 	// TODO: Starting player
 	// reset notes to blank after submission
@@ -52,9 +63,8 @@ export default function SelectTextFields() {
 		console.log(player)
 		setStartingPlayer(player)
 	}
-	
 
-	const handleSubmit = (e: any) => {
+	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 
 		let role = "basic"
@@ -101,14 +111,8 @@ export default function SelectTextFields() {
 
 		console.log(matchup)
 
-		fetch("http://localhost:8090/matchups/add", {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify(matchup)
-		}).then(() => {
-			console.log("Matchup Added : " + JSON.stringify(matchup))
-			setNotes("")
-		})
+		dispatch(addNewMatchup(matchup));
+		setNotes("")
 	}
 
 	return (
@@ -193,7 +197,6 @@ export default function SelectTextFields() {
 					id="outlined-multiline-static"
 					label="Notes"
 					multiline
-					//   fullWidth
 					rows={3}
 					defaultValue=""
 					fullWidth={true}

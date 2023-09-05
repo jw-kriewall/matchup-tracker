@@ -16,7 +16,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { useSelector, useDispatch, useStore } from 'react-redux';
 import { useState } from 'react';
 import { loginAction, logoutAction } from '../../actions/userActions';
-import { RootState, store } from "../../store";
+import { RootState, store } from "../../data/store";
 import LoginButton from "./LoginButton";
 
 function Copyright(props: any) {

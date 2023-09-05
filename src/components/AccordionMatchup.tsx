@@ -8,78 +8,75 @@ import axios from "axios";
 import { Matchup } from "../types/Matchup";
 import Button from '@mui/material/Button';
 import { OAuth2Response } from "../types/OAuth2Response";
+import { useAppSelector } from "../hooks/hooks";
+import { getMatchups } from "../apiCalls/getMatchups";
+import { store } from "../data/store";
+import { deleteSingleMatchup } from "../apiCalls/deleteMatchup";
 
 export default function ControlledAccordions() {
+
+	const matchups = useAppSelector((state) => state.matchupReducer.matchups)
+	const user = useAppSelector((state) => state.userReducer.user)
+
 	const [expanded, setExpanded] = React.useState<string | false>(false);
 	const [matchupArray, setMatchupArray] = React.useState<Matchup[]>([]);
 	const [loading, setLoading] = React.useState<boolean>(false);
+	const [isInitialized, setInitialized] = React.useState<boolean>(false);
 
 	const handleChange =
 		(panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
 			setExpanded(isExpanded ? panel : false);
-		};
+	};
 
-	// const deleteMatchup = (e: any) => {
-	// 	return axios.delete("http://localhost:8090/matchups/delete/" , {
-	// 		headers: {
-	// 			"Content-Type": "application/json",
-	// 		}
-	// 	})
-	// 	.then(res => { console.log("Deletion Response: " + res); return res })
-	// 	.catch(err => { console.log(err); return err })
-	// }
+	const deleteMatchup = (matchup: Matchup) => () => {
+		let token = ''
+		if (user) {
+			axios.delete("http://localhost:8090/matchups/delete/" + matchup.id)
+			console.log("Deletion successful")
+			// deleteSingleMatchup(matchup)
+		}
+		let oauth: OAuth2Response = JSON.parse(localStorage.getItem("user")!)
+			token = oauth.credential
+			store.dispatch(getMatchups(token))
+	}
 
-	const deleteMatchup = (matchup: Matchup) => () =>{
-		axios.delete("http://localhost:8090/matchups/delete/" + matchup.id)
-		console.log("Deletion successful")
+	const getMatchupsIfAuthorized = () => {
+		let token = '';
+			if(user) {
+				let oauth: OAuth2Response = JSON.parse(localStorage.getItem("user")!)
+				token = oauth.credential
+				store.dispatch(getMatchups(token))
+					.unwrap()
+					.then(handleInit)
+					.catch((error: any) => {
+						console.log(error)
+				})
+			}
 	}
 
 	React.useEffect(() => {
-		let token = "";
+		if(!isInitialized && user) {
+			getMatchupsIfAuthorized();
+			}	
+		// getMatchupsIfAuthorized();
+	}, [isInitialized]);
 
-			if(localStorage.getItem("user")) {
-				
-				let oauth: OAuth2Response = JSON.parse(localStorage.getItem("user")!)
-				token = oauth.credential
-			}
-		const loadMatchups = async () => {
-			setLoading(true);
+	function handleInit() {
+		const currentState: any = store.getState();
 
-			const response = await axios({
-				url:"http://localhost:8090/matchups/getAll",
-				method: "GET",
-				headers: {	
-					'Access-Control-Allow-Origin': "*",
-					"Access-Control-Allow-Methods": "GET, POST",
-					Authorization: "Bearer " + token,
-				},
-				
-				// withCredentials: true,
-			});
-					setMatchupArray(response.data);
-
-					console.log(response.data);
-					console.log("From Get request" + localStorage.getItem("user"))
-				};
-				
-				if(localStorage.getItem("user") ) {
-					console.log("From localStorage Conditional")
-					loadMatchups();
-					setLoading(false);
-				}
-		
-	}, []);
-
-	//@TODO: When I submit a matchup, it must populate immediately on the screen
+		if (currentState.matchups > 0) {
+			setInitialized(true);
+		}
+	}
 
 	return (
 		<div className="matchup-accordion">
 			{loading ? (
 				<h3>LOADING...</h3>
 			) : (
-				matchupArray.map((matchup, index) => (
+				matchups.map((matchup, index) => (
 					<Accordion
-            key={index}
+            			key={index}
 						expanded={expanded === "panel" + index}
 						onChange={handleChange("panel" + index)}
 					>
@@ -89,7 +86,7 @@ export default function ControlledAccordions() {
 							id="panel1bh-header"
 						>
 							<Typography sx={{ width: "33%", flexShrink: 0 }}>
-								Game {matchupArray.length - index}
+								Game {matchups.length - index}
 							</Typography>
 							<Typography sx={{ color: "text.secondary" }}>
 								{matchup.playerOneDeck.name} VS {matchup.playerTwoDeck.name}{" "}
