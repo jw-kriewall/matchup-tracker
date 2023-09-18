@@ -104,7 +104,7 @@ export default function SignIn() {
 					>
 						Sign In
 					</Button> */}
-          <LoginButton/>
+          <LoginButton />
 					{/* <GoogleLogin
               // clientId={clientId}
 						  onSuccess={(credentialResponse) => {
