@@ -23,7 +23,7 @@ export default function LoginButton() {
         }
 
         store.dispatch(action);
-    
+        
         // TODO: close modal
     }
     const onError = (res: any) => {
