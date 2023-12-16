@@ -1,15 +1,9 @@
 import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
-import { useStore } from 'react-redux';
-import { StandardAction } from '../../types/StandardAction';
 import { getMatchups } from '../../apiCalls/getMatchups';
-import { DecodedJwtToken } from '../../types/DecodedJwtToken';
-import jwt_decode from 'jwt-decode';
-import { OAuth2Response } from '../../types/OAuth2Response';
 import { useAppDispatch } from '../../hooks/hooks';
 import { loginAction } from '../../actions/userActions';
-import { User } from '../../types/Matchup';
 
-export default function LoginButton() {
+export default function LoginButton({closeModal}: any) {
 
     const dispatch = useAppDispatch();
 
@@ -20,10 +14,11 @@ export default function LoginButton() {
         dispatch(loginAction(res));
         dispatch(getMatchups(res));
         
-        // TODO: close modal!!!!!!!!!!!!!!
+        closeModal();
     }
     const onError = (res: any) => {
         console.log("Login Failed Res: " + JSON.stringify(res))
+        throw res
     }
     return(
     

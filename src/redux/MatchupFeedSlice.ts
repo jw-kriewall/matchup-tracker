@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Matchup } from "../types/Matchup";
 import { addNewMatchup } from "../apiCalls/addMatchup";
-import { RootState,  } from "../data/store";
+import { RootState } from "../data/store";
 import { getMatchups } from "../apiCalls/getMatchups";
 import { deleteSingleMatchup } from "../apiCalls/deleteMatchup";
 

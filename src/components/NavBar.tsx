@@ -80,7 +80,7 @@ export default function NavBar() {
 					aria-describedby="modal-modal-description"
 				>
 					<Box sx={style}>
-						<LoginPage/>
+						<LoginPage closeModal={handleClose}/>
 					</Box>
 				</Modal>
 			</div>
