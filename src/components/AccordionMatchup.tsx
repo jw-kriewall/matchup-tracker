@@ -12,6 +12,7 @@ import { useAppSelector } from "../hooks/hooks";
 import { getMatchups } from "../apiCalls/getMatchups";
 import { store } from "../data/store";
 import { deleteSingleMatchup } from "../apiCalls/deleteMatchup";
+import { CredentialResponse } from "@react-oauth/google";
 
 export default function ControlledAccordions() {
 
@@ -29,23 +30,18 @@ export default function ControlledAccordions() {
 	};
 
 	const deleteMatchup = (matchup: Matchup) => () => {
-		let token = ''
 		if (user) {
 			axios.delete("http://localhost:8090/matchups/delete/" + matchup.id)
 			console.log("Deletion successful")
-			// deleteSingleMatchup(matchup)
 		}
-		let oauth: OAuth2Response = JSON.parse(localStorage.getItem("user")!)
-			token = oauth.credential
-			store.dispatch(getMatchups(token))
+		let oauth: CredentialResponse = JSON.parse(localStorage.getItem("user")!)
+			store.dispatch(getMatchups(oauth))
 	}
 
 	const getMatchupsIfAuthorized = () => {
-		let token = '';
 			if(user) {
-				let oauth: OAuth2Response = JSON.parse(localStorage.getItem("user")!)
-				token = oauth.credential
-				store.dispatch(getMatchups(token))
+				let oauth: CredentialResponse = JSON.parse(localStorage.getItem("user")!)
+				store.dispatch(getMatchups(oauth))
 					.unwrap()
 					.then(handleInit)
 					.catch((error: any) => {

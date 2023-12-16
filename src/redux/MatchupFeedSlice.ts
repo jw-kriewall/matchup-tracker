@@ -1,12 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Matchup } from "../types/Matchup";
 import { addNewMatchup } from "../apiCalls/addMatchup";
-import { RootState, store } from "../data/store";
-import { useAppSelector } from "../hooks/hooks";
+import { RootState,  } from "../data/store";
 import { getMatchups } from "../apiCalls/getMatchups";
-import { useSelector } from "react-redux";
-import { OAuth2Response } from "../types/OAuth2Response";
-import axios from "axios";
 import { deleteSingleMatchup } from "../apiCalls/deleteMatchup";
 
 export interface MatchupFeedState {
@@ -30,7 +26,6 @@ const matchupFeedSlice = createSlice({
         addToMatchups: (state, action) => {
             addNewMatchup(action.payload)
             state.matchups.push(action.payload)
-            // state.matchups = [action.payload, ...state.matchups]
         },
         removeFromMatchups: (state, action) => {
             const matchupIndex = state.matchups?.indexOf(action.payload)

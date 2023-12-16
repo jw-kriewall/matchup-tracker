@@ -1,11 +1,11 @@
+import { CredentialResponse } from "@react-oauth/google";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { async } from "q";
-import { User } from "../types/Matchup";
 import axios from "axios";
 
 export const getMatchups = createAsyncThunk(
     "matchups/get",
-    async(token: string) => {
+    // TODO: can I pass entire GoogleOAuth response object instead of token?
+    async(user: CredentialResponse | undefined) => {
         try {
             const response = await axios({
                 url:"http://localhost:8090/matchups/getAll",
@@ -13,7 +13,7 @@ export const getMatchups = createAsyncThunk(
                 headers: {	
                     'Access-Control-Allow-Origin': "*",
                     "Access-Control-Allow-Methods": "GET, POST",
-                    Authorization: "Bearer " + token,
+                    Authorization: "Bearer " + user?.credential,
                 },
             })
             const data = await response.data;

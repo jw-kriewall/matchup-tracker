@@ -10,6 +10,7 @@ import Modal from "@mui/material/Modal";
 import LoginPage from "../components/login/LoginPage";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { logoutAction } from "../actions/userActions";
+import { getMatchups } from "../apiCalls/getMatchups";
 
 const style = {
 	position: "absolute" as "absolute",
@@ -33,6 +34,8 @@ export default function NavBar() {
 	const handleLogout = () => {
 		console.log("handle logout")
 		dispatch(logoutAction())
+		dispatch(getMatchups())
+		// TODO: Call get matchups to reset state?
 	}
 	
 	return (
