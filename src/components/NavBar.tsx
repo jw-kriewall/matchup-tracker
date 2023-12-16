@@ -8,6 +8,8 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Modal from "@mui/material/Modal";
 import LoginPage from "../components/login/LoginPage";
+import { useAppDispatch, useAppSelector } from "../hooks/hooks";
+import { logoutAction } from "../actions/userActions";
 
 const style = {
 	position: "absolute" as "absolute",
@@ -25,11 +27,12 @@ export default function NavBar() {
 	const [open, setOpen] = React.useState(false);
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
+	const user = useAppSelector(state => state.userReducer.user);
+	const dispatch = useAppDispatch();
 
 	const handleLogout = () => {
-		if(localStorage.getItem("user")) {
-			localStorage.removeItem("user");
-		}
+		console.log("handle logout")
+		dispatch(logoutAction())
 	}
 	
 	return (
@@ -52,7 +55,7 @@ export default function NavBar() {
 
 						<div>
 
-						{ localStorage.getItem("user") == null ? (		
+						{ !user ? (		
 							<Button color="inherit" onClick={handleOpen}>
 								Login
 							</Button>

@@ -1,13 +1,13 @@
 export const loginAction = (user) => {
     return {
-      type: 'LOGIN',
+      type: 'userAuth/login',
       payload: user,
     };
   };
   
   export const logoutAction = () => {
     return {
-      type: 'LOGOUT',
+      type: 'userAuth/logout'
     };
   };
   

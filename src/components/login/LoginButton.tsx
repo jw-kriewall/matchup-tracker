@@ -6,23 +6,23 @@ import { DecodedJwtToken } from '../../types/DecodedJwtToken';
 import jwt_decode from 'jwt-decode';
 import { OAuth2Response } from '../../types/OAuth2Response';
 import { useAppDispatch } from '../../hooks/hooks';
+import { loginAction } from '../../actions/userActions';
 
 
 export default function LoginButton() {
 
-    const store = useStore();
-    // const userState = useSelector((state) => state.user); 
+    const dispatch = useAppDispatch();
 
     const onSuccess = (res: any) => {
         console.log("Login Successful! Current user: " + JSON.stringify(res))
         localStorage.setItem("user", JSON.stringify(res))
         
-        let action: StandardAction = { 
-            type: "LOGIN", 
-            payload: res
-        }
+        // let action: StandardAction = { 
+        //     type: "userAuth/login", 
+        //     payload: res
+        // }
 
-        store.dispatch(action);
+        dispatch(loginAction(res));
         
         // TODO: close modal
     }
