@@ -20,7 +20,7 @@ export default function LoginButton() {
         dispatch(loginAction(res));
         dispatch(getMatchups(res));
         
-        // TODO: close modal
+        // TODO: close modal!!!!!!!!!!!!!!
     }
     const onError = (res: any) => {
         console.log("Login Failed Res: " + JSON.stringify(res))

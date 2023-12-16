@@ -32,6 +32,9 @@ const matchupFeedSlice = createSlice({
             if (matchupIndex) {
                 state.matchups?.splice(matchupIndex, 1)
             }
+        },
+        resetMatchups: (state) => {
+            state.matchups = [];
         }
     }, 
     extraReducers: (builder) => {

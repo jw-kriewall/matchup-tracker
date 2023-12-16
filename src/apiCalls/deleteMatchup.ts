@@ -9,13 +9,11 @@ import { CredentialResponse } from "@react-oauth/google";
 export const deleteSingleMatchup = createAsyncThunk(
     "matchups/delete",
     async(matchup: Matchup) => {
-        let token = ''
         try {
             const response = await axios.delete("http://localhost:8090/matchups/delete/" + matchup.id)
 
             if (response.status >= 200 && response.status < 300 ) {
             let oauth: CredentialResponse = JSON.parse(localStorage.getItem("user")!)
-			// token = oauth.credential
 			store.dispatch(getMatchups(oauth))
             }
         } catch (error) {
