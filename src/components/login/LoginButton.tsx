@@ -25,6 +25,7 @@ export default function LoginButton({closeModal}: any) {
             <GoogleLogin
                 // clientId={clientId}
                 // buttonText="Login"
+                // useOneTap={true}
                 onSuccess={onSuccess}
                 onError={() => onError}
                 // cookiePolicy={'single_host_origin'}
