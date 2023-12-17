@@ -13,7 +13,9 @@ import { useDispatch } from "react-redux";
 import { addNewMatchup } from "../apiCalls/addMatchup";
 import { AppDispatch } from "../data/store";
 import { IconButton } from "@mui/material";
+import { CredentialResponse } from "@react-oauth/google";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
+import LooksOneIcon from '@mui/icons-material/LooksOne';
 
 export default function MatchupForm() {
 	const [playerOneName, setPlayerOneName] = React.useState<string>("");
@@ -51,7 +53,6 @@ export default function MatchupForm() {
 		determineWinningDeckOptions(deckName, playerOneDeckName);
 	};
 	const handleSetStartingPlayer = (playerName: string) => {
-		console.log(playerName);
 		setStartingPlayer(playerName);
 	};
 
@@ -62,7 +63,7 @@ export default function MatchupForm() {
 		let username = "";
 		let email = "";
 
-		let oauth: OAuth2Response = JSON.parse(localStorage.getItem("user")!);
+		let oauth: CredentialResponse = JSON.parse(localStorage.getItem("user")!);
 		let token = oauth.credential;
 
 		if (token) {
@@ -130,15 +131,13 @@ export default function MatchupForm() {
 							onClick={() => handleSetStartingPlayer(playerOneName)}
 							aria-label="set-starting-player-button"
 							sx={{ position: "absolute", right: -48 }}
+							color={startingPlayer === playerOneName ? "primary" : "default"}
 						>
-							<PlayCircleOutlineIcon />
+							<LooksOneIcon />
 						</IconButton>
 					</Box>
 				</Box>
-
-
-
-
+				
 				<Box sx={{ display: "flex", justifyContent: "center", width: "100%", }}>
 					<Box sx={{ position: "relative", display: "inline-flex", width: "auto", alignItems: "center" }}>
 						<TextField
@@ -153,8 +152,9 @@ export default function MatchupForm() {
 							onClick={() => handleSetStartingPlayer(playerTwoName)}
 							aria-label="set-starting-player-button"
 							sx={{ position: "absolute", right: -48 }}
+							color={startingPlayer === playerTwoName ? "primary" : "default"}
 						>
-							<PlayCircleOutlineIcon />
+							<LooksOneIcon />
 						</IconButton>
 					</Box>
 				</Box>
