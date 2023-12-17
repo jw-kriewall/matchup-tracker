@@ -189,7 +189,7 @@ export default function MatchupForm() {
 					label="Notes"
 					multiline
 					rows={3}
-					defaultValue=""
+					value={notes}
 					fullWidth={true}
 					onChange={(e) => setNotes(e.target.value)}
 				/>
