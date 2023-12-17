@@ -1,77 +1,78 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import { decks } from "../constants/decks";
 import Button from "@mui/material/Button";
-import AccordionMatchup from './AccordionMatchup'
+import AccordionMatchup from "./AccordionMatchup";
 import { Matchup } from "../types/Matchup";
-import Checkbox from '@mui/material/Checkbox';
 import { OAuth2Response } from "../types/OAuth2Response";
-import jwt_decode from 'jwt-decode';
+import jwt_decode from "jwt-decode";
 import { DecodedJwtToken } from "../types/DecodedJwtToken";
-import { useDispatch } from 'react-redux'
+import { useDispatch } from "react-redux";
 import { addNewMatchup } from "../apiCalls/addMatchup";
 import { AppDispatch } from "../data/store";
+import { IconButton } from "@mui/material";
+import { CredentialResponse } from "@react-oauth/google";
+import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
+import LooksOneIcon from '@mui/icons-material/LooksOne';
 
 export default function MatchupForm() {
-
 	const [playerOneName, setPlayerOneName] = React.useState<string>("");
 	const [playerTwoName, setPlayerTwoName] = React.useState<string>("");
 	const [playerOneDeckName, setPlayerOneDeckName] = React.useState<string>("");
 	const [playerTwoDeckName, setPlayerTwoDeckName] = React.useState<string>("");
-	const [playerOneDecklist, setPlayerOneDecklist] = React.useState<string>("blank");
-	const [playerTwoDecklist, setPlayerTwoDecklist] = React.useState<string>("blank");
-	
+	const [playerOneDecklist, setPlayerOneDecklist] =
+		React.useState<string>("blank");
+	const [playerTwoDecklist, setPlayerTwoDecklist] =
+		React.useState<string>("blank");
+
 	const [startingPlayer, setStartingPlayer] = React.useState<string>("");
 	const [winningDeck, setWinningDeck] = React.useState<string>("");
 	const [format, setFormat] = React.useState<string>("");
 	const [notes, setNotes] = React.useState<string>("");
 
-	const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<string[]>([]);
-
-	const [matchupData, setMatchupData] = React.useState<Matchup[]>([]);
+	const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<
+		string[]
+	>([]);
 
 	const dispatch = useDispatch<AppDispatch>();
 
 	// TODO: Starting player
-	// reset notes to blank after submission
 
 	const handlePlayerOneDeckChange = (e: any) => {
 		e.preventDefault();
 		let deckName = e.target.value;
-		setPlayerOneDeckName(deckName)
+		setPlayerOneDeckName(deckName);
 		determineWinningDeckOptions(deckName, playerTwoDeckName);
-	}
+	};
 	const handlePlayerTwoDeckChange = (e: any) => {
 		e.preventDefault();
 		let deckName = e.target.value;
 		setPlayerTwoDeckName(deckName);
 		determineWinningDeckOptions(deckName, playerOneDeckName);
-	}
-	const handleStartingPlayerCheckbox = (e: any) => {
-		let player = e.target.checked
-		console.log(player)
-		setStartingPlayer(player)
-	}
+	};
+	const handleSetStartingPlayer = (playerName: string) => {
+		setStartingPlayer(playerName);
+	};
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 
-		let role = "basic"
-		let username = ''
-		let email = ''
+		let role = "basic";
+		let username = "";
+		let email = "";
 
-		let oauth: OAuth2Response = JSON.parse(localStorage.getItem("user")!)
-		let token = oauth.credential
-		
-		if(token) {
+		let oauth: CredentialResponse = JSON.parse(localStorage.getItem("user")!);
+		let token = oauth.credential;
+
+		if (token) {
 			try {
 				const decodedToken: DecodedJwtToken = jwt_decode(token);
-				email = decodedToken.email
-				username = decodedToken.name
+				email = decodedToken.email;
+				username = decodedToken.name;
 			} catch (error) {
-				console.error('Error decoding JWT: ', error);
+				console.error("Error decoding JWT: ", error);
 			}
 		}
 
@@ -81,12 +82,12 @@ export default function MatchupForm() {
 			playerOneName,
 			playerOneDeck: {
 				name: playerOneDeckName,
-				cards: playerOneDecklist
+				cards: playerOneDecklist,
 			},
 			playerTwoName,
 			playerTwoDeck: {
 				name: playerTwoDeckName,
-				cards: playerTwoDecklist
+				cards: playerTwoDecklist,
 			},
 			startingPlayer,
 			winningDeck,
@@ -95,16 +96,16 @@ export default function MatchupForm() {
 			createdBy: {
 				username: username,
 				role: role,
-				email: email
+				email: email,
 			},
-			notes
-		}
+			notes,
+		};
 
-		console.log(matchup)
+		console.log(matchup);
 
 		dispatch(addNewMatchup(matchup));
-		setNotes("")
-	}
+		setNotes("");
+	};
 
 	return (
 		<Box
@@ -115,33 +116,55 @@ export default function MatchupForm() {
 			noValidate
 			autoComplete="off"
 		>
-			<div className="first-player-buttons">
-				{/* <Button variant="outlined">{playerOneName}</Button> */}
-				{}
-			</div>
-
 			<div>
-				<Checkbox onChange={(e) => handleStartingPlayerCheckbox(e.target.checked)}/>
-				<TextField
-					id="outlined-multiline-flexible"
-					label="Player One"
-					multiline
-					onChange={(e) => setPlayerOneName(e.target.value)}
-				/>
-				<TextField
-					id="outlined-textarea"
-					label="Player Two"
-					multiline
-					onChange={(e) => setPlayerTwoName(e.target.value)}
-				/>
-				<Checkbox/>
+				<Box sx={{ display: "flex", justifyContent: "center", width: "100%", }}>
+					<Box sx={{ position: "relative", display: "inline-flex", width: "auto", alignItems: "center" }}>
+						<TextField
+							id="outlined-multiline-flexible"
+							label="Player One"
+							multiline
+							value={playerOneName}
+							onChange={(e) => setPlayerOneName(e.target.value)}
+							sx={{ width: "25ch" }}
+						/>
+						<IconButton
+							onClick={() => handleSetStartingPlayer(playerOneName)}
+							aria-label="set-starting-player-button"
+							sx={{ position: "absolute", right: -48 }}
+							color={startingPlayer && startingPlayer === playerOneName ? "primary" : "default"}
+						>
+							<LooksOneIcon />
+						</IconButton>
+					</Box>
+				</Box>
+
+				<Box sx={{ display: "flex", justifyContent: "center", width: "100%", }}>
+					<Box sx={{ position: "relative", display: "inline-flex", width: "auto", alignItems: "center" }}>
+						<TextField
+							id="outlined-multiline-flexible"
+							label="Player Two"
+							multiline
+							value={playerTwoName}
+							onChange={(e) => setPlayerTwoName(e.target.value)}
+							sx={{ width: "25ch" }}
+						/>
+						<IconButton
+							onClick={() => handleSetStartingPlayer(playerTwoName)}
+							aria-label="set-starting-player-button"
+							sx={{ position: "absolute", right: -48 }}
+							color={startingPlayer && startingPlayer === playerTwoName ? "primary" : "default"}
+						>
+							<LooksOneIcon />
+						</IconButton>
+					</Box>
+				</Box>
 			</div>
 
 			<div>
 				<TextField
 					id="outlined-deck-one"
 					select
-					label="Select Deck 1"
+					label="Player One Deck"
 					defaultValue=""
 					onChange={(e) => handlePlayerOneDeckChange(e)}
 				>
@@ -155,7 +178,7 @@ export default function MatchupForm() {
 				<TextField
 					id="outlined-deck-two"
 					select
-					label="Select Deck 2"
+					label="Player Two Deck"
 					defaultValue=""
 					onChange={(e) => handlePlayerTwoDeckChange(e)}
 				>
@@ -189,12 +212,14 @@ export default function MatchupForm() {
 					label="Notes"
 					multiline
 					rows={3}
-					defaultValue=""
+					value={notes}
 					fullWidth={true}
 					onChange={(e) => setNotes(e.target.value)}
 				/>
 			</div>
-			<Button variant="outlined" onClick={handleSubmit}>Submit</Button>
+			<Button variant="outlined" onClick={handleSubmit}>
+				Submit
+			</Button>
 			<div className="accordion-matchup-component">
 				{/* show last 10 matchups with option to show all in second screen. Linked to which user created it */}
 				<AccordionMatchup />
