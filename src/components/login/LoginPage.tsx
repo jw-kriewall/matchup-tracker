@@ -1,23 +1,12 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { GoogleLogin } from "@react-oauth/google";
-import { useSelector, useDispatch, useStore } from 'react-redux';
-import { useState } from 'react';
-import { loginAction, logoutAction } from '../../actions/userActions';
-import { RootState, store } from "../../data/store";
-import LoginButton from "./LoginButton";
+import GoogleLoginButton from "./GoogleLoginButton";
 
 function Copyright(props: any) {
 	return (
@@ -37,22 +26,16 @@ function Copyright(props: any) {
 	);
 }
 
-export default function SignIn() {
+export default function LoginPage({ closeModal }: any) {
 
-  const clientId = "946171427391-9q1lkna1ibpgq49g2fivl8m2edg6304a.apps.googleusercontent.com";
-  const user = useSelector((state: RootState) => state.userReducer.user);
-  const dispatch = useDispatch();
-
-  const [isUserLoggedIn, setIsUserLoggedIn] = React.useState(false);
-
-	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-		const data = new FormData(event.currentTarget);
-		console.log({
-			email: data.get("email"),
-			password: data.get("password"),
-		});
-	};
+	// const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+	// 	event.preventDefault();
+	// 	const data = new FormData(event.currentTarget);
+	// 	console.log({
+	// 		email: data.get("email"),
+	// 		password: data.get("password"),
+	// 	});
+	// };
 
 	return (
 		<Container component="main" maxWidth="xs">
@@ -104,7 +87,7 @@ export default function SignIn() {
 					>
 						Sign In
 					</Button> */}
-          <LoginButton />
+          			<GoogleLoginButton closeModal={closeModal}/>
 					{/* <GoogleLogin
               // clientId={clientId}
 						  onSuccess={(credentialResponse) => {

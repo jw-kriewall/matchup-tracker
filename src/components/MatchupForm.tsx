@@ -3,26 +3,18 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import { decks } from "../constants/decks";
-import { formats } from "../constants/formats"
 import Button from "@mui/material/Button";
 import AccordionMatchup from './AccordionMatchup'
-import { userInfo } from "os";
-import { v4 as uuidv4 } from 'uuid';
 import { Matchup } from "../types/Matchup";
 import Checkbox from '@mui/material/Checkbox';
 import { OAuth2Response } from "../types/OAuth2Response";
 import jwt_decode from 'jwt-decode';
 import { DecodedJwtToken } from "../types/DecodedJwtToken";
-import { useDispatch, useStore } from 'react-redux'
-import matchupFeedSlice from "../redux/MatchupFeedSlice";
+import { useDispatch } from 'react-redux'
 import { addNewMatchup } from "../apiCalls/addMatchup";
-import { useAppDispatch } from "../hooks/hooks";
-import { match } from "assert";
 import { AppDispatch } from "../data/store";
 
 export default function MatchupForm() {
-
-	const store = useStore();
 
 	const [playerOneName, setPlayerOneName] = React.useState<string>("");
 	const [playerTwoName, setPlayerTwoName] = React.useState<string>("");
@@ -40,7 +32,6 @@ export default function MatchupForm() {
 
 	const [matchupData, setMatchupData] = React.useState<Matchup[]>([]);
 
-	// const { addToMatchups } = matchupFeedSlice.actions
 	const dispatch = useDispatch<AppDispatch>();
 
 	// TODO: Starting player

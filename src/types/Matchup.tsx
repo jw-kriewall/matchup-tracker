@@ -9,7 +9,7 @@ export type Matchup = {
 	winningDeck: string;
 	format: string;
 	notes: string;
-	createdBy: User
+	createdBy: UserInfo
 };
 
 export type Deck = {
@@ -18,7 +18,13 @@ export type Deck = {
 }
 
 export type User = {
-	username: string;
-	role: string;
-	email: string;
+	credential: string,
+	clientId: string,
+	select_by: string
+}
+
+export type UserInfo = {
+	username: string,
+	role: string,
+	email: string
 }

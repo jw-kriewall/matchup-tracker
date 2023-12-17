@@ -12,14 +12,14 @@ if(localUser !== null && localUser !== '') {
 
 export interface UserState {
     user: User | null | undefined,
-    isLoading: boolean,
+    userLoading: boolean,
     loginSuccess: boolean
 }
   
 const initialState: UserState = {
     user: user,
-    isLoading: false,
-    loginSuccess: user?.username ? true : false
+    userLoading: false,
+    loginSuccess: user?.credential ? true : false
 }
   
 const userAuthSlice = createSlice({
@@ -27,17 +27,19 @@ const userAuthSlice = createSlice({
     initialState,
     reducers: {
         pending: (state, action) => {
-            state.isLoading = true
+            state.userLoading = true
         },
         login: (state, action) => {
-            state.isLoading = false
+            state.userLoading = false
             state.user = action.payload
+            state.loginSuccess = state.user?.credential ? true : false
         },
         logout: (state) => {
-            state.isLoading = false
+            state.userLoading = false
+            state.user = null
             localStorage.removeItem("user")
         }
     }
 })
 
-export default userAuthSlice
+export default userAuthSlice.reducer

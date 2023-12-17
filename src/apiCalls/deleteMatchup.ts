@@ -4,18 +4,17 @@ import { Matchup } from "../types/Matchup";
 import { OAuth2Response } from "../types/OAuth2Response";
 import { store } from "../data/store";
 import { getMatchups } from "./getMatchups";
+import { CredentialResponse } from "@react-oauth/google";
 
 export const deleteSingleMatchup = createAsyncThunk(
     "matchups/delete",
     async(matchup: Matchup) => {
-        let token = ''
         try {
             const response = await axios.delete("http://localhost:8090/matchups/delete/" + matchup.id)
 
             if (response.status >= 200 && response.status < 300 ) {
-            let oauth: OAuth2Response = JSON.parse(localStorage.getItem("user")!)
-			token = oauth.credential
-			store.dispatch(getMatchups(token))
+            let oauth: CredentialResponse = JSON.parse(localStorage.getItem("user")!)
+			store.dispatch(getMatchups(oauth))
             }
         } catch (error) {
             console.log(error)

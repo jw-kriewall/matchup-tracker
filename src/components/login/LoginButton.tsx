@@ -1,44 +1,44 @@
-import { GoogleLogin } from '@react-oauth/google';
-import { useStore } from 'react-redux';
-import { StandardAction } from '../../types/StandardAction';
-import { getMatchups } from '../../apiCalls/getMatchups';
-import { DecodedJwtToken } from '../../types/DecodedJwtToken';
-import jwt_decode from 'jwt-decode';
-import { OAuth2Response } from '../../types/OAuth2Response';
-import { useAppDispatch } from '../../hooks/hooks';
+import * as React from "react";
+import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import LoginPage from "./LoginPage";
 
+const style = {
+	position: "absolute" as "absolute",
+	top: "50%",
+	left: "50%",
+	transform: "translate(-50%, -50%)",
+	width: 360,
+	bgcolor: "background.paper",
+	border: "2px solid #000",
+	boxShadow: 24,
+	p: 4,
+};
 
-export default function LoginButton() {
+const LoginButton = () => {
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
-    const store = useStore();
-    // const userState = useSelector((state) => state.user); 
+    return (
+        <>
+            <Button color="inherit" onClick={handleOpen}>
+                Login
+            </Button>
 
-    const onSuccess = (res: any) => {
-        console.log("Login Successful! Current user: " + JSON.stringify(res))
-        localStorage.setItem("user", JSON.stringify(res))
-        
-        let action: StandardAction = { 
-            type: "LOGIN", 
-            payload: res
-        }
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <LoginPage closeModal={handleClose} />
+                </Box>
+            </Modal>
+        </>
+    );
+};
 
-        store.dispatch(action);
-        
-        // TODO: close modal
-    }
-    const onError = (res: any) => {
-        console.log("Login Failed Res: " + JSON.stringify(res))
-    }
-    return(
-    
-            <GoogleLogin
-                // clientId={clientId}
-                // buttonText="Login"
-                onSuccess={onSuccess}
-                onError={() => onError}
-                // cookiePolicy={'single_host_origin'}
-                // isSignedIn={true}
-            />
-    
-    )
-}
+export default LoginButton;
