@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import LoginButton from "./LoginButton";
+import GoogleLoginButton from "./GoogleLoginButton";
 
 function Copyright(props: any) {
 	return (
@@ -87,7 +87,7 @@ export default function LoginPage({ closeModal }: any) {
 					>
 						Sign In
 					</Button> */}
-          <LoginButton closeModal={closeModal}/>
+          			<GoogleLoginButton closeModal={closeModal}/>
 					{/* <GoogleLogin
               // clientId={clientId}
 						  onSuccess={(credentialResponse) => {
