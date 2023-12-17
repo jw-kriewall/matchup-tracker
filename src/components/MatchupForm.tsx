@@ -131,13 +131,13 @@ export default function MatchupForm() {
 							onClick={() => handleSetStartingPlayer(playerOneName)}
 							aria-label="set-starting-player-button"
 							sx={{ position: "absolute", right: -48 }}
-							color={startingPlayer === playerOneName ? "primary" : "default"}
+							color={startingPlayer && startingPlayer === playerOneName ? "primary" : "default"}
 						>
 							<LooksOneIcon />
 						</IconButton>
 					</Box>
 				</Box>
-				
+
 				<Box sx={{ display: "flex", justifyContent: "center", width: "100%", }}>
 					<Box sx={{ position: "relative", display: "inline-flex", width: "auto", alignItems: "center" }}>
 						<TextField
@@ -152,7 +152,7 @@ export default function MatchupForm() {
 							onClick={() => handleSetStartingPlayer(playerTwoName)}
 							aria-label="set-starting-player-button"
 							sx={{ position: "absolute", right: -48 }}
-							color={startingPlayer === playerTwoName ? "primary" : "default"}
+							color={startingPlayer && startingPlayer === playerTwoName ? "primary" : "default"}
 						>
 							<LooksOneIcon />
 						</IconButton>
