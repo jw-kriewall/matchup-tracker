@@ -28,14 +28,14 @@ function Copyright(props: any) {
 
 export default function LoginPage({ closeModal }: any) {
 
-	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-		const data = new FormData(event.currentTarget);
-		console.log({
-			email: data.get("email"),
-			password: data.get("password"),
-		});
-	};
+	// const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+	// 	event.preventDefault();
+	// 	const data = new FormData(event.currentTarget);
+	// 	console.log({
+	// 		email: data.get("email"),
+	// 		password: data.get("password"),
+	// 	});
+	// };
 
 	return (
 		<Container component="main" maxWidth="xs">

@@ -11,6 +11,7 @@ import LoginPage from "../components/login/LoginPage";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { logoutAction } from "../actions/userActions";
 import { resetMatchups } from "../actions/matchupActions";
+import LogoutButton from "./login/LogoutButton";
 
 const style = {
 	position: "absolute" as "absolute",
@@ -30,12 +31,6 @@ export default function NavBar() {
 	const handleClose = () => setOpen(false);
 	const user = useAppSelector(state => state.userReducer.user);
 	const dispatch = useAppDispatch();
-
-	const handleLogout = () => {
-		console.log("handle logout")
-		dispatch(logoutAction())
-		dispatch(resetMatchups())
-	}
 	
 	return (
 		<>
@@ -62,9 +57,7 @@ export default function NavBar() {
 								Login
 							</Button>
 							) : 
-							<Button color="inherit" onClick={() => handleLogout()}>
-								Logout
-							</Button>
+							<LogoutButton/>
 						}
 						</div>
 						
