@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
-import NavBar from './components/NavBar';
-import MatchupForm from './components/MatchupForm';
+import NavBar from './components/navBar/NavBar';
+import MatchupForm from './components/matchups/MatchupForm';
 import LoginPage from './components/login/LoginPage';
 
 //const clientId = "946171427391-9q1lkna1ibpgq49g2fivl8m2edg6304a.apps.googleusercontent.com";

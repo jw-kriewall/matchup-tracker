@@ -2,20 +2,18 @@ import React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
-import { decks } from "../constants/decks";
+import { decks } from "../../constants/decks";
 import Button from "@mui/material/Button";
 import AccordionMatchup from "./AccordionMatchup";
-import { Matchup } from "../types/Matchup";
-import { OAuth2Response } from "../types/OAuth2Response";
+import { DeckDisplay, Matchup } from "../../types/MatchupModels";
 import jwt_decode from "jwt-decode";
-import { DecodedJwtToken } from "../types/DecodedJwtToken";
+import { DecodedJwtToken } from "../../types/DecodedJwtToken";
 import { useDispatch } from "react-redux";
-import { addNewMatchup } from "../apiCalls/addMatchup";
-import { AppDispatch } from "../data/store";
+import { addNewMatchup } from "../../apiCalls/addMatchup";
+import { AppDispatch } from "../../data/store";
 import { IconButton } from "@mui/material";
 import { CredentialResponse } from "@react-oauth/google";
-import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
-import LooksOneIcon from '@mui/icons-material/LooksOne';
+import LooksOneIcon from "@mui/icons-material/LooksOne";
 
 export default function MatchupForm() {
 	const [playerOneName, setPlayerOneName] = React.useState<string>("");
@@ -36,9 +34,10 @@ export default function MatchupForm() {
 		string[]
 	>([]);
 
-	const dispatch = useDispatch<AppDispatch>();
+	// @TODO: Delete needs to occur automatically.
 
-	// TODO: Starting player
+	// TODO: can this be useAppDispatch?
+	const dispatch = useDispatch<AppDispatch>();
 
 	const handlePlayerOneDeckChange = (e: any) => {
 		e.preventDefault();
@@ -117,8 +116,15 @@ export default function MatchupForm() {
 			autoComplete="off"
 		>
 			<div>
-				<Box sx={{ display: "flex", justifyContent: "center", width: "100%", }}>
-					<Box sx={{ position: "relative", display: "inline-flex", width: "auto", alignItems: "center" }}>
+				<Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
+					<Box
+						sx={{
+							position: "relative",
+							display: "inline-flex",
+							width: "auto",
+							alignItems: "center",
+						}}
+					>
 						<TextField
 							id="outlined-multiline-flexible"
 							label="Player One"
@@ -131,15 +137,26 @@ export default function MatchupForm() {
 							onClick={() => handleSetStartingPlayer(playerOneName)}
 							aria-label="set-starting-player-button"
 							sx={{ position: "absolute", right: -48 }}
-							color={startingPlayer && startingPlayer === playerOneName ? "primary" : "default"}
+							color={
+								startingPlayer && startingPlayer === playerOneName
+									? "primary"
+									: "default"
+							}
 						>
 							<LooksOneIcon />
 						</IconButton>
 					</Box>
 				</Box>
 
-				<Box sx={{ display: "flex", justifyContent: "center", width: "100%", }}>
-					<Box sx={{ position: "relative", display: "inline-flex", width: "auto", alignItems: "center" }}>
+				<Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
+					<Box
+						sx={{
+							position: "relative",
+							display: "inline-flex",
+							width: "auto",
+							alignItems: "center",
+						}}
+					>
 						<TextField
 							id="outlined-multiline-flexible"
 							label="Player Two"
@@ -152,7 +169,11 @@ export default function MatchupForm() {
 							onClick={() => handleSetStartingPlayer(playerTwoName)}
 							aria-label="set-starting-player-button"
 							sx={{ position: "absolute", right: -48 }}
-							color={startingPlayer && startingPlayer === playerTwoName ? "primary" : "default"}
+							color={
+								startingPlayer && startingPlayer === playerTwoName
+									? "primary"
+									: "default"
+							}
 						>
 							<LooksOneIcon />
 						</IconButton>
@@ -168,9 +189,19 @@ export default function MatchupForm() {
 					defaultValue=""
 					onChange={(e) => handlePlayerOneDeckChange(e)}
 				>
-					{decks.map((option) => (
+					{decks.map((option: DeckDisplay) => (
 						<MenuItem key={option.value} value={option.value}>
 							{option.label}
+							<Box sx={{ display: "flex" }}>
+								{option.sprites.map((sprite, index) => (
+									<img
+										key={index}
+										src={sprite}
+										alt={option.label}
+										style={{ width: "24px", height: "24px", marginLeft: "5px" }}
+									/>
+								))}
+							</Box>
 						</MenuItem>
 					))}
 				</TextField>

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Matchup } from "../types/Matchup";
+import { Matchup } from "../types/MatchupModels";
 import { addNewMatchup } from "../apiCalls/addMatchup";
 import { RootState } from "../data/store";
 import { getMatchups } from "../apiCalls/getMatchups";

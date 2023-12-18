@@ -1,3 +1,5 @@
+import { UserInfo } from "./UserModels";
+
 export type Matchup = {
 	id: number | undefined,
 	playerOneName: string;
@@ -17,14 +19,8 @@ export type Deck = {
 	cards: string;
 }
 
-export type User = {
-	credential: string,
-	clientId: string,
-	select_by: string
-}
-
-export type UserInfo = {
-	username: string,
-	role: string,
-	email: string
+export type DeckDisplay = {
+	value: string,
+	label: string,
+	sprites: string[],
 }
