@@ -8,7 +8,7 @@ export default function HomePage() {
 				<NavBar />
 			</div>
 
-			<div className="matchupForm">
+			<div className="matchup-form">
 				<MatchupForm />
 			</div>
 		</div>
