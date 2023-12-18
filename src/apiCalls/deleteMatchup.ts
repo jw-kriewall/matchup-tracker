@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Matchup } from "../types/Matchup";
-import { OAuth2Response } from "../types/OAuth2Response";
+import { Matchup } from "../types/MatchupModels";
 import { store } from "../data/store";
 import { getMatchups } from "./getMatchups";
 import { CredentialResponse } from "@react-oauth/google";

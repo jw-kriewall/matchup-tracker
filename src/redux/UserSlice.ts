@@ -1,17 +1,17 @@
+import { CredentialResponse } from "@react-oauth/google";
 import { createSlice } from "@reduxjs/toolkit";
-import { User } from "../types/Matchup";
 
 let localUser = localStorage.getItem("user");
 let user = null;
 if(localUser !== null && localUser !== '') {
-    user = JSON.parse(localUser) as User;
+    user = JSON.parse(localUser) as CredentialResponse;
 } 
 // else {
 //     user = new User();
 // }
 
 export interface UserState {
-    user: User | null | undefined,
+    user: CredentialResponse | null | undefined,
     userLoading: boolean,
     loginSuccess: boolean
 }
@@ -21,7 +21,7 @@ const initialState: UserState = {
     userLoading: false,
     loginSuccess: user?.credential ? true : false
 }
-  
+
 const userAuthSlice = createSlice({
     name: "userAuth",
     initialState,

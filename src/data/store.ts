@@ -1,9 +1,7 @@
 import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit';
 import matchupFeedReducer from '../redux/MatchupFeedSlice';
-//import userAuthSlice from '../redux/UserSlice';
 import userAuthReducer from '../redux/UserSlice';
-//import { AnyAction } from 'redux';
-import { Matchup } from '../types/Matchup';
+import { Matchup } from '../types/MatchupModels';
 
 export const store = configureStore({
   reducer: {
