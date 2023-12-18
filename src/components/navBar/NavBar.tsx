@@ -24,7 +24,9 @@ export default function NavBar() {
 							aria-label="menu"
 							sx={{ mr: 4 }}
 						>
-							<MenuIcon />
+						<MenuIcon />
+						{/* @TODO: MenuIcon needs to show dropdown with routing to other pages */}
+
 						</IconButton>
 						<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
 							MatchupTracker v1.0
