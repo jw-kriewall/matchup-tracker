@@ -191,16 +191,18 @@ export default function MatchupForm() {
 				>
 					{decks.map((option: DeckDisplay) => (
 						<MenuItem key={option.value} value={option.value}>
+							<Box sx={{ display: 'flex', alignItems: 'center' }}>
 							{option.label}
-							<Box sx={{ display: "flex" }}>
-								{option.sprites.map((sprite, index) => (
-									<img
+								<Box sx={{ display: "flex" }}>
+									{option.sprites.map((sprite, index) => (
+										<img
 										key={index}
 										src={sprite}
 										alt={option.label}
-										style={{ width: "24px", height: "24px", marginLeft: "5px" }}
-									/>
-								))}
+										style={{ width: "36px", height: "36px", marginLeft: "2px" }}
+										/>
+									))}
+								</Box>
 							</Box>
 						</MenuItem>
 					))}
@@ -215,7 +217,19 @@ export default function MatchupForm() {
 				>
 					{decks.map((option) => (
 						<MenuItem key={option.value} value={option.value}>
-							{option.label}
+							<Box sx={{ display: 'flex', alignItems: 'center' }}>
+								{option.label}
+								<Box sx={{ display: "flex" }}>
+									{option.sprites.map((sprite, index) => (
+										<img
+										key={index}
+										src={sprite}
+										alt={option.label}
+										style={{ width: "36px", height: "36px", marginLeft: "2px" }}
+										/>
+									))}
+								</Box>
+							</Box>
 						</MenuItem>
 					))}
 				</TextField>
