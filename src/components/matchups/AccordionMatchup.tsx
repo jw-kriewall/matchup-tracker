@@ -19,7 +19,6 @@ export default function ControlledAccordions() {
 	const user = useAppSelector((state) => state.userReducer.user)
 
 	const [expanded, setExpanded] = React.useState<string | false>(false);
-	const [matchupArray, setMatchupArray] = React.useState<Matchup[]>([]);
 	const [loading, setLoading] = React.useState<boolean>(false);
 	const [isInitialized, setInitialized] = React.useState<boolean>(false);
 
@@ -28,13 +27,17 @@ export default function ControlledAccordions() {
 			setExpanded(isExpanded ? panel : false);
 	};
 
-	const deleteMatchup = (matchup: Matchup) => () => {
+	const handleDeleteMatchup = (matchup: Matchup) => () => {
+		//@TODO: should setLoading value trigger a loading bar?
+		//let oauth: CredentialResponse = JSON.parse(localStorage.getItem("user")!)
 		if (user) {
-			axios.delete("http://localhost:8090/matchups/delete/" + matchup.id)
-			console.log("Deletion successful")
+			setLoading(true);
+			axios.delete("http://localhost:8090/matchups/delete/" + matchup.id).then(() => {
+				store.dispatch(getMatchups(user))
+				console.log("Deletion successful. Matchup ID: " + matchup.id)
+				setLoading(false);
+			})
 		}
-		let oauth: CredentialResponse = JSON.parse(localStorage.getItem("user")!)
-			store.dispatch(getMatchups(oauth))
 	}
 
 	const getMatchupsIfAuthorized = () => {
@@ -102,7 +105,7 @@ export default function ControlledAccordions() {
 								<b>Notes: </b>
 								{matchup.notes}
 							</Typography>
-							<Button variant="outlined" color="error" onClick={deleteMatchup(matchup)}>DELETE</Button>
+							<Button variant="outlined" color="error" onClick={handleDeleteMatchup(matchup)}>DELETE</Button>
 						</AccordionDetails>
 					</Accordion>
 				))

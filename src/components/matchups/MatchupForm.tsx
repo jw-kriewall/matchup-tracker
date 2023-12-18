@@ -244,6 +244,7 @@ export default function MatchupForm() {
 					onChange={(e) => setWinningDeck(e.target.value)}
 				>
 					{winningDeckOptionsArray.map((option) => (
+						// @TODO: sprites here? Should I pass deck back?
 						<MenuItem key={option} value={option}>
 							{option}
 						</MenuItem>
@@ -272,7 +273,7 @@ export default function MatchupForm() {
 		</Box>
 	);
 
-	function determineWinningDeckOptions(deckName: any, playerDeckName: any) {
+	function determineWinningDeckOptions(deckName: string, playerDeckName: string) {
 		if (deckName === playerDeckName) {
 			setWinningDeckOptionsArray([deckName]);
 		} else {
