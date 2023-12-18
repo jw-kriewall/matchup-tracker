@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# Pokemon TCG Matchup Tracker
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is intended to help trainers keep track of their matchups and display their data to gain valuable insight into how their decks perform against each other.
 
 ## Available Scripts
 
