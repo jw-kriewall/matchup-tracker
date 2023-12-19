@@ -1,5 +1,5 @@
 import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
-import { getMatchups } from '../../apiCalls/getMatchups';
+import { getMatchups } from '../../apiCalls/matchups/getMatchups';
 import { useAppDispatch } from '../../hooks/hooks';
 import { loginAction } from '../../actions/userActions';
 

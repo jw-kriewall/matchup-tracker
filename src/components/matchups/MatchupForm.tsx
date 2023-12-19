@@ -9,7 +9,7 @@ import { DeckDisplay, Matchup } from "../../types/MatchupModels";
 import jwt_decode from "jwt-decode";
 import { DecodedJwtToken } from "../../types/DecodedJwtToken";
 import { useDispatch } from "react-redux";
-import { addNewMatchup } from "../../apiCalls/addMatchup";
+import { addNewMatchup } from "../../apiCalls/matchups/addMatchup";
 import { AppDispatch } from "../../data/store";
 import { IconButton } from "@mui/material";
 import { CredentialResponse } from "@react-oauth/google";

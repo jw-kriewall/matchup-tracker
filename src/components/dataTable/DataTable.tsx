@@ -1,32 +1,74 @@
+import { useEffect, useState } from "react";
 import { TableData } from "../../types/TableTypes";
+import { getMatchupRecordsByDeck } from "../../apiCalls/dataTable/getIndividualMatchupRecordsByDeck";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
 export default function DataTable() {
 	// This is the data object sent back by API
     // @TODO: data call for tableData - dependant on user
-	const tableData: TableData = {
-		Pikachu: {
-			"Pikachu": "0-0-1",
-			Charizard: "7-2-0",
-			Bulbasaur: "1-2-0",
-		},
-		Charizard: {
-			Pikachu: "2-7-0",
-			Charizard: "2-2-0",
-			Bulbasaur: "2-0-1",
-		},
-		Bulbasaur: {
-			Pikachu: "2-1-0",
-			Charizard: "0-2-1",
-			Bulbasaur: "1-1-0",
-			Wartortle: "4-23-3",
-		},
-		Wartortle: {
-			Venusaur: "3-0-0",
-			Golbat: "2-5-2",
-			Wartortle: "1-1",
-			Bulbasaur: "23-4-3",
-		},
-	};
+
+    const dispatch = useAppDispatch();
+    const [tableData, setTableData] = useState<TableData>({});
+    const filteredDecks = ['Pikachu', 'Charizard', 'Bulbasaur', 'Wartortle', "Venusaur"]; // List of all decks. Sub this with the list of decks used in menu dropdowns
+    const user = useAppSelector((state) => state.userReducer.user)
+
+    useEffect(() => {
+        let isMounted = true;
+        const fetchData = async () => {
+            const data: TableData = {};
+            // Loading
+            for (const deck of filteredDecks) {
+                if (user) {
+
+                    try {
+                        const response = await dispatch(getMatchupRecordsByDeck({ deckName: deck, user }));
+                        if (response && isMounted) {
+                            data[deck] = response.payload; // Ensure the response is structured as expected
+                        }
+                    } catch (error) {
+                        console.error("Error fetching data for deck", deck, error);
+                    }
+                }
+            }
+
+            if (isMounted) {
+                setTableData(data);
+            }
+        };
+
+        fetchData();
+
+        return () => {
+            isMounted = false;
+        };
+    }, [dispatch]);
+
+
+    
+	// const tableData: TableData = {
+	// 	Pikachu: {
+	// 		"Pikachu": "0-0-1",
+	// 		Charizard: "7-2-0",
+	// 		Bulbasaur: "1-2-0",
+	// 	},
+	// 	Charizard: {
+	// 		Pikachu: "2-7-0",
+	// 		Charizard: "2-2-0",
+	// 		Bulbasaur: "2-0-1",
+	// 	},
+	// 	Bulbasaur: {
+	// 		Pikachu: "2-1-0",
+	// 		Charizard: "0-2-1",
+	// 		Bulbasaur: "1-1-0",
+	// 		Wartortle: "4-23-3",
+	// 	},
+	// 	Wartortle: {
+	// 		Venusaur: "3-0-0",
+	// 		Golbat: "2-5-2",
+	// 		Wartortle: "1-1",
+	// 		Bulbasaur: "23-4-3",
+	// 	},
+	// };
 
 	const allDecks = new Set<string>();
 	Object.keys(tableData).forEach((deck) => {
@@ -50,6 +92,13 @@ export default function DataTable() {
 		const winPercentage = (wins / totalMatches) * 100;
 		return winPercentage.toFixed(1);
 	}
+
+    function formatWinPercentage(winPercentage: string) {
+        if (winPercentage === 'N/A') {
+            return winPercentage;
+        }
+        return `${winPercentage}%`;
+    }
 
 	return (
 		<table className="matchup-table">
@@ -79,7 +128,7 @@ export default function DataTable() {
 									}}
 								>
                                     {/* @TODO - eliminate % when N/A */}
-									{`${winPercentage}%`}
+									{formatWinPercentage(winPercentage)}
 								</td>
 							);
 						})}

@@ -1,5 +1,4 @@
-import { response } from "express";
-import { Matchup } from "../types/MatchupModels";
+import { Matchup } from "../../types/MatchupModels";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const addNewMatchup = createAsyncThunk(

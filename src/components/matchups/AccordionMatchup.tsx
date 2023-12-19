@@ -8,7 +8,7 @@ import axios from "axios";
 import { Matchup } from "../../types/MatchupModels";
 import Button from '@mui/material/Button';
 import { useAppSelector } from "../../hooks/hooks";
-import { getMatchups } from "../../apiCalls/getMatchups";
+import { getMatchups } from "../../apiCalls/matchups/getMatchups";
 import { store } from "../../data/store";
 import { CredentialResponse } from "@react-oauth/google";
 import Box from '@mui/material/Box';
