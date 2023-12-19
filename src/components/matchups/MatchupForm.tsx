@@ -34,8 +34,6 @@ export default function MatchupForm() {
 		string[]
 	>([]);
 
-	// @TODO: Delete needs to occur automatically.
-
 	// TODO: can this be useAppDispatch?
 	const dispatch = useDispatch<AppDispatch>();
 
@@ -268,6 +266,7 @@ export default function MatchupForm() {
 			</Button>
 			<div className="accordion-matchup-component">
 				{/* show last 10 matchups with option to show all in second screen. Linked to which user created it */}
+				{/* @TODO: Matchup Pagination */}
 				<AccordionMatchup />
 			</div>
 		</Box>
@@ -277,7 +276,7 @@ export default function MatchupForm() {
 		if (deckName === playerDeckName) {
 			setWinningDeckOptionsArray([deckName]);
 		} else {
-			setWinningDeckOptionsArray([playerDeckName, deckName]);
+			setWinningDeckOptionsArray([playerDeckName, deckName, "Tie"]);
 		}
 	}
 }
