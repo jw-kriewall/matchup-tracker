@@ -8,7 +8,18 @@ export default function LogoutButton() {
 
     const handleLogout = () => {
         dispatch(logoutAction());
-        dispatch(resetMatchups());
+        // dispatch(resetMatchups());
+        // should I be doing something different here?
+        window.location.reload();
+
+        // dispatch(logoutAction())
+        //     .then(() => {
+        //         // The action has completed
+        //         window.location.reload();
+        //     })
+        //     .catch((error) => {
+        //         // Handle any errors
+        //     });
     }
 
     return(
