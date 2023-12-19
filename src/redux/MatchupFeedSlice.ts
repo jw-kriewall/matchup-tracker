@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Matchup } from "../types/MatchupModels";
-import { addNewMatchup } from "../apiCalls/addMatchup";
+import { addNewMatchup } from "../apiCalls/matchups/addMatchup";
 import { RootState } from "../data/store";
-import { getMatchups } from "../apiCalls/getMatchups";
-import { deleteSingleMatchup } from "../apiCalls/deleteMatchup";
+import { getMatchups } from "../apiCalls/matchups/getMatchups";
+import { deleteSingleMatchup } from "../apiCalls/matchups/deleteMatchup";
 
 export interface MatchupFeedState {
     matchups: Matchup[],
