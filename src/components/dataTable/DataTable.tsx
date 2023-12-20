@@ -1,74 +1,48 @@
 import { useEffect, useState } from "react";
-import { TableData } from "../../types/TableTypes";
+import { MatchupRecord, TableData } from "../../types/TableTypes";
 import { getMatchupRecordsByDeck } from "../../apiCalls/dataTable/getIndividualMatchupRecordsByDeck";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
 export default function DataTable() {
-	// This is the data object sent back by API
-    // @TODO: data call for tableData - dependant on user
+	const dispatch = useAppDispatch();
+	const [tableData, setTableData] = useState<TableData>({});
+	const filteredDecks = ['Pikachu', 'Charizard', 'Bulbasaur', 'Squirtle', 'Wartortle', "Venusaur"]; // List of all decks. This is working so will just need a filter adjustment strategy.
+	const user = useAppSelector((state) => state.userReducer.user)
 
-    const dispatch = useAppDispatch();
-    const [tableData, setTableData] = useState<TableData>({});
-    const filteredDecks = ['Pikachu', 'Charizard', 'Bulbasaur', 'Wartortle', "Venusaur"]; // List of all decks. Sub this with the list of decks used in menu dropdowns
-    const user = useAppSelector((state) => state.userReducer.user)
+	useEffect(() => {
+		let isMounted = true;
+		const fetchData = async () => {
+			if (user) {
+				try {
+					const response = await dispatch(getMatchupRecordsByDeck({ user }));
+					if (response && isMounted) {
+						const fetchedData: TableData = response.payload;
 
-    useEffect(() => {
-        let isMounted = true;
-        const fetchData = async () => {
-            const data: TableData = {};
-            // Loading
-            for (const deck of filteredDecks) {
-                if (user) {
+						const data: TableData = Object.keys(fetchedData).reduce((acc, deck) => {
+							if (filteredDecks.includes(deck)) {
+								acc[deck] = Object.keys(fetchedData[deck]).reduce((innerAcc, opponent) => {
+									if (filteredDecks.includes(opponent)) {
+										innerAcc[opponent] = fetchedData[deck][opponent];
+									}
+									return innerAcc;
+								}, {} as MatchupRecord);
+							}
+							return acc;
+						}, {} as TableData);
 
-                    try {
-                        const response = await dispatch(getMatchupRecordsByDeck({ deckName: deck, user }));
-                        if (response && isMounted) {
-                            data[deck] = response.payload; // Ensure the response is structured as expected
-                        }
-                    } catch (error) {
-                        console.error("Error fetching data for deck", deck, error);
-                    }
-                }
-            }
+						setTableData(data);
+					}
+				} catch (error) {
+					console.error("Error fetching data for decks", error);
+				}
+			}
+		};
+		fetchData();
 
-            if (isMounted) {
-                setTableData(data);
-            }
-        };
-
-        fetchData();
-
-        return () => {
-            isMounted = false;
-        };
-    }, [dispatch]);
-
-
-    
-	// const tableData: TableData = {
-	// 	Pikachu: {
-	// 		"Pikachu": "0-0-1",
-	// 		Charizard: "7-2-0",
-	// 		Bulbasaur: "1-2-0",
-	// 	},
-	// 	Charizard: {
-	// 		Pikachu: "2-7-0",
-	// 		Charizard: "2-2-0",
-	// 		Bulbasaur: "2-0-1",
-	// 	},
-	// 	Bulbasaur: {
-	// 		Pikachu: "2-1-0",
-	// 		Charizard: "0-2-1",
-	// 		Bulbasaur: "1-1-0",
-	// 		Wartortle: "4-23-3",
-	// 	},
-	// 	Wartortle: {
-	// 		Venusaur: "3-0-0",
-	// 		Golbat: "2-5-2",
-	// 		Wartortle: "1-1",
-	// 		Bulbasaur: "23-4-3",
-	// 	},
-	// };
+		return () => {
+			isMounted = false;
+		};
+	}, [dispatch, user, filteredDecks]);
 
 	const allDecks = new Set<string>();
 	Object.keys(tableData).forEach((deck) => {
@@ -79,26 +53,26 @@ export default function DataTable() {
 
 	function calculateWinPercentage(record: string): string {
 		const [wins, losses, ties] = record.split("-").map(Number);
-		const totalMatches = wins + losses; // Include ties in the total matches
+		const totalMatches = wins + losses; // Do not include ties in totalMatches
 
 		if (wins + losses + ties === 0) {
 			return "N/A";
 		}
 		// If there are no matches, or there are only ties (no wins or losses), return 50
 		if (wins === 0 && losses === 0) {
-            const winPercentage = 50
+			const winPercentage = 50
 			return winPercentage.toFixed(1);
 		}
 		const winPercentage = (wins / totalMatches) * 100;
 		return winPercentage.toFixed(1);
 	}
 
-    function formatWinPercentage(winPercentage: string) {
-        if (winPercentage === 'N/A') {
-            return winPercentage;
-        }
-        return `${winPercentage}%`;
-    }
+	function formatWinPercentage(winPercentage: string) {
+		if (winPercentage === 'N/A') {
+			return winPercentage;
+		}
+		return `${winPercentage}%`;
+	}
 
 	return (
 		<table className="matchup-table">
@@ -127,7 +101,7 @@ export default function DataTable() {
 										textAlign: "center",
 									}}
 								>
-                                    {/* @TODO - eliminate % when N/A */}
+									{/* @TODO - eliminate % when N/A */}
 									{formatWinPercentage(winPercentage)}
 								</td>
 							);
