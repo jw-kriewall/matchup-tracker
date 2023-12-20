@@ -26,7 +26,7 @@ function Copyright(props: any) {
 	);
 }
 
-export default function LoginPage({ closeModal }: any) {
+export default function LoginModal({ closeModal }: any) {
 
 	// const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 	// 	event.preventDefault();

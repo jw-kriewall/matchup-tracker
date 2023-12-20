@@ -2,7 +2,7 @@ import * as React from "react";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import LoginPage from "./LoginPage";
+import LoginModal from "./LoginModal";
 
 const style = {
 	position: "absolute" as "absolute",
@@ -34,7 +34,7 @@ const LoginButton = () => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <LoginPage closeModal={handleClose} />
+                    <LoginModal closeModal={handleClose} />
                 </Box>
             </Modal>
         </>

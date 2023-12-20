@@ -2,11 +2,13 @@ import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit';
 import matchupFeedReducer from '../redux/MatchupFeedSlice';
 import userAuthReducer from '../redux/UserSlice';
 import { Matchup } from '../types/MatchupModels';
+import TableDataReducer from '../redux/TableDataSlice';
 
 export const store = configureStore({
   reducer: {
     userReducer: userAuthReducer,
-    matchupReducer: matchupFeedReducer
+    matchupReducer: matchupFeedReducer,
+    tableDataReducer: TableDataReducer,
   }
 });
 
