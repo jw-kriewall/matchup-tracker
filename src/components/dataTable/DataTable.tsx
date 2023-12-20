@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MatchupRecord, TableData } from "../../types/TableTypes";
 import { getMatchupRecordsByDeck } from "../../apiCalls/dataTable/getIndividualMatchupRecordsByDeck";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
@@ -6,7 +6,8 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 export default function DataTable() {
 	const dispatch = useAppDispatch();
 	const [tableData, setTableData] = useState<TableData>({});
-	const filteredDecks = ['Pikachu', 'Charizard', 'Bulbasaur', 'Squirtle', 'Wartortle', "Venusaur"]; // List of all decks. This is working so will just need a filter adjustment strategy.
+	// filteredDecks is defined inside a component and changes on every render so I am using useMemo here to prevent running useEffect infinitely.
+	const filteredDecks = useMemo(() => ['Pikachu', 'Charizard', 'Bulbasaur', 'Squirtle', 'Wartortle', "Venusaur"], []); // List of all decks. This is working so will just need a filter adjustment strategy.
 	const user = useAppSelector((state) => state.userReducer.user)
 
 	useEffect(() => {
@@ -42,7 +43,7 @@ export default function DataTable() {
 		return () => {
 			isMounted = false;
 		};
-	}, [dispatch, user, filteredDecks]);
+	}, [dispatch, user?.credential, filteredDecks]);
 
 	const allDecks = new Set<string>();
 	Object.keys(tableData).forEach((deck) => {

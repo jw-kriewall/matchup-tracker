@@ -7,7 +7,7 @@ import axios from "axios";
 const API_URL = "http://localhost:8090";
 
 export const getMatchupRecordsByDeck = createAsyncThunk(
-    "matchups/getRecordsByDeck",
+    "tableData/getAllRecords",
     async({ user }: { user: CredentialResponse | undefined }) => {
         try {
             const response = await axios({
