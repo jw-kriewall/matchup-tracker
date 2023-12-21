@@ -1,5 +1,5 @@
 import { DeckDisplay } from "../types/MatchupModels";
-//https://pokemondb.net/sprites/pikachu
+//https://pokemondb.net/sprites
 
 // @TODO: This data should be stored in Backend. Need CRUD endpoints ultimately.
 export const decks: DeckDisplay[] = [
@@ -32,4 +32,18 @@ export const decks: DeckDisplay[] = [
         'https://img.pokemondb.net/sprites/black-white/normal/squirtle.png'
       ]
     },
+    {
+      value: 'Dragonite',
+      label: 'Dragonite',
+      sprites: [
+        'https://img.pokemondb.net/sprites/ruby-sapphire/normal/dragonite.png'
+      ]
+    },
+    {
+      value: 'Mewtwo',
+      label: 'Mewtwo',
+      sprites: [
+        'https://img.pokemondb.net/sprites/diamond-pearl/normal/mewtwo.png'
+      ]
+    }
   ];

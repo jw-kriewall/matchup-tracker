@@ -7,38 +7,46 @@ export default function DataTable() {
 	const dispatch = useAppDispatch();
 	const [tableData, setTableData] = useState<TableData>({});
 	// filteredDecks is defined inside a component and changes on every render so I am using useMemo here to prevent running useEffect infinitely.
-	const filteredDecks = useMemo(() => ['Pikachu', 'Charizard', 'Bulbasaur', 'Squirtle', 'Wartortle', "Venusaur"], []); // List of all decks. This is working so will just need a filter adjustment strategy.
+	const filteredDecks = useMemo(() => ['Pikachu', 'Charizard', 'Bulbasaur', 'Squirtle', 'Venusaur', 'Mewtwo', 'Dragonite'], []); // List of all decks. This is working so will just need a filter adjustment strategy.
 	const user = useAppSelector((state) => state.userReducer.user)
 
 	useEffect(() => {
 		let isMounted = true;
-		const fetchData = async () => {
-			if (user) {
-				try {
-					const response = await dispatch(getMatchupRecordsByDeck({ user }));
-					if (response && isMounted) {
-						const fetchedData: TableData = response.payload;
+    const fetchData = async () => {
+        if (user) {
+            try {
+                const response = await dispatch(getMatchupRecordsByDeck({ user }));
+                if (response && isMounted) {
+                    const fetchedData: TableData = response.payload;
 
-						const data: TableData = Object.keys(fetchedData).reduce((acc, deck) => {
-							if (filteredDecks.includes(deck)) {
-								acc[deck] = Object.keys(fetchedData[deck]).reduce((innerAcc, opponent) => {
-									if (filteredDecks.includes(opponent)) {
-										innerAcc[opponent] = fetchedData[deck][opponent];
-									}
-									return innerAcc;
-								}, {} as MatchupRecord);
-							}
-							return acc;
-						}, {} as TableData);
+                    // Initialize data with all decks from filteredDecks
+                    const data: TableData = filteredDecks.reduce((acc, deck) => {
+                        acc[deck] = filteredDecks.reduce((innerAcc, opponent) => {
+                            innerAcc[opponent] = "0-0-0"; // Default value
+                            return innerAcc;
+                        }, {} as MatchupRecord);
+                        return acc;
+                    }, {} as TableData);
 
-						setTableData(data);
-					}
-				} catch (error) {
-					console.error("Error fetching data for decks", error);
-				}
-			}
-		};
-		fetchData();
+                    // Populate data with fetched matchup records
+                    Object.keys(fetchedData).forEach(deck => {
+                        if (filteredDecks.includes(deck)) {
+                            Object.keys(fetchedData[deck]).forEach(opponent => {
+                                if (filteredDecks.includes(opponent)) {
+                                    data[deck][opponent] = fetchedData[deck][opponent];
+                                }
+                            });
+                        }
+                    });
+
+                    setTableData(data);
+                }
+            } catch (error) {
+                console.error("Error fetching data for decks", error);
+            }
+        }
+    };
+    fetchData();
 
 		return () => {
 			isMounted = false;
