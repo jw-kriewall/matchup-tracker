@@ -9,7 +9,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
-import { allDecks } from "../../constants/allDecks";
+import { allDecksConstant } from "../../constants/allDecks";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -26,18 +26,7 @@ export default function DataTable() {
 	const dispatch = useAppDispatch();
 	const [tableData, setTableData] = useState<TableData>({});
 	// filteredDecks is defined inside a component and changes on every render so I am using useMemo here to prevent running useEffect infinitely.
-	const filteredDecks = useMemo(
-		() => [
-			"Pikachu",
-			"Charizard",
-			"Bulbasaur",
-			"Squirtle",
-			"Venusaur",
-			"Mewtwo",
-			"Dragonite",
-		],
-		[]
-	);
+    const filteredDecks = useMemo(() => allDecksConstant.map(deck => deck.value), []);
 	const [selectedDecks, setSelectedDecks] = useState<string[]>(filteredDecks);
 	const user = useAppSelector((state) => state.userReducer.user);
 
@@ -91,12 +80,12 @@ export default function DataTable() {
 		};
 	}, [dispatch, user?.credential, selectedDecks]);
 
-	const allDecks = new Set<string>();
+	const deckSet = new Set<string>();
 	Object.keys(tableData).forEach((deck) => {
-		allDecks.add(deck);
-		Object.keys(tableData[deck]).forEach((opponent) => allDecks.add(opponent));
+		deckSet.add(deck);
+		Object.keys(tableData[deck]).forEach((opponent) => deckSet.add(opponent));
 	});
-	const decks = Array.from(allDecks);
+	const decks = Array.from(deckSet);
 
 	function calculateWinPercentage(record: string): string {
 		const [wins, losses, ties] = record.split("-").map(Number);
@@ -131,7 +120,7 @@ export default function DataTable() {
 					multiple
 					value={selectedDecks}
 					onChange={handleDeckChange}
-					input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+					input={<OutlinedInput id="deck-select-label" label="Select Decks" />}
 					renderValue={(selected) => (
 						<Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
 							{selected.map((value) => (
