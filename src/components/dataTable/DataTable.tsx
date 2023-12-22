@@ -32,65 +32,29 @@ export default function DataTable() {
 		[]
 	);
 	const [hoveredCell, setHoveredCell] = useState<string | null>(null);
-	const [selectedDecks, setSelectedDecks] = useState<string[]>(filteredDecks);
-	const user = useAppSelector((state) => state.userReducer.user);
+    const [selectedDecks, setSelectedDecks] = useState<string[]>(filteredDecks);
+    const user = useAppSelector((state) => state.userReducer.user);
 
-	const handleDeckChange = (event: SelectChangeEvent<typeof selectedDecks>) => {
-		const {
-			target: { value },
-		} = event;
-		setSelectedDecks(typeof value === "string" ? value.split(",") : value);
-	};
+    useEffect(() => {
+        const fetchData = async () => {
+            if (user) {
+                try {
+                    const response = await dispatch(getMatchupRecordsByDeck({ user }));
+                    if (response) {
+                        setTableData(response.payload);
+                    }
+                } catch (error) {
+                    console.error("Error fetching data for decks", error);
+                }
+            }
+        };
+        fetchData();
+    }, [dispatch, user]);
 
-	useEffect(() => {
-		let isMounted = true;
-		if (user) {
-			const fetchData = async () => {
-				try {
-					const response = await dispatch(getMatchupRecordsByDeck({ user }));
-					if (response && isMounted) {
-						const fetchedData: TableData = response.payload;
-
-						// Initialize data with all decks from filteredDecks
-						const data: TableData = selectedDecks.reduce((acc, deck) => {
-							acc[deck] = selectedDecks.reduce((innerAcc, opponent) => {
-								innerAcc[opponent] = "0-0-0"; // Default value
-								return innerAcc;
-							}, {} as MatchupRecord);
-							return acc;
-						}, {} as TableData);
-
-						// Populate data with fetched matchup records
-						Object.keys(fetchedData).forEach((deck) => {
-							if (selectedDecks.includes(deck)) {
-								Object.keys(fetchedData[deck]).forEach((opponent) => {
-									if (selectedDecks.includes(opponent)) {
-										data[deck][opponent] = fetchedData[deck][opponent];
-									}
-								});
-							}
-						});
-
-						setTableData(data);
-					}
-				} catch (error) {
-					console.error("Error fetching data for decks", error);
-				}
-			};
-			fetchData();
-		}
-
-		return () => {
-			isMounted = false;
-		};
-	}, [dispatch, user, selectedDecks]);
-
-	const deckSet = new Set<string>();
-	Object.keys(tableData).forEach((deck) => {
-		deckSet.add(deck);
-		Object.keys(tableData[deck]).forEach((opponent) => deckSet.add(opponent));
-	});
-	const decks = Array.from(deckSet);
+    const handleDeckChange = (event: SelectChangeEvent<string[]>) => {
+        const value = event.target.value;
+        setSelectedDecks(typeof value === "string" ? value.split(",") : value);
+    };
 
 	function calculateWinPercentage(record: string): string {
 		const [wins, losses, ties] = record.split("-").map(Number);
@@ -173,16 +137,16 @@ export default function DataTable() {
 				<thead>
 					<tr>
 						<th style={{ border: "none", background: "transparent" }}></th>
-						{decks.map((deck) => (
+						{selectedDecks.map((deck) => (
 							<th key={deck}>{deck}</th>
 						))}
 					</tr>
 				</thead>
 				<tbody>
-					{decks.map((deckRow, index) => (
+					{selectedDecks.map((deckRow, index) => (
 						<tr key={deckRow}>
 							<th>{deckRow}</th>
-							{decks.map((deckCol) => {
+							{selectedDecks.map((deckCol) => {
 								const key = `${deckRow}-${deckCol}`;
 								const record = tableData[deckRow]
 									? tableData[deckRow][deckCol] || "0-0-0"
