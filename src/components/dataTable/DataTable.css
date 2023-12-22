@@ -1,0 +1,28 @@
+.matchup-table {
+    width: 100%; /* Adjust as necessary */
+    border-collapse: collapse; /* Optional: for borders to be more connected */
+}
+
+.matchup-table th, .matchup-table td {
+    padding: 18px; /* Increase cell size */
+    border: 1px solid #ddd; /* Stylish border */
+    text-align: center; /* Center alignment */
+    font-size: 16px; /* Larger font size */
+    font-weight: 400;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); /* Optional: Box shadow for depth */
+}
+
+.matchup-table th {
+    background-color: #f4f4f4; /* Header background */
+    font-weight: bold; /* Bold font for headers */
+}
+
+.record-style {
+    background-color: #fff;
+    border-radius: 4px;
+    display: inline-block;
+    margin: auto;
+    padding: 5px 10px;
+    margin: -7px -12px; /* To prevent adjustment to the table dimensions, margin needs to offset padding + border */
+    border: 1px solid #000000;
+  }

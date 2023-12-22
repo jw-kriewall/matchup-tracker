@@ -10,6 +10,7 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
 import { allDecksConstant } from "../../constants/allDecks";
+import "./DataTable.css";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -26,7 +27,11 @@ export default function DataTable() {
 	const dispatch = useAppDispatch();
 	const [tableData, setTableData] = useState<TableData>({});
 	// filteredDecks is defined inside a component and changes on every render so I am using useMemo here to prevent running useEffect infinitely.
-    const filteredDecks = useMemo(() => allDecksConstant.map(deck => deck.value), []);
+	const filteredDecks = useMemo(
+		() => allDecksConstant.map((deck) => deck.value),
+		[]
+	);
+    const [hoveredCell, setHoveredCell] = useState<string | null>(null);
 	const [selectedDecks, setSelectedDecks] = useState<string[]>(filteredDecks);
 	const user = useAppSelector((state) => state.userReducer.user);
 
@@ -110,9 +115,9 @@ export default function DataTable() {
 		return `${winPercentage}%`;
 	}
 
-    if(!user) {
-        return <div>Please log in to view content.</div>
-    }
+	if (!user) {
+		return <div>Please log in to view content.</div>;
+	}
 
 	return (
 		<>
@@ -138,12 +143,9 @@ export default function DataTable() {
 						<MenuItem
 							key={name}
 							value={name}
-							//   style={{
-							//     fontWeight:
-							//       selectedDecks.indexOf(name) === -1
-							//         ? theme.typography.fontWeightRegular
-							//         : theme.typography.fontWeightMedium,
-							//   }}
+                            style={{
+                                backgroundColor: selectedDecks.includes(name) ? '#07bcf7' : 'transparent',
+                              }}
 						>
 							{name}
 						</MenuItem>
@@ -154,7 +156,7 @@ export default function DataTable() {
 			<table className="matchup-table">
 				<thead>
 					<tr>
-						<th></th>
+                        <th style={{ border: 'none', background: 'transparent' }}></th>
 						{decks.map((deck) => (
 							<th key={deck}>{deck}</th>
 						))}
@@ -165,19 +167,25 @@ export default function DataTable() {
 						<tr key={deckRow}>
 							<th>{deckRow}</th>
 							{decks.map((deckCol) => {
+                                const key = `${deckRow}-${deckCol}`;
 								const record = tableData[deckRow]
 									? tableData[deckRow][deckCol] || "0-0-0"
 									: "0-0-0";
 								const winPercentage = calculateWinPercentage(record);
 								return (
 									<td
-										key={deckCol}
+										key={key}
+										onMouseEnter={() => setHoveredCell(key)}
+										onMouseLeave={() => setHoveredCell(null)}
 										style={{
 											backgroundColor: `hsl(${winPercentage}, 100%, 50%)`,
 											textAlign: "center",
+											cursor: "pointer",
 										}}
 									>
-										{formatWinPercentage(winPercentage)}
+										{hoveredCell === key
+											? <div className="record-style">{record}</div>
+											: formatWinPercentage(winPercentage)}
 									</td>
 								);
 							})}
