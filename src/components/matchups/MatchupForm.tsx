@@ -2,7 +2,7 @@ import React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
-import { decks } from "../../constants/decks";
+import { allDecks } from "../../constants/allDecks";
 import Button from "@mui/material/Button";
 import AccordionMatchup from "./AccordionMatchup";
 import { DeckDisplay, Matchup } from "../../types/MatchupModels";
@@ -187,7 +187,7 @@ export default function MatchupForm() {
 					defaultValue=""
 					onChange={(e) => handlePlayerOneDeckChange(e)}
 				>
-					{decks.map((option: DeckDisplay) => (
+					{allDecks.map((option: DeckDisplay) => (
 						<MenuItem key={option.value} value={option.value}>
 							<Box sx={{ display: 'flex', alignItems: 'center' }}>
 							{option.label}
@@ -213,7 +213,7 @@ export default function MatchupForm() {
 					defaultValue=""
 					onChange={(e) => handlePlayerTwoDeckChange(e)}
 				>
-					{decks.map((option) => (
+					{allDecks.map((option) => (
 						<MenuItem key={option.value} value={option.value}>
 							<Box sx={{ display: 'flex', alignItems: 'center' }}>
 								{option.label}

@@ -2,7 +2,7 @@ import { DeckDisplay } from "../types/MatchupModels";
 //https://pokemondb.net/sprites
 
 // @TODO: This data should be stored in Backend. Need CRUD endpoints ultimately.
-export const decks: DeckDisplay[] = [
+export const allDecks: DeckDisplay[] = [
     {
       value: 'Pikachu',
       label: 'Pikachu',
