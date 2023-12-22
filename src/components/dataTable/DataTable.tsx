@@ -12,16 +12,16 @@ import Chip from "@mui/material/Chip";
 import { allDecksConstant } from "../../constants/allDecks";
 import "./DataTable.css";
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-	PaperProps: {
-		style: {
-			maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-			width: 250,
-		},
-	},
-};
+// const ITEM_HEIGHT = 48;
+// const ITEM_PADDING_TOP = 8;
+// const MenuProps = {
+// 	PaperProps: {
+// 		style: {
+// 			maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+// 			width: 250,
+// 		},
+// 	},
+// };
 
 export default function DataTable() {
 	const dispatch = useAppDispatch();
@@ -116,12 +116,13 @@ export default function DataTable() {
 	}
 
 	if (!user) {
+        // @TODO - separate to own component for reusability
 		return <div>Please log in to view content.</div>;
 	}
 
 	return (
 		<>
-			<FormControl sx={{ m: 1, width: 300 }}>
+			<FormControl sx={{ m: 1, width: 400 }}>
 				<InputLabel id="deck-select-label">Select Decks</InputLabel>
 				<Select
 					labelId="deck-select-label"
@@ -131,13 +132,16 @@ export default function DataTable() {
 					onChange={handleDeckChange}
 					input={<OutlinedInput id="deck-select-label" label="Select Decks" />}
 					renderValue={(selected) => (
-						<Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+						<Box sx={{ display: "flex", gap:0.2, overflow: 'hidden', 
+                        textOverflow: 'ellipsis', 
+                        whiteSpace: 'nowrap',
+                        maxWidth: '100%', }}>
 							{selected.map((value) => (
-								<Chip key={value} label={value} />
+								<Chip key={value} label={value} style={{ backgroundColor: '#07bcf7' }}/>
 							))}
 						</Box>
 					)}
-					MenuProps={MenuProps}
+					// MenuProps={MenuProps}
 				>
 					{filteredDecks.map((name) => (
 						<MenuItem
