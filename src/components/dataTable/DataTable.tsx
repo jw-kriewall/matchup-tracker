@@ -110,6 +110,10 @@ export default function DataTable() {
 		return `${winPercentage}%`;
 	}
 
+    if(!user) {
+        return <div>Please log in to view content.</div>
+    }
+
 	return (
 		<>
 			<FormControl sx={{ m: 1, width: 300 }}>
