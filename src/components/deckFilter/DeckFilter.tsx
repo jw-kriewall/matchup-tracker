@@ -20,7 +20,7 @@ function DeckFilter({ selectedDecks, initialDecks, onSelectedDecksChange }: Deck
   };
 
   return (
-    <FormControl sx={{ m: 1, width: 400 }}>
+    <FormControl>
       <InputLabel id="deck-select-label">Select Decks</InputLabel>
       <Select
         labelId="deck-select-label"
@@ -30,16 +30,7 @@ function DeckFilter({ selectedDecks, initialDecks, onSelectedDecksChange }: Deck
         onChange={handleDeckChange}
         input={<OutlinedInput id="deck-select-label" label="Select Decks" />}
         renderValue={(selected) => (
-          <Box
-            sx={{
-              display: "flex",
-              gap: 0.2,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-              maxWidth: "100%",
-            }}
-          >
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
             {selected.map((value: string) => (
               <Chip
                 key={value}

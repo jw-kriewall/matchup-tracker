@@ -34,6 +34,9 @@ export default function MatchupForm() {
 		string[]
 	>([]);
 
+	// @TODO: https://mui.com/material-ui/react-snackbar/
+	// Show when successful matchup added.
+
 	// TODO: can this be useAppDispatch?
 	const dispatch = useDispatch<AppDispatch>();
 
@@ -60,6 +63,8 @@ export default function MatchupForm() {
 		let username = "";
 		let email = "";
 
+
+		// @TODO: useUser() hook....
 		let oauth: CredentialResponse = JSON.parse(localStorage.getItem("user")!);
 		let token = oauth.credential;
 

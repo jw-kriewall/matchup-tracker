@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { TableData } from "../../types/TableTypes";
 import { getMatchupRecordsByDeck } from "../../apiCalls/dataTable/getIndividualMatchupRecordsByDeck";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { calculateWinPercentage, formatWinPercentage } from "./DataTableFunctions";
 import "./DataTable.css";
 
 interface DataTableProps {
@@ -29,34 +30,6 @@ function DataTable({ selectedDecks }: DataTableProps) {
 		};
 		fetchData();
 	}, [dispatch, user]);
-
-	function calculateWinPercentage(record: string): string {
-		const [wins, losses, ties] = record.split("-").map(Number);
-		const totalMatches = wins + losses; // Do not include ties in totalMatches
-
-		if (wins + losses + ties === 0) {
-			return "N/A";
-		}
-		// If there are no matches, or there are only ties (no wins or losses), return 50
-		if (wins === 0 && losses === 0) {
-			const winPercentage = 50;
-			return winPercentage.toFixed(1);
-		}
-		const winPercentage = (wins / totalMatches) * 100;
-		return winPercentage.toFixed(1);
-	}
-
-	function formatWinPercentage(winPercentage: string) {
-		if (winPercentage === "N/A") {
-			return winPercentage;
-		}
-		return `${winPercentage}%`;
-	}
-
-	if (!user) {
-		// @TODO - separate to own component for reusability
-		return <div>Please log in to view content.</div>;
-	}
 
 	return (
 		<>

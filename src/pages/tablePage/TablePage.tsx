@@ -18,26 +18,29 @@ export default function TablePage() {
 					<NavBar />
 				</div>
 
-				{/* TODO: Create a fun please log in component */}
+				{/* TODO: Create a fun log in component */}
 				<div>Please log in to view content.</div>
 			</div>
 		)
 	}
-	
+
 	return (
 		<div>
 			<div className="navigation">
 				<NavBar />
 			</div>
-			<div className="deck-filter">
-				<DeckFilter
-					selectedDecks={selectedDecks}
-					onSelectedDecksChange={setSelectedDecks}
-					initialDecks={initialDecks}
-				/>
-			</div>
-			<div className="data-table">
-				<DataTable selectedDecks={selectedDecks} />
+
+			<div className="bento-box">
+				<div className="deck-filter">
+					<DeckFilter
+						selectedDecks={selectedDecks}
+						onSelectedDecksChange={setSelectedDecks}
+						initialDecks={initialDecks}
+					/>
+				</div>
+				<div className="data-table">
+					<DataTable selectedDecks={selectedDecks} />
+				</div>
 			</div>
 		</div>
 	);
