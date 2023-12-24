@@ -1,8 +1,8 @@
 import React from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import HomePage from "./pages/HomePage";
-import TablePage from "./pages/TablePage";
+import HomePage from "./pages/homePage/HomePage";
+import TablePage from "./pages/tablePage/TablePage";
 
 function App() {
 	return (
