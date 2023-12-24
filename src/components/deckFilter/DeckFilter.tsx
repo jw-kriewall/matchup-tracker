@@ -6,20 +6,18 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
-import { allDecksConstant } from "../../constants/allDecks";
 
 interface DeckFilterProps {
   selectedDecks: string[];
+  initialDecks: string[];
   onSelectedDecksChange: (selectedDecks: string[]) => void;
 }
 
-const DeckFilter: React.FC<DeckFilterProps> = ({ selectedDecks, onSelectedDecksChange }) => {
+function DeckFilter({ selectedDecks, initialDecks, onSelectedDecksChange }: DeckFilterProps) {
   const handleDeckChange = (event: SelectChangeEvent<string[]>) => {
     const value = event.target.value as string[];
     onSelectedDecksChange(value);
   };
-
-  const availableDecks = allDecksConstant.map((deck) => deck.value);
 
   return (
     <FormControl sx={{ m: 1, width: 400 }}>
@@ -52,7 +50,7 @@ const DeckFilter: React.FC<DeckFilterProps> = ({ selectedDecks, onSelectedDecksC
           </Box>
         )}
       >
-        {availableDecks.map((name: string) => (
+        {initialDecks.map((name: string) => (
           <MenuItem
             key={name}
             value={name}

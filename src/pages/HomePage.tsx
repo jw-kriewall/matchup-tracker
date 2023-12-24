@@ -1,5 +1,5 @@
-import MatchupForm from "../matchups/MatchupForm";
-import NavBar from "../navBar/NavBar";
+import MatchupForm from "../components/matchups/MatchupForm";
+import NavBar from "../components/navBar/NavBar";
 
 export default function HomePage() {
 	return (

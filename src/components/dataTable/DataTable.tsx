@@ -8,7 +8,7 @@ interface DataTableProps {
 	selectedDecks: string[];
 }
 
-const DataTable: React.FC<DataTableProps> = ({ selectedDecks }) => {
+function DataTable({ selectedDecks }: DataTableProps) {
 	const dispatch = useAppDispatch();
 	const [tableData, setTableData] = useState<TableData>({});
 	const [hoveredCell, setHoveredCell] = useState<string | null>(null);

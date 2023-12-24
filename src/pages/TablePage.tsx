@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import DataTable from "../dataTable/DataTable";
-import DeckFilter from "../deckFilter/DeckFilter";
-import NavBar from "../navBar/NavBar";
-import { allDecksConstant } from "../../constants/allDecks";
+import DataTable from "../components/dataTable/DataTable";
+import DeckFilter from "../components/deckFilter/DeckFilter";
+import NavBar from "../components/navBar/NavBar";
+import { allDecksConstant } from "../constants/allDecks";
 
 export default function TablePage() {
 	const initialDecks = allDecksConstant.map((deck) => deck.value);
@@ -17,6 +17,7 @@ export default function TablePage() {
 				<DeckFilter
 					selectedDecks={selectedDecks}
 					onSelectedDecksChange={setSelectedDecks}
+					initialDecks={initialDecks}
 				/>
 			</div>
 			<div className="data-table">
