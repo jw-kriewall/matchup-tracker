@@ -15,32 +15,24 @@ import { IconButton } from "@mui/material";
 import { CredentialResponse } from "@react-oauth/google";
 import LooksOneIcon from "@mui/icons-material/LooksOne";
 import SnackbarSuccess from "../snackbarNotifications/SnackbarSuccess";
+import { useAppDispatch } from "../../hooks/hooks";
 
 export default function MatchupForm() {
 	const [playerOneName, setPlayerOneName] = React.useState<string>("");
 	const [playerTwoName, setPlayerTwoName] = React.useState<string>("");
 	const [playerOneDeckName, setPlayerOneDeckName] = React.useState<string>("");
 	const [playerTwoDeckName, setPlayerTwoDeckName] = React.useState<string>("");
-	const [playerOneDecklist, setPlayerOneDecklist] =
-		React.useState<string>("blank");
-	const [playerTwoDecklist, setPlayerTwoDecklist] =
-		React.useState<string>("blank");
-
+	const [playerOneDecklist, setPlayerOneDecklist] = React.useState<string>("blank");
+	const [playerTwoDecklist, setPlayerTwoDecklist] = React.useState<string>("blank");
 	const [startingPlayer, setStartingPlayer] = React.useState<string>("");
 	const [winningDeck, setWinningDeck] = React.useState<string>("");
 	const [format, setFormat] = React.useState<string>("");
 	const [notes, setNotes] = React.useState<string>("");
 	const [successMessage, setSuccessMessage] = React.useState<string>('');
 
-	const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<
-		string[]
-	>([]);
+	const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<string[]>([]);
 
-	// @TODO: https://mui.com/material-ui/react-snackbar/
-	// Show when successful matchup added.
-
-	// TODO: can this be useAppDispatch?
-	const dispatch = useDispatch<AppDispatch>();
+	const dispatch = useAppDispatch();
 
 	const handlePlayerOneDeckChange = (e: any) => {
 		e.preventDefault();
@@ -64,7 +56,6 @@ export default function MatchupForm() {
 		let role = "basic";
 		let username = "";
 		let email = "";
-
 
 		// @TODO: useUser() hook....
 		let oauth: CredentialResponse = JSON.parse(localStorage.getItem("user")!);
