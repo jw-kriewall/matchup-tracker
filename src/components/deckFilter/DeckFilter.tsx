@@ -30,7 +30,7 @@ function DeckFilter({ selectedDecks, initialDecks, onSelectedDecksChange }: Deck
         onChange={handleDeckChange}
         input={<OutlinedInput id="deck-select-label" label="Select Decks" />}
         renderValue={(selected) => (
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, overflow: 'hidden', maxHeight: '72px' }}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', whiteSpace: 'nowrap', gap: 0.5, overflow: 'hidden', textOverflow: 'ellipsis', maxHeight: '72px' }}>
             {selected.map((value: string) => (
               <Chip
                 key={value}

@@ -14,6 +14,7 @@ import { AppDispatch } from "../../data/store";
 import { IconButton } from "@mui/material";
 import { CredentialResponse } from "@react-oauth/google";
 import LooksOneIcon from "@mui/icons-material/LooksOne";
+import SnackbarSuccess from "../snackbarNotifications/SnackbarSuccess";
 
 export default function MatchupForm() {
 	const [playerOneName, setPlayerOneName] = React.useState<string>("");
@@ -29,6 +30,7 @@ export default function MatchupForm() {
 	const [winningDeck, setWinningDeck] = React.useState<string>("");
 	const [format, setFormat] = React.useState<string>("");
 	const [notes, setNotes] = React.useState<string>("");
+	const [successMessage, setSuccessMessage] = React.useState<string>('');
 
 	const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<
 		string[]
@@ -104,9 +106,15 @@ export default function MatchupForm() {
 		};
 
 		console.log(matchup);
-
-		dispatch(addNewMatchup(matchup));
-		setNotes("");
+		try {
+			await dispatch(addNewMatchup(matchup));
+			setSuccessMessage("");
+			setTimeout(() => setSuccessMessage("Matchup successfully added!"), 0);
+			setNotes("");
+		} catch(err) {
+			//@TODO: Set a SnackbarError notification.
+			console.error(err);
+		}
 	};
 
 	return (
@@ -269,6 +277,7 @@ export default function MatchupForm() {
 			<Button variant="outlined" onClick={handleSubmit}>
 				Submit
 			</Button>
+			{successMessage && <SnackbarSuccess message={successMessage} />}
 			<div className="accordion-matchup-component">
 				{/* show last 10 matchups with option to show all in second screen. Linked to which user created it */}
 				{/* @TODO: Matchup Pagination */}
