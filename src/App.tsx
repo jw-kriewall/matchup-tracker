@@ -5,30 +5,27 @@ import HomePage from "./pages/homePage/HomePage";
 import TablePage from "./pages/tablePage/TablePage";
 import { useAppDispatch } from "./hooks/hooks";
 import { logoutAction } from "./actions/userActions";
-import useUser from "./hooks/userHook";
 
 function App() {
+	const dispatch = useAppDispatch();
 
-	// const dispatch = useAppDispatch();
-	// const user = useUser();
+	useEffect(() => {
+		const signOutTimeStr: string | null = localStorage.getItem('signOutTime');
 
-	// useEffect(() => {
-	// 	const checkUserLoggedIn = () => {
-	// 		// Replace isLoggedIn with your actual logic to check if the user is logged in.
-	// 		// This might be a check to local storage, cookies, or your Redux state.
-	// 		const isLoggedIn = user?.credential
-	// 		if (!isLoggedIn) {
-	// 			dispatch(logoutAction());
-	// 			// Optional: redirect to login page
-	// 		}
-	// 	};
+		if (signOutTimeStr) {
+			const signOutTime: number = parseInt(signOutTimeStr, 10);
+			const currentTime: number = new Date().getTime();
+			const timeRemaining: number = signOutTime - currentTime;
 
-	// 	// Set the interval to check every second
-	// 	const interval = setInterval(checkUserLoggedIn, 1000);
-
-	// 	// Clear the interval on cleanup
-	// 	return () => clearInterval(interval);
-	// }, [dispatch]);
+			if (timeRemaining > 0) {
+				// Set a timeout to sign the user out after the remaining time
+				setTimeout(() => dispatch(logoutAction()), timeRemaining);
+			} else {
+				dispatch(logoutAction());
+				window.location.reload();
+			}
+		}
+	}, []);
 
 	return (
 		<>

@@ -12,7 +12,9 @@ export default function GoogleLoginButton({closeModal}: any) {
 
         dispatch(loginAction(res));
         dispatch(getMatchups(res));
-        
+        //@TODO: Logout timer....
+        const signOutTime = new Date().getTime() + (60 * 60 * 1000);
+        localStorage.setItem('signOutTime', signOutTime.toString());
         closeModal();
     }
     const onError = (res: any) => {

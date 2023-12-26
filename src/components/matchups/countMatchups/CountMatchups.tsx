@@ -32,7 +32,7 @@ export default function CountMatchups({ selectedDecks, user }: CountComponentPro
 
   return (
     <div className="matchup-count-display">
-      <span>Matchup Count:</span>
+      <span>Matchup Count</span>
       <div>{count}</div>
     </div>
   );
