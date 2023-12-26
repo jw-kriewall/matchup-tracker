@@ -1,7 +1,7 @@
 import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
 import { getMatchups } from '../../apiCalls/matchups/getMatchups';
 import { useAppDispatch } from '../../hooks/hooks';
-import { loginAction } from '../../actions/userActions';
+import { loginAction, logoutAction } from '../../actions/userActions';
 
 export default function GoogleLoginButton({closeModal}: any) {
     const dispatch = useAppDispatch();
@@ -12,9 +12,19 @@ export default function GoogleLoginButton({closeModal}: any) {
 
         dispatch(loginAction(res));
         dispatch(getMatchups(res));
-        //@TODO: Logout timer....
-        const signOutTime = new Date().getTime() + (60 * 60 * 1000);
-        localStorage.setItem('signOutTime', signOutTime.toString());
+
+        const loginTime = new Date().getTime();
+
+        const checkInterval = setInterval(() => {
+            const currentTime = new Date().getTime();
+
+            if (currentTime - loginTime >=  60 * 60 * 1000) {
+                dispatch(logoutAction());
+                clearInterval(checkInterval);
+                window.location.href = "/";
+            }
+        }, 1000);
+
         closeModal();
     }
     const onError = (res: any) => {
