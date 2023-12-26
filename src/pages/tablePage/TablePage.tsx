@@ -5,6 +5,7 @@ import NavBar from "../../components/navBar/NavBar";
 import { allDecksConstant } from "../../constants/allDecks";
 import useUser from "../../hooks/userHook";
 import './TablePage.css';
+import CountMatchups from "../../components/matchups/CountMatchups";
 
 export default function TablePage() {
 	const initialDecks = allDecksConstant.map((deck) => deck.value);
@@ -36,6 +37,12 @@ export default function TablePage() {
 						selectedDecks={selectedDecks}
 						onSelectedDecksChange={setSelectedDecks}
 						initialDecks={initialDecks}
+					/>
+				</div>
+				<div className="matchup-count">
+					<CountMatchups
+						selectedDecks={selectedDecks}
+						user={user}
 					/>
 				</div>
 				<div className="data-table">

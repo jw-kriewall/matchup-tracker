@@ -4,7 +4,6 @@ import axios from "axios";
 
 export const getMatchups = createAsyncThunk(
     "matchups/get",
-    // TODO: can I pass entire GoogleOAuth response object instead of token?
     async(user: CredentialResponse | undefined) => {
         try {
             const response = await axios({

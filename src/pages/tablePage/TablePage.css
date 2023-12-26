@@ -4,31 +4,23 @@
   padding: 20px;
   gap: 20px;
   align-items: flex-start;
-  /* Aligns items to the top of the container */
   overflow: hidden;
-  /* Prevent overflow */
 }
 
 .data-table {
   flex-grow: 4;
-  /* Allows the table to grow and take up 80% of the space */
   flex-shrink: 1;
-  /* Allows the table to shrink if necessary */
   flex-basis: 0;
-  /* Starts at 0% width before growing */
   padding: 10px;
   border-radius: 10px;
   background-color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow-x: auto;
-  /* Allows the table to scroll horizontally if it's too wide */
   max-width: 80%;
-  /* Ensures it doesn't grow beyond 80% even when flex-grow is set */
 }
 
 .deck-filter {
   flex-grow: 1;
-  /* Takes the remaining space */
   flex-shrink: 1;
   flex-basis: 0;
   padding: 10px;
@@ -36,10 +28,8 @@
   background-color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 20%;
-  /* Ensures it doesn't grow beyond 20% */
 }
 
-/* Add a media query for smaller screens to stack the components */
 @media (max-width: 768px) {
   .bento-box {
     flex-direction: column;
@@ -48,7 +38,6 @@
   .data-table,
   .deck-filter {
     flex: 0 0 100%;
-    /* Take full width on smaller screens */
     max-width: 100%;
   }
 }
