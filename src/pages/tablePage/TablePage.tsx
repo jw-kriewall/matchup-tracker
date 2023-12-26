@@ -5,7 +5,7 @@ import NavBar from "../../components/navBar/NavBar";
 import { allDecksConstant } from "../../constants/allDecks";
 import useUser from "../../hooks/userHook";
 import './TablePage.css';
-import CountMatchups from "../../components/matchups/CountMatchups";
+import CountMatchups from "../../components/matchups/countMatchups/CountMatchups";
 
 export default function TablePage() {
 	const initialDecks = allDecksConstant.map((deck) => deck.value);
@@ -33,17 +33,17 @@ export default function TablePage() {
 
 			<div className="bento-box">
 				<div className="left-column">
+					<div className="matchup-count">
+						<CountMatchups
+							selectedDecks={selectedDecks}
+							user={user}
+						/>
+					</div>
 					<div className="deck-filter">
 						<DeckFilter
 							selectedDecks={selectedDecks}
 							onSelectedDecksChange={setSelectedDecks}
 							initialDecks={initialDecks}
-						/>
-					</div>
-					<div className="matchup-count">
-						<CountMatchups
-							selectedDecks={selectedDecks}
-							user={user}
 						/>
 					</div>
 				</div>

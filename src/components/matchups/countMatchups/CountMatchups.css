@@ -1,0 +1,27 @@
+.matchup-count-display {
+  text-align: center;
+  font-size: 5rem;
+  font-weight: bold;
+  color: #333;
+  padding: 10px;
+  margin: 10px 0;
+  /* Add some margin at the top and bottom */
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.matchup-count-display span {
+  font-size: 1rem;
+  /* Smaller font size for the label */
+  text-transform: uppercase;
+  /* Uppercase for the label */
+  letter-spacing: 1px;
+  /* Add spacing between letters for the label */
+  color: #666;
+  /* A lighter color for the label */
+  margin-top: 10px;
+  /* Add some space above the label */
+}

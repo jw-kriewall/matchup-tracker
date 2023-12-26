@@ -39,7 +39,6 @@
   flex-grow: 0;
   flex-shrink: 1;
   flex-basis: calc(80% - 20px);
-  /* Adjusted for gap, modify as needed */
   overflow-x: auto;
 }
 
@@ -55,6 +54,5 @@
     flex: 0 0 100%;
     max-width: 100%;
     flex-basis: auto;
-    /* Reset to automatic size for mobile */
   }
 }

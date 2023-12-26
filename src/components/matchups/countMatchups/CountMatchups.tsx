@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { CredentialResponse } from '@react-oauth/google';
-import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { Matchup } from '../../types/MatchupModels';
-import { getMatchups } from '../../apiCalls/matchups/getMatchups';
+import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
+import { Matchup } from '../../../types/MatchupModels';
+import { getMatchups } from '../../../apiCalls/matchups/getMatchups';
+import './CountMatchups.css';
 
 interface CountComponentProps {
   selectedDecks: string[],
@@ -30,9 +31,9 @@ export default function CountMatchups({ selectedDecks, user }: CountComponentPro
   }, [selectedDecks, matchups]);
 
   return (
-    <div>
-      <p>Matchup Count: </p>
-      <p>{count}</p>
+    <div className="matchup-count-display">
+      <span>Matchup Count: </span>
+      <div>{count}</div>
     </div>
   );
 };
