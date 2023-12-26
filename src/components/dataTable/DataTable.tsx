@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
 import { TableData } from "../../types/TableTypes";
 import { getMatchupRecordsByDeck } from "../../apiCalls/dataTable/getIndividualMatchupRecordsByDeck";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
-import { calculateWinPercentage, formatWinPercentage } from "./DataTableFunctions";
+import { useAppDispatch } from "../../hooks/hooks";
+import { calculateWinPercentage, formatWinPercentage } from "./DataTableUtil";
+import { CredentialResponse } from "@react-oauth/google";
 import "./DataTable.css";
 
 interface DataTableProps {
 	selectedDecks: string[];
+	user: CredentialResponse
 }
 
-function DataTable({ selectedDecks }: DataTableProps) {
+function DataTable({ selectedDecks, user}: DataTableProps) {
 	const dispatch = useAppDispatch();
 	const [tableData, setTableData] = useState<TableData>({});
 	const [hoveredCell, setHoveredCell] = useState<string | null>(null);
-	const user = useAppSelector((state) => state.userReducer.user);
 
 	useEffect(() => {
 		const fetchData = async () => {

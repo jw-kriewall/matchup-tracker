@@ -10,8 +10,8 @@ import CountMatchups from "../../components/matchups/CountMatchups";
 export default function TablePage() {
 	const initialDecks = allDecksConstant.map((deck) => deck.value);
 	const [selectedDecks, setSelectedDecks] = useState<string[]>(initialDecks);
-
 	const user = useUser();
+
 	if (!user) {
 		return (
 			<div>
@@ -32,21 +32,26 @@ export default function TablePage() {
 			</div>
 
 			<div className="bento-box">
-				<div className="deck-filter">
-					<DeckFilter
-						selectedDecks={selectedDecks}
-						onSelectedDecksChange={setSelectedDecks}
-						initialDecks={initialDecks}
-					/>
+				<div className="left-column">
+					<div className="deck-filter">
+						<DeckFilter
+							selectedDecks={selectedDecks}
+							onSelectedDecksChange={setSelectedDecks}
+							initialDecks={initialDecks}
+						/>
+					</div>
+					<div className="matchup-count">
+						<CountMatchups
+							selectedDecks={selectedDecks}
+							user={user}
+						/>
+					</div>
 				</div>
-				<div className="matchup-count">
-					<CountMatchups
+				<div className="data-table">
+					<DataTable
 						selectedDecks={selectedDecks}
 						user={user}
 					/>
-				</div>
-				<div className="data-table">
-					<DataTable selectedDecks={selectedDecks} />
 				</div>
 			</div>
 		</div>
