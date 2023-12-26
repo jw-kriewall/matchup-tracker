@@ -13,6 +13,7 @@ export default function GoogleLoginButton({closeModal}: any) {
         dispatch(loginAction(res));
         dispatch(getMatchups(res));
 
+        //@TODO: Check this.
         const loginTime = new Date().getTime();
 
         const checkInterval = setInterval(() => {
