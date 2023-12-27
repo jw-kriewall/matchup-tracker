@@ -19,3 +19,22 @@
   color: #666;
   margin-top: 10px;
 }
+
+.increase-animation {
+  animation: increase 1s ease;
+  color: green;
+}
+
+/* Animation for decreasing count */
+.decrease-animation {
+  animation: decrease 1s ease;
+  color: red;
+}
+
+@keyframes increase {
+  /* Define keyframes for the increase animation */
+}
+
+@keyframes decrease {
+  /* Define keyframes for the decrease animation */
+}
