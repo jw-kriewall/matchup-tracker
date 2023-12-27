@@ -13,19 +13,6 @@ export default function GoogleLoginButton({closeModal}: any) {
         dispatch(loginAction(res));
         dispatch(getMatchups(res));
 
-        //@TODO: Check this.
-        const loginTime = new Date().getTime();
-
-        const checkInterval = setInterval(() => {
-            const currentTime = new Date().getTime();
-
-            if (currentTime - loginTime >=  60 * 60 * 1000) {
-                dispatch(logoutAction());
-                clearInterval(checkInterval);
-                window.location.href = "/";
-            }
-        }, 1000);
-
         closeModal();
     }
     const onError = (res: any) => {
