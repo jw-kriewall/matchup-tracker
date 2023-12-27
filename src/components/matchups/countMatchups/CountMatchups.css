@@ -21,20 +21,27 @@
 }
 
 .increase-animation {
-  animation: increase 1s ease;
-  color: green;
+  animation: increase 1s;
 }
 
-/* Animation for decreasing count */
 .decrease-animation {
-  animation: decrease 1s ease;
-  color: red;
+  animation: decrease 1s;
 }
 
 @keyframes increase {
-  /* Define keyframes for the increase animation */
+  0%, 75% {
+    color: black;
+  }
+  10% {
+    color: green;
+  }
 }
 
 @keyframes decrease {
-  /* Define keyframes for the decrease animation */
+  0%, 75% {
+    color: black;
+  }
+  10% {
+    color: red;
+  }
 }

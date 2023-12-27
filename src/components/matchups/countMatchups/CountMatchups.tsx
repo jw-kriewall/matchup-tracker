@@ -35,22 +35,10 @@ export default function CountMatchups({ selectedDecks, user }: CountComponentPro
     previousCountRef.current = count;
   }, [selectedDecks, matchups, count]);
 
-  const renderCount = () => {
-    const previousCount = previousCountRef.current;
-    let className = '';
-    if (count > previousCount) {
-      className = 'increase-animation';
-    } else if (count < previousCount) {
-      className = 'decrease-animation';
-    }
-
-    return <div className={className}>{count}</div>;
-  };
-
   return (
     <div className="matchup-count-display">
       <span>Matchup Count</span>
-      <animated.div>
+      <animated.div className={count > previousCountRef.current ? 'increase-animation' : count < previousCountRef.current ? 'decrease-animation' : ''}>
         {props.number.to(n => n.toFixed(0))}
       </animated.div>
     </div>
