@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import { TableData } from "../../types/TableTypes";
 import { getMatchupRecordsByDeck } from "../../apiCalls/dataTable/getIndividualMatchupRecordsByDeck";

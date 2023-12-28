@@ -1,3 +1,4 @@
+import React from "react";
 import MatchupForm from "../../components/matchups/MatchupForm";
 import NavBar from "../../components/navBar/NavBar";
 import useUser from "../../hooks/userHook";
