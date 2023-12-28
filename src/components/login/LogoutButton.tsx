@@ -1,5 +1,4 @@
 import { Button } from "@mui/material";
-import { resetMatchups } from "../../actions/matchupActions";
 import { logoutAction } from "../../actions/userActions";
 import { useAppDispatch } from "../../hooks/hooks";
 

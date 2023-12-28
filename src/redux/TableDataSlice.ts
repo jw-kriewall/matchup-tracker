@@ -20,9 +20,7 @@ const initialState: TableDataInitialState = {
 const tableDataSlice = createSlice({
   name: "tableData",
   initialState,
-  reducers: {
-
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getMatchupRecordsByDeck.pending, (state) => {

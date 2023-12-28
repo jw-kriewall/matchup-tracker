@@ -1,7 +1,7 @@
 import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
 import { getMatchups } from '../../apiCalls/matchups/getMatchups';
 import { useAppDispatch } from '../../hooks/hooks';
-import { loginAction } from '../../actions/userActions';
+import { loginAction, logoutAction } from '../../actions/userActions';
 
 export default function GoogleLoginButton({closeModal}: any) {
     const dispatch = useAppDispatch();
@@ -12,7 +12,7 @@ export default function GoogleLoginButton({closeModal}: any) {
 
         dispatch(loginAction(res));
         dispatch(getMatchups(res));
-        
+
         closeModal();
     }
     const onError = (res: any) => {

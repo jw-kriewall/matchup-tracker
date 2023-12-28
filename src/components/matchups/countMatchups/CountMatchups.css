@@ -1,0 +1,47 @@
+.matchup-count-display {
+  text-align: center;
+  font-size: 5rem;
+  font-weight: bold;
+  color: #333;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.matchup-count-display span {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #666;
+  margin-top: 10px;
+}
+
+.increase-animation {
+  animation: increase 1s;
+}
+
+.decrease-animation {
+  animation: decrease 1s;
+}
+
+@keyframes increase {
+  0%, 75% {
+    color: black;
+  }
+  10% {
+    color: green;
+  }
+}
+
+@keyframes decrease {
+  0%, 75% {
+    color: black;
+  }
+  10% {
+    color: red;
+  }
+}

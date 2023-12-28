@@ -13,13 +13,15 @@ if(localUser !== null && localUser !== '') {
 export interface UserState {
     user: CredentialResponse | null | undefined,
     userLoading: boolean,
-    loginSuccess: boolean
+    loginSuccess: boolean,
+    logoutTime: Date | undefined
 }
   
 const initialState: UserState = {
     user: user,
     userLoading: false,
-    loginSuccess: user?.credential ? true : false
+    loginSuccess: user?.credential ? true : false,
+    logoutTime: undefined
 }
 
 const userAuthSlice = createSlice({
@@ -33,11 +35,12 @@ const userAuthSlice = createSlice({
             state.userLoading = false
             state.user = action.payload
             state.loginSuccess = state.user?.credential ? true : false
+            state.logoutTime = new Date(new Date().getTime() + (60 * 60 * 1000));
         },
         logout: (state) => {
             state.userLoading = false
             state.user = null
-            localStorage.removeItem("user")
+            localStorage.clear()
         }
     }
 })

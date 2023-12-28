@@ -8,34 +8,29 @@ import AccordionMatchup from "./AccordionMatchup";
 import { DeckDisplay, Matchup } from "../../types/MatchupModels";
 import jwt_decode from "jwt-decode";
 import { DecodedJwtToken } from "../../types/DecodedJwtToken";
-import { useDispatch } from "react-redux";
 import { addNewMatchup } from "../../apiCalls/matchups/addMatchup";
-import { AppDispatch } from "../../data/store";
 import { IconButton } from "@mui/material";
 import { CredentialResponse } from "@react-oauth/google";
 import LooksOneIcon from "@mui/icons-material/LooksOne";
+import SnackbarSuccess from "../snackbarNotifications/SnackbarSuccess";
+import { useAppDispatch } from "../../hooks/hooks";
 
 export default function MatchupForm() {
 	const [playerOneName, setPlayerOneName] = React.useState<string>("");
 	const [playerTwoName, setPlayerTwoName] = React.useState<string>("");
 	const [playerOneDeckName, setPlayerOneDeckName] = React.useState<string>("");
 	const [playerTwoDeckName, setPlayerTwoDeckName] = React.useState<string>("");
-	const [playerOneDecklist, setPlayerOneDecklist] =
-		React.useState<string>("blank");
-	const [playerTwoDecklist, setPlayerTwoDecklist] =
-		React.useState<string>("blank");
-
+	const [playerOneDecklist, setPlayerOneDecklist] = React.useState<string>("blank");
+	const [playerTwoDecklist, setPlayerTwoDecklist] = React.useState<string>("blank");
 	const [startingPlayer, setStartingPlayer] = React.useState<string>("");
 	const [winningDeck, setWinningDeck] = React.useState<string>("");
 	const [format, setFormat] = React.useState<string>("");
 	const [notes, setNotes] = React.useState<string>("");
+	const [successMessage, setSuccessMessage] = React.useState<string>('');
 
-	const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<
-		string[]
-	>([]);
+	const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<string[]>([]);
 
-	// TODO: can this be useAppDispatch?
-	const dispatch = useDispatch<AppDispatch>();
+	const dispatch = useAppDispatch();
 
 	const handlePlayerOneDeckChange = (e: any) => {
 		e.preventDefault();
@@ -60,6 +55,7 @@ export default function MatchupForm() {
 		let username = "";
 		let email = "";
 
+		// @TODO: useUser() hook....
 		let oauth: CredentialResponse = JSON.parse(localStorage.getItem("user")!);
 		let token = oauth.credential;
 
@@ -99,9 +95,15 @@ export default function MatchupForm() {
 		};
 
 		console.log(matchup);
-
-		dispatch(addNewMatchup(matchup));
-		setNotes("");
+		try {
+			await dispatch(addNewMatchup(matchup));
+			setSuccessMessage("");
+			setTimeout(() => setSuccessMessage("Matchup successfully added!"), 0);
+			setNotes("");
+		} catch(err) {
+			//@TODO: Set a SnackbarError notification.
+			console.error(err);
+		}
 	};
 
 	return (
@@ -264,6 +266,7 @@ export default function MatchupForm() {
 			<Button variant="outlined" onClick={handleSubmit}>
 				Submit
 			</Button>
+			{successMessage && <SnackbarSuccess message={successMessage} />}
 			<div className="accordion-matchup-component">
 				{/* show last 10 matchups with option to show all in second screen. Linked to which user created it */}
 				{/* @TODO: Matchup Pagination */}
