@@ -7,11 +7,12 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import axios from "axios";
 import { Matchup } from "../../types/MatchupModels";
 import Button from '@mui/material/Button';
-import { useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { getMatchups } from "../../apiCalls/matchups/getMatchups";
 import { store } from "../../data/store";
 import { CredentialResponse } from "@react-oauth/google";
 import Box from '@mui/material/Box';
+import { deleteSingleMatchup } from "../../apiCalls/matchups/deleteMatchup";
 
 export default function ControlledAccordions() {
 
@@ -27,16 +28,14 @@ export default function ControlledAccordions() {
 			setExpanded(isExpanded ? panel : false);
 	};
 
+	const dispatch = useAppDispatch();
+
 	const handleDeleteMatchup = (matchup: Matchup) => () => {
 		//@TODO: should setLoading value trigger a loading bar?
 		//let oauth: CredentialResponse = JSON.parse(localStorage.getItem("user")!)
 		if (user) {
 			setLoading(true);
-			axios.delete("http://localhost:8090/matchups/delete/" + matchup.id).then(() => {
-				store.dispatch(getMatchups(user))
-				console.log("Deletion successful. Matchup ID: " + matchup.id)
-				setLoading(false);
-			})
+			dispatch(deleteSingleMatchup(matchup))
 		}
 	}
 
