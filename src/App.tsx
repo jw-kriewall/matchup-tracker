@@ -4,24 +4,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/homePage/HomePage";
 import TablePage from "./pages/tablePage/TablePage";
 import SessionManagement from "./components/sessionManagement/SessionManagement";
-// import {
-// 	ThemeProvider,
-// 	createMuiTheme,
-// 	makeStyles,
-// } from "@mui/core/styles";
+import { ThemeProvider, createTheme } from "@mui/material";
 
-// const theme = createMuiTheme();
-
-// const useStyles = makeStyles((theme: any) => {
-// 	root: {
-// 		// some CSS that accesses the theme
-// 	}
-// });
+const theme = createTheme({});
 
 function App() {
 	return (
 		<>
-			{/* <ThemeProvider theme={theme}> */}
+			<ThemeProvider theme={theme}>
 				<SessionManagement>
 					<BrowserRouter>
 						<Routes>
@@ -30,7 +20,7 @@ function App() {
 						</Routes>
 					</BrowserRouter>
 				</SessionManagement>
-			{/* </ThemeProvider> */}
+			</ThemeProvider>
 		</>
 	);
 }
