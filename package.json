@@ -32,7 +32,6 @@
   "scripts": {
     "start-local": "react-scripts start",
     "start": "serve build -s -n -L -p $PORT",
-    "build": "serve build -s -n -L -p $PORT",
     "dev": "react-scripts start",
     "build-local": "npm install --legacy-peer-deps && react-scripts build",
     "test": "react-scripts test",
