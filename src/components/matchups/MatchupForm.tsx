@@ -107,7 +107,7 @@ export default function MatchupForm() {
 	};
 
 	return (
-		<Box
+        <Box
 			component="form"
 			sx={{
 				"& .MuiTextField-root": { m: 1, width: "30ch" },
@@ -134,15 +134,15 @@ export default function MatchupForm() {
 							sx={{ width: "25ch" }}
 						/>
 						<IconButton
-							onClick={() => handleSetStartingPlayer(playerOneName)}
-							aria-label="set-starting-player-button"
-							sx={{ position: "absolute", right: -48 }}
-							color={
+                            onClick={() => handleSetStartingPlayer(playerOneName)}
+                            aria-label="set-starting-player-button"
+                            sx={{ position: "absolute", right: -48 }}
+                            color={
 								startingPlayer && startingPlayer === playerOneName
 									? "primary"
 									: "default"
 							}
-						>
+                            size="large">
 							<LooksOneIcon />
 						</IconButton>
 					</Box>
@@ -166,15 +166,15 @@ export default function MatchupForm() {
 							sx={{ width: "25ch" }}
 						/>
 						<IconButton
-							onClick={() => handleSetStartingPlayer(playerTwoName)}
-							aria-label="set-starting-player-button"
-							sx={{ position: "absolute", right: -48 }}
-							color={
+                            onClick={() => handleSetStartingPlayer(playerTwoName)}
+                            aria-label="set-starting-player-button"
+                            sx={{ position: "absolute", right: -48 }}
+                            color={
 								startingPlayer && startingPlayer === playerTwoName
 									? "primary"
 									: "default"
 							}
-						>
+                            size="large">
 							<LooksOneIcon />
 						</IconButton>
 					</Box>
@@ -273,7 +273,7 @@ export default function MatchupForm() {
 				<AccordionMatchup />
 			</div>
 		</Box>
-	);
+    );
 
 	function determineWinningDeckOptions(deckName: string, playerDeckName: string) {
 		if (deckName === playerDeckName) {
