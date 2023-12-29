@@ -7,9 +7,10 @@ const apiUrl = process.env.REACT_APP_API_URL;
 export const getMatchups = createAsyncThunk(
     "matchups/get",
     async(user: CredentialResponse | undefined) => {
+        console.log('API URL:', process.env.REACT_APP_API_URL);
         try {
             const response = await axios({
-                url:`${apiUrl}//matchups/getAll`,
+                url:`${apiUrl}/matchups/getAll`,
                 method: "GET",
                 headers: {
                     'Access-Control-Allow-Origin': "*",
