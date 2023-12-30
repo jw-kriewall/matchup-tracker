@@ -16,7 +16,7 @@ import { deleteSingleMatchup } from "../../apiCalls/matchups/deleteMatchup";
 
 export default function ControlledAccordions() {
 
-	const matchups = useAppSelector((state) => state.matchupReducer.matchups)
+	const matchups: Matchup[] = useAppSelector((state) => state.matchupReducer.matchups)
 	const user = useAppSelector((state) => state.userReducer.user)
 
 	const [expanded, setExpanded] = React.useState<string | false>(false);
@@ -72,7 +72,7 @@ export default function ControlledAccordions() {
 				// @TODO: Create a loading component
 				<h3>LOADING...</h3>
 			) : (
-				matchups.map((matchup, index) => (
+				matchups?.map((matchup, index) => (
 					<Accordion
             			key={index}
 						expanded={expanded === "panel" + index}
