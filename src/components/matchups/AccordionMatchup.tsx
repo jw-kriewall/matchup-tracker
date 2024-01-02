@@ -4,7 +4,6 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import axios from "axios";
 import { Matchup } from "../../types/MatchupModels";
 import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
@@ -16,7 +15,7 @@ import { deleteSingleMatchup } from "../../apiCalls/matchups/deleteMatchup";
 
 export default function ControlledAccordions() {
 
-	const matchups: Matchup[] = useAppSelector((state) => state.matchupReducer.matchups)
+	const matchups: Matchup[] | undefined = useAppSelector((state) => state.matchupReducer.matchups)
 	const user = useAppSelector((state) => state.userReducer.user)
 
 	const [expanded, setExpanded] = React.useState<string | false>(false);
