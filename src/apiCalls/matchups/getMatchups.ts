@@ -11,7 +11,7 @@ export const getMatchups = createAsyncThunk(
         console.log('API URL:', apiUrl);
         try {
             const response = await axios({
-                url:`https://matchuptracker-production.up.railway.app/matchups/getAll`,
+                url: `${apiUrl}/matchups/getAll`,
                 method: "GET",
                 headers: {
                     'Access-Control-Allow-Origin': "*",

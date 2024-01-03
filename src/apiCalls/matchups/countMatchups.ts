@@ -10,7 +10,7 @@ export const countMatchups = createAsyncThunk(
   async ({ user, deckNames }: { user: CredentialResponse | undefined; deckNames: string[] }) => {
     try {
       const response = await axios({
-        url: `https://matchuptracker-production.up.railway.app/matchups/count`,
+        url: `${apiUrl}/matchups/count`,
         method: "GET",
         headers: {
           'Access-Control-Allow-Origin': "*",
