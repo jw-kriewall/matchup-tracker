@@ -3,6 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const apiUrl = process.env.REACT_APP_API_URL;
+//const apiUrl = "https://matchuptracker-production.up.railway.app";
 
 export const getMatchups = createAsyncThunk(
     "matchups/get",

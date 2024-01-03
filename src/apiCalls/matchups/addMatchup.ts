@@ -2,6 +2,7 @@ import { Matchup } from "../../types/MatchupModels";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 const apiUrl = process.env.REACT_APP_API_URL;
+//const apiUrl = "https://matchuptracker-production.up.railway.app";
 
 export const addNewMatchup = createAsyncThunk(
     "matchups/Add",

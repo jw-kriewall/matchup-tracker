@@ -4,14 +4,15 @@ import { CredentialResponse } from "@react-oauth/google";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_URL = "http://localhost:8090";
+//const apiUrl = "http://localhost:8090";
+const apiUrl = process.env.REACT_APP_API_URL;
 
 export const getMatchupRecordsByDeck = createAsyncThunk(
     "tableData/getAllRecords",
     async({ user }: { user: CredentialResponse | undefined }) => {
         try {
             const response = await axios({
-                url: `${API_URL}/matchups/getAllRecords`,
+                url: `${apiUrl}/matchups/getAllRecords`,
                 method: "GET",
                 headers: {	
                     'Access-Control-Allow-Origin': "*",
