@@ -9,7 +9,7 @@ export const addNewMatchup = createAsyncThunk(
     // @TODO: doesn't this endpoint need authorization too?
     async (matchup: Matchup) => {
         try {
-            const response = await fetch(`${apiUrl}/matchups/add`, {
+            const response = await fetch(`https://matchuptracker-production.up.railway.app/matchups/add`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(matchup)

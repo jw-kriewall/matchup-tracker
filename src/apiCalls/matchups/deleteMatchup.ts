@@ -12,7 +12,7 @@ export const deleteSingleMatchup = createAsyncThunk(
     "matchups/delete",
     async(matchup: Matchup) => {
         try {
-            const response = await axios.delete(`${apiUrl}/matchups/delete/` + matchup.id)
+            const response = await axios.delete(`https://matchuptracker-production.up.railway.app/matchups/delete/` + matchup.id)
 
             if (response.status >= 200 && response.status < 300 ) {
             let oauth: CredentialResponse = JSON.parse(localStorage.getItem("user")!)
