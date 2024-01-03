@@ -8,7 +8,7 @@ const apiUrl = process.env.REACT_APP_API_URL;
 export const getMatchups = createAsyncThunk(
     "matchups/get",
     async(user: CredentialResponse | undefined) => {
-        console.log('API URL:', process.env.REACT_APP_API_URL);
+        console.log('API URL:', apiUrl);
         try {
             const response = await axios({
                 url:`${apiUrl}/matchups/getAll`,
