@@ -19,9 +19,9 @@ export default function CountMatchups({ selectedDecks, user }: CountComponentPro
 
   const dispatch = useAppDispatch();
 
-  if (matchups.length === 0) {
-    dispatch(getMatchups(user));
-  }
+  // if (matchups.length === 0) {
+  //   dispatch(getMatchups(user));
+  // }
 
   useEffect(() => {
     const countMatchups = () => {

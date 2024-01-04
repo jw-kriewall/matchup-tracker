@@ -31,17 +31,16 @@ export default function ControlledAccordions() {
 
 	const handleDeleteMatchup = (matchup: Matchup) => () => {
 		//@TODO: should setLoading value trigger a loading bar?
-		//let oauth: CredentialResponse = JSON.parse(localStorage.getItem("user")!)
 		if (user) {
 			setLoading(true);
-			dispatch(deleteSingleMatchup(matchup))
+			dispatch(deleteSingleMatchup(matchup));
+			setLoading(false);
 		}
 	}
 
 	const getMatchupsIfAuthorized = () => {
 			if(user) {
-				let oauth: CredentialResponse = JSON.parse(localStorage.getItem("user")!)
-				store.dispatch(getMatchups(oauth))
+				dispatch(getMatchups(user))
 					.unwrap()
 					.then(handleInit)
 					.catch((error: any) => {
