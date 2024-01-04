@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { CredentialResponse } from '@react-oauth/google';
-import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
+import { useAppSelector } from '../../../hooks/hooks';
 import { Matchup } from '../../../types/MatchupModels';
-import { getMatchups } from '../../../apiCalls/matchups/getMatchups';
 import './CountMatchups.css';
 import { useSpring, animated } from 'react-spring';
 
@@ -16,12 +15,6 @@ export default function CountMatchups({ selectedDecks, user }: CountComponentPro
   const previousCountRef = useRef<number>(0);
   const matchups: Matchup[] = useAppSelector((state) => state.matchupReducer.matchups);
   const props = useSpring({ number: count, from: { number: previousCountRef.current } });
-
-  const dispatch = useAppDispatch();
-
-  if (matchups.length === 0) {
-    dispatch(getMatchups(user));
-  }
 
   useEffect(() => {
     const countMatchups = () => {

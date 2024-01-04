@@ -1,10 +1,7 @@
-// http://localhost:{{port}}/matchups/individual/Pikachu
-
 import { CredentialResponse } from "@react-oauth/google";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-//const apiUrl = "http://localhost:8090";
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export const getMatchupRecordsByDeck = createAsyncThunk(

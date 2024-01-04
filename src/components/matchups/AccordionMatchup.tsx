@@ -9,7 +9,6 @@ import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { getMatchups } from "../../apiCalls/matchups/getMatchups";
 import { store } from "../../data/store";
-import { CredentialResponse } from "@react-oauth/google";
 import Box from '@mui/material/Box';
 import { deleteSingleMatchup } from "../../apiCalls/matchups/deleteMatchup";
 
@@ -31,17 +30,16 @@ export default function ControlledAccordions() {
 
 	const handleDeleteMatchup = (matchup: Matchup) => () => {
 		//@TODO: should setLoading value trigger a loading bar?
-		//let oauth: CredentialResponse = JSON.parse(localStorage.getItem("user")!)
 		if (user) {
 			setLoading(true);
-			dispatch(deleteSingleMatchup(matchup))
+			dispatch(deleteSingleMatchup(matchup));
+			setLoading(false);
 		}
 	}
 
 	const getMatchupsIfAuthorized = () => {
 			if(user) {
-				let oauth: CredentialResponse = JSON.parse(localStorage.getItem("user")!)
-				store.dispatch(getMatchups(oauth))
+				dispatch(getMatchups(user))
 					.unwrap()
 					.then(handleInit)
 					.catch((error: any) => {

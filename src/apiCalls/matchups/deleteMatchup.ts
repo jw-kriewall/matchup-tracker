@@ -6,7 +6,6 @@ import { getMatchups } from "./getMatchups";
 import { CredentialResponse } from "@react-oauth/google";
 
 const apiUrl = process.env.REACT_APP_API_URL;
-//const apiUrl = "https://matchuptracker-production.up.railway.app";
 
 export const deleteSingleMatchup = createAsyncThunk(
     "matchups/delete",
