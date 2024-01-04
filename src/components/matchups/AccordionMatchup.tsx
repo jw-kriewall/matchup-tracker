@@ -9,7 +9,6 @@ import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { getMatchups } from "../../apiCalls/matchups/getMatchups";
 import { store } from "../../data/store";
-import { CredentialResponse } from "@react-oauth/google";
 import Box from '@mui/material/Box';
 import { deleteSingleMatchup } from "../../apiCalls/matchups/deleteMatchup";
 
