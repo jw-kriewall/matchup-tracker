@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { CredentialResponse } from '@react-oauth/google';
-import { useAppSelector } from '../../../hooks/hooks';
+import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
 import { Matchup } from '../../../types/MatchupModels';
-import './CountMatchups.css';
 import { useSpring, animated } from 'react-spring';
+import { getMatchups } from '../../../apiCalls/matchups/getMatchups';
+import './CountMatchups.css';
 
 interface CountComponentProps {
   selectedDecks: string[],
@@ -15,6 +16,14 @@ export default function CountMatchups({ selectedDecks, user }: CountComponentPro
   const previousCountRef = useRef<number>(0);
   const matchups: Matchup[] = useAppSelector((state) => state.matchupReducer.matchups);
   const props = useSpring({ number: count, from: { number: previousCountRef.current } });
+  const dispatch = useAppDispatch();
+
+  //@TODO: Does this need to make a call every time the component is navigated to? Can getMatchups simply be set and persist on refresh?
+  useEffect(() => {
+    if (matchups.length === 0) {
+      dispatch(getMatchups(user));
+    }
+  }, [dispatch, user, matchups.length]);
 
   useEffect(() => {
     const countMatchups = () => {
