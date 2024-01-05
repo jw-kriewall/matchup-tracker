@@ -50,8 +50,8 @@ function DataTable({ selectedDecks, user}: DataTableProps) {
 							<th>{deckRow}</th>
 							{selectedDecks.map((deckCol) => {
 								const key = `${deckRow}-${deckCol}`;
-								const record = tableData[deckRow]
-									? tableData[deckRow][deckCol] || "0-0-0"
+								const record = tableData[deckRow] && tableData[deckRow][deckCol]
+									? tableData[deckRow][deckCol]
 									: "0-0-0";
 								const winPercentage = calculateWinPercentage(record);
 								return (

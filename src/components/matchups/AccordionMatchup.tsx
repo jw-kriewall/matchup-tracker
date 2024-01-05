@@ -24,7 +24,7 @@ export default function ControlledAccordions() {
 	const handleChange =
 		(panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
 			setExpanded(isExpanded ? panel : false);
-	};
+		};
 
 	const dispatch = useAppDispatch();
 
@@ -38,20 +38,20 @@ export default function ControlledAccordions() {
 	}
 
 	const getMatchupsIfAuthorized = () => {
-			if(user) {
-				dispatch(getMatchups(user))
-					.unwrap()
-					.then(handleInit)
-					.catch((error: any) => {
-						console.log(error)
+		if (user) {
+			dispatch(getMatchups(user))
+				.unwrap()
+				.then(handleInit)
+				.catch((error: any) => {
+					console.log(error)
 				})
-			}
+		}
 	}
 
 	React.useEffect(() => {
-		if(!isInitialized && user) {
+		if (!isInitialized && user) {
 			getMatchupsIfAuthorized();
-			}	
+		}
 		// getMatchupsIfAuthorized();
 	}, [isInitialized]);
 
@@ -71,7 +71,7 @@ export default function ControlledAccordions() {
 			) : (
 				matchups?.map((matchup, index) => (
 					<Accordion
-            			key={index}
+						key={index}
 						expanded={expanded === "panel" + index}
 						onChange={handleChange("panel" + index)}
 					>
@@ -80,7 +80,7 @@ export default function ControlledAccordions() {
 							aria-controls="panel1bh-content"
 							id="panel1bh-header"
 						>
-							<Box sx= {{ display: 'flex', width: '100%', alignItems: 'center' }}>
+							<Box sx={{ display: 'flex', width: '100%', alignItems: 'center' }}>
 
 								<Typography sx={{ width: '33%', flexShrink: 0 }}>
 									Game {matchups.length - index}
@@ -89,7 +89,7 @@ export default function ControlledAccordions() {
 									{matchup.playerOneDeck.name} VS {matchup.playerTwoDeck.name}{" "}
 									<b>Winner: </b> {matchup.winningDeck}
 								</Typography>
-								<Box sx={{ width:'33%' }}/>
+								<Box sx={{ width: '33%' }} />
 							</Box>
 						</AccordionSummary>
 						<AccordionDetails>
