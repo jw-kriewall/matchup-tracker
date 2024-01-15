@@ -2,29 +2,21 @@ import React from "react";
 import { Button } from "@mui/material";
 import { logoutAction } from "../../actions/userActions";
 import { useAppDispatch } from "../../hooks/hooks";
+import { useCookies } from 'react-cookie';
 
 export default function LogoutButton() {
-	const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
+  const [, removeCookie] = useCookies(['userRole']);
+  const handleLogout = () => {
+    removeCookie('userRole', { path: '/' });
+    dispatch(logoutAction());
+    // @TODO: should I be doing something different here?
+    window.location.reload();
+  };
 
-    const handleLogout = () => {
-        dispatch(logoutAction());
-        // dispatch(resetMatchups());
-        // should I be doing something different here?
-        window.location.reload();
-
-        // dispatch(logoutAction())
-        //     .then(() => {
-        //         // The action has completed
-        //         window.location.reload();
-        //     })
-        //     .catch((error) => {
-        //         // Handle any errors
-        //     });
-    }
-
-    return(
-        <Button color="inherit" onClick={() => handleLogout()}>
-			Logout
-		</Button>
-    )
+  return (
+    <Button color="inherit" onClick={() => handleLogout()}>
+      Logout
+    </Button>
+  );
 }

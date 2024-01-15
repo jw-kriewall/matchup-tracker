@@ -6,7 +6,7 @@ import SnackbarWarning from '../snackbarNotifications/SnackbarWarning';
 import { useAppDispatch } from '../../hooks/hooks';
 import { logoutAction } from '../../actions/userActions';
 
-const SessionManagement = ({ children }: any) => {
+const SessionManagement: any = ({ children }: any) => {
   const user = useUser();
   const logoutTime = useUserLogout()?.getTime();
   const [showSnackbarInfo, setShowSnackbarInfo] = useState(false);

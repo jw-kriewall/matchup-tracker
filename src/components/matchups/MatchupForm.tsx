@@ -14,6 +14,7 @@ import { CredentialResponse } from "@react-oauth/google";
 import LooksOneIcon from "@mui/icons-material/LooksOne";
 import SnackbarSuccess from "../snackbarNotifications/SnackbarSuccess";
 import { useAppDispatch } from "../../hooks/hooks";
+import { useCookies } from "react-cookie";
 
 export default function MatchupForm() {
 	const [playerOneName, setPlayerOneName] = React.useState<string>("");
@@ -27,6 +28,9 @@ export default function MatchupForm() {
 	const [format, setFormat] = React.useState<string>("");
 	const [notes, setNotes] = React.useState<string>("");
 	const [successMessage, setSuccessMessage] = React.useState<string>('');
+	const [cookies] = useCookies(["userRole"]);
+  	
+	const userRole = cookies["userRole"].payload;
 
 	const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<string[]>([]);
 
@@ -51,7 +55,7 @@ export default function MatchupForm() {
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 
-		let role = "basic";
+		// let role = "";
 		let username = "";
 		let email = "";
 
@@ -88,7 +92,7 @@ export default function MatchupForm() {
 			createdOn: new Date(),
 			createdBy: {
 				username: username,
-				role: role,
+				role: userRole,
 				email: email,
 			},
 			notes,

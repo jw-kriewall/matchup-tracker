@@ -51,7 +51,7 @@ export default function NavBar() {
 				</ListItem>
 				<ListItem disablePadding>
 					<ListItemButton onClick={() => handleNavigation("/data")}>
-						<ListItemText primary="Matchup Table" />
+						<ListItemText primary="Data" />
 					</ListItemButton>
 				</ListItem>
 				{/* Add more ListItems here for additional pages */}

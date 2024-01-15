@@ -6,7 +6,9 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { store } from './data/store';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { CookiesProvider } from 'react-cookie';
 
+// @TODO: clientID should be env variable
 const clientId = "946171427391-9q1lkna1ibpgq49g2fivl8m2edg6304a.apps.googleusercontent.com";
 
 const root = ReactDOM.createRoot(
@@ -16,7 +18,9 @@ root.render(
   <GoogleOAuthProvider clientId={clientId}>
     <React.StrictMode>
       <Provider store={store}>
-        <App />
+        <CookiesProvider>
+          <App />
+        </CookiesProvider>
       </Provider>
     </React.StrictMode>
   </GoogleOAuthProvider>

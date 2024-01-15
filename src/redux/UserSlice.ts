@@ -1,49 +1,65 @@
 import { CredentialResponse } from "@react-oauth/google";
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { getUserRole } from "../apiCalls/users/getUserRole";
 
-let localUser = localStorage.getItem("user");
-let user = null;
-if(localUser !== null && localUser !== '') {
-    user = JSON.parse(localUser) as CredentialResponse;
-} 
-// else {
-//     user = new User();
-// }
+interface UserWithRole extends CredentialResponse {
+	role: string;
+}
 
 export interface UserState {
-    user: CredentialResponse | null | undefined,
-    userLoading: boolean,
-    loginSuccess: boolean,
-    logoutTime: Date | undefined
+	user: UserWithRole | null;
+	userLoading: boolean;
+	loginSuccess: boolean;
+	logoutTime: Date | undefined;
 }
-  
+
 const initialState: UserState = {
-    user: user,
-    userLoading: false,
-    loginSuccess: user?.credential ? true : false,
-    logoutTime: undefined
-}
+	user: JSON.parse(localStorage.getItem("user") || "null"),
+	userLoading: false,
+	loginSuccess: false,
+	logoutTime: undefined,
+};
 
 const userAuthSlice = createSlice({
-    name: "userAuth",
-    initialState,
-    reducers: {
-        pending: (state, action) => {
-            state.userLoading = true
-        },
-        login: (state, action) => {
-            state.userLoading = false
-            state.user = action.payload
-            state.loginSuccess = state.user?.credential ? true : false
-            state.logoutTime = new Date(new Date().getTime() + (60 * 60 * 1000));
-        },
-        logout: (state) => {
-            state.userLoading = false
-            state.user = null
-            state.logoutTime = undefined
-            localStorage.clear()
-        }
-    }
-})
+	name: "userAuth",
+	initialState,
+	reducers: {
+		login: (state, action: PayloadAction<UserWithRole>) => {
+			state.userLoading = false;
+			state.user = action.payload;
+			state.loginSuccess = true;
+			state.logoutTime = new Date(new Date().getTime() + 60 * 60 * 1000);
+			// localStorage.setItem("user", JSON.stringify(action.payload));
+		},
+		logout: (state) => {
+			state.userLoading = false;
+			state.user = null;
+			state.logoutTime = undefined;
+			state.loginSuccess = false;
+			localStorage.clear();
+		},
+	},
+	extraReducers: (builder) => {
+		builder
+			.addCase(getUserRole.pending, (state) => {
+				state.userLoading = true;
+			})
+			.addCase(getUserRole.fulfilled, (state, action) => {
+				console.log(action.payload);
+				state.userLoading = false;
+				if (state.user) {
+					// state.user.role = action.payload;
+					// Set a cookie with the user's role
+					// createCookie("userRole", action.payload, 3600);
+				}
+				// console.log(document.cookie);
+			})
+			.addCase(getUserRole.rejected, (state) => {
+				state.userLoading = false;
+			});
+	},
+});
 
-export default userAuthSlice.reducer
+export const { login, logout } = userAuthSlice.actions;
+
+export default userAuthSlice.reducer;
