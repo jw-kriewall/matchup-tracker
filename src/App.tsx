@@ -9,20 +9,20 @@ import { ThemeProvider, createTheme } from "@mui/material";
 const theme = createTheme({});
 
 function App() {
-	return (
-		<>
-			<ThemeProvider theme={theme}>
-				<SessionManagement>
-					<BrowserRouter>
-						<Routes>
-							<Route path="/" element={<HomePage />} />
-							<Route path="/data" element={<TablePage />} />
-						</Routes>
-					</BrowserRouter>
-				</SessionManagement>
-			</ThemeProvider>
-		</>
-	);
+  return (
+    <>
+      <ThemeProvider theme={theme}>
+          <SessionManagement>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/data" element={<TablePage />} />
+              </Routes>
+            </BrowserRouter>
+          </SessionManagement>
+      </ThemeProvider>
+    </>
+  );
 }
 
 export default App;
