@@ -31,7 +31,7 @@ export default function HomePage() {
         <NavBar />
       </div>
 
-      {userRole === "admin" ? <h1>admin</h1> : <h1>user</h1>}
+      {/* {userRole === "admin" ? <h1>admin</h1> : <h1>user</h1>} */}
 
       <div className="matchup-form">
         <MatchupForm />
