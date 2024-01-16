@@ -6,9 +6,11 @@ import "./HomePage.css";
 import { useCookies } from "react-cookie";
 
 export default function HomePage() {
-  const user = useUser();
+  const [userCookies] = useCookies(["user"]);
+  const user = userCookies["user"]?.payload;
+
   const [cookies] = useCookies(["userRole"]);
-  const userRole = cookies["userRole"].payload;
+  const userRole = cookies["userRole"]?.payload;
 
   if (!user) {
     return (
@@ -29,7 +31,7 @@ export default function HomePage() {
         <NavBar />
       </div>
 
-      {userRole === "user" ? <h1>user</h1> : <h1>admin</h1>}
+      {userRole === "admin" ? <h1>admin</h1> : <h1>user</h1>}
 
       <div className="matchup-form">
         <MatchupForm />

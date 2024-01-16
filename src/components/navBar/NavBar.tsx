@@ -13,10 +13,12 @@ import ListItemText from "@mui/material/ListItemText";
 import { useNavigate } from "react-router-dom";
 import LoginButton from "../login/LoginButton";
 import LogoutButton from "../login/LogoutButton";
-import { useAppSelector } from "../../hooks/hooks";
+import { useCookies } from "react-cookie";
+import { CredentialResponse } from "@react-oauth/google";
 
 export default function NavBar() {
-	const user = useAppSelector((state) => state.userReducer.user);
+	const [userCookies] = useCookies(["user"]);
+  	const user: CredentialResponse = userCookies["user"]?.payload;
 	const [drawerOpen, setDrawerOpen] = React.useState(false);
 	const navigate = useNavigate();
 

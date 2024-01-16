@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import SnackbarInfo from '../snackbarNotifications/SnackbarInfo';
 import useUserLogout from '../../hooks/userLogoutHook';
-import useUser from '../../hooks/userHook';
 import SnackbarWarning from '../snackbarNotifications/SnackbarWarning';
 import { useAppDispatch } from '../../hooks/hooks';
 import { logoutAction } from '../../actions/userActions';
+import { useCookies } from 'react-cookie';
 
 const SessionManagement: any = ({ children }: any) => {
-  const user = useUser();
-  const logoutTime = useUserLogout()?.getTime();
   const [showSnackbarInfo, setShowSnackbarInfo] = useState(false);
   const [showSnackbarWarning, setShowSnackbarWarning] = useState(false);
   const [infoShown, setInfoShown] = useState(false);
   const [warningShown, setWarningShown] = useState(false);
+  const [cookies] = useCookies(["user"]);
+  
+  const user = cookies["user"]?.payload;
+  const logoutTime = useUserLogout()?.getTime();
 
   const dispatch = useAppDispatch();
 

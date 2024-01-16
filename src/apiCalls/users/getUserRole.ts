@@ -9,7 +9,6 @@ const apiUrl = process.env.REACT_APP_API_URL;
 export const getUserRole = createAsyncThunk(
 	"user/getRole",
 	async (user: CredentialResponse) => {
-		console.log("Hitting getUserRole");
 		try {
 			if (user.credential) {
 				const decodedToken: DecodedJwtToken = jwt_decode(user.credential);
@@ -28,7 +27,6 @@ export const getUserRole = createAsyncThunk(
 					}
 				);
 				const role = response.data;
-				console.log("ROLE: " + role);
 				return role;
 			}
 		} catch (error) {

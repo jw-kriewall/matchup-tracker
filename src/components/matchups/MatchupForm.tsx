@@ -17,273 +17,296 @@ import { useAppDispatch } from "../../hooks/hooks";
 import { useCookies } from "react-cookie";
 
 export default function MatchupForm() {
-	const [playerOneName, setPlayerOneName] = React.useState<string>("");
-	const [playerTwoName, setPlayerTwoName] = React.useState<string>("");
-	const [playerOneDeckName, setPlayerOneDeckName] = React.useState<string>("");
-	const [playerTwoDeckName, setPlayerTwoDeckName] = React.useState<string>("");
-	const [playerOneDecklist, setPlayerOneDecklist] = React.useState<string>("blank");
-	const [playerTwoDecklist, setPlayerTwoDecklist] = React.useState<string>("blank");
-	const [startingPlayer, setStartingPlayer] = React.useState<string>("");
-	const [winningDeck, setWinningDeck] = React.useState<string>("");
-	const [format, setFormat] = React.useState<string>("");
-	const [notes, setNotes] = React.useState<string>("");
-	const [successMessage, setSuccessMessage] = React.useState<string>('');
-	const [cookies] = useCookies(["userRole"]);
-  	
-	const userRole = cookies["userRole"].payload;
+  const [playerOneName, setPlayerOneName] = React.useState<string>("");
+  const [playerTwoName, setPlayerTwoName] = React.useState<string>("");
+  const [playerOneDeckName, setPlayerOneDeckName] = React.useState<string>("");
+  const [playerTwoDeckName, setPlayerTwoDeckName] = React.useState<string>("");
+  const [playerOneDecklist, setPlayerOneDecklist] =
+    React.useState<string>("blank");
+  const [playerTwoDecklist, setPlayerTwoDecklist] =
+    React.useState<string>("blank");
+  const [startingPlayer, setStartingPlayer] = React.useState<string>("");
+  const [winningDeck, setWinningDeck] = React.useState<string>("");
+  const [format, setFormat] = React.useState<string>("");
+  const [notes, setNotes] = React.useState<string>("");
+  const [snackbarSuccessMessage, setSnackbarSuccessMessage] =
+    React.useState<string>("");
+  const [snackbarWarningMessage, setSnackbarWarningMessage] =
+    React.useState<string>("");
+  const [cookies] = useCookies(["userRole"]);
+  const [userCookies] = useCookies(["user"]);
 
-	const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<string[]>([]);
+  const userRole = cookies["userRole"]?.payload;
+  const user: CredentialResponse = userCookies["user"]?.payload;
 
-	const dispatch = useAppDispatch();
+  const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<
+    string[]
+  >([]);
 
-	const handlePlayerOneDeckChange = (e: any) => {
-		e.preventDefault();
-		let deckName = e.target.value;
-		setPlayerOneDeckName(deckName);
-		determineWinningDeckOptions(deckName, playerTwoDeckName);
-	};
-	const handlePlayerTwoDeckChange = (e: any) => {
-		e.preventDefault();
-		let deckName = e.target.value;
-		setPlayerTwoDeckName(deckName);
-		determineWinningDeckOptions(deckName, playerOneDeckName);
-	};
-	const handleSetStartingPlayer = (playerName: string) => {
-		setStartingPlayer(playerName);
-	};
+  const dispatch = useAppDispatch();
 
-	const handleSubmit = async (e: any) => {
-		e.preventDefault();
+  const handlePlayerOneDeckChange = (e: any) => {
+    e.preventDefault();
+    let deckName = e.target.value;
+    setPlayerOneDeckName(deckName);
+    determineWinningDeckOptions(deckName, playerTwoDeckName);
+  };
+  const handlePlayerTwoDeckChange = (e: any) => {
+    e.preventDefault();
+    let deckName = e.target.value;
+    setPlayerTwoDeckName(deckName);
+    determineWinningDeckOptions(deckName, playerOneDeckName);
+  };
+  const handleSetStartingPlayer = (playerName: string) => {
+    setStartingPlayer(playerName);
+  };
 
-		// let role = "";
-		let username = "";
-		let email = "";
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
 
-		// @TODO: useUser() hook....
-		let oauth: CredentialResponse = JSON.parse(localStorage.getItem("user")!);
-		let token = oauth.credential;
+    let username = "";
+    let email = "";
 
-		if (token) {
-			try {
-				const decodedToken: DecodedJwtToken = jwt_decode(token);
-				email = decodedToken.email;
-				username = decodedToken.name;
-			} catch (error) {
-				console.error("Error decoding JWT: ", error);
-			}
-		}
+    let token = user.credential;
 
-		const matchup: Matchup = {
-			// matchup schema goes here...
-			id: undefined,
-			playerOneName,
-			playerOneDeck: {
-				name: playerOneDeckName,
-				cards: playerOneDecklist,
-			},
-			playerTwoName,
-			playerTwoDeck: {
-				name: playerTwoDeckName,
-				cards: playerTwoDecklist,
-			},
-			startingPlayer,
-			winningDeck,
-			format,
-			createdOn: new Date(),
-			createdBy: {
-				username: username,
-				role: userRole,
-				email: email,
-			},
-			notes,
-		};
+    if (token) {
+      try {
+        const decodedToken: DecodedJwtToken = jwt_decode(token);
+        email = decodedToken.email;
+        username = decodedToken.name;
+      } catch (error) {
+        console.error("Error decoding JWT: ", error);
+      }
+    }
 
-		console.log(matchup);
-		try {
-			await dispatch(addNewMatchup(matchup));
-			setSuccessMessage("");
-			setTimeout(() => setSuccessMessage("Matchup successfully added!"), 0);
-			setNotes("");
-		} catch(err) {
-			//@TODO: Set a SnackbarError notification.
-			console.error(err);
-		}
-	};
+    const matchup: Matchup = {
+      // matchup schema goes here...
+      id: undefined,
+      playerOneName,
+      playerOneDeck: {
+        name: playerOneDeckName,
+        cards: playerOneDecklist,
+      },
+      playerTwoName,
+      playerTwoDeck: {
+        name: playerTwoDeckName,
+        cards: playerTwoDecklist,
+      },
+      startingPlayer,
+      winningDeck,
+      format,
+      createdOn: new Date(),
+      createdBy: {
+        username: username,
+        role: userRole,
+        email: email,
+      },
+      notes,
+    };
+    console.log(matchup);
 
-	return (
-        <Box
-			component="form"
-			sx={{
-				"& .MuiTextField-root": { m: 1, width: "30ch" },
-			}}
-			noValidate
-			autoComplete="off"
-		>
-			<div>
-				<Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
-					<Box
-						sx={{
-							position: "relative",
-							display: "inline-flex",
-							width: "auto",
-							alignItems: "center",
-						}}
-					>
-						<TextField
-							id="outlined-multiline-flexible"
-							label="Player One"
-							multiline
-							value={playerOneName}
-							onChange={(e) => setPlayerOneName(e.target.value)}
-							sx={{ width: "25ch" }}
-						/>
-						<IconButton
-                            onClick={() => handleSetStartingPlayer(playerOneName)}
-                            aria-label="set-starting-player-button"
-                            sx={{ position: "absolute", right: -48 }}
-                            color={
-								startingPlayer && startingPlayer === playerOneName
-									? "primary"
-									: "default"
-							}
-                            size="large">
-							<LooksOneIcon />
-						</IconButton>
-					</Box>
-				</Box>
+    try {
+      await dispatch(addNewMatchup({ user, matchup }));
+      setNotes("");
+      setSnackbarSuccessMessage("Matchup successfully added!");
+    } catch (err) {
+      console.error(err);
+      setSnackbarWarningMessage("Failed to add matchup. Please try again.");
+    }
+  };
 
-				<Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
-					<Box
-						sx={{
-							position: "relative",
-							display: "inline-flex",
-							width: "auto",
-							alignItems: "center",
-						}}
-					>
-						<TextField
-							id="outlined-multiline-flexible"
-							label="Player Two"
-							multiline
-							value={playerTwoName}
-							onChange={(e) => setPlayerTwoName(e.target.value)}
-							sx={{ width: "25ch" }}
-						/>
-						<IconButton
-                            onClick={() => handleSetStartingPlayer(playerTwoName)}
-                            aria-label="set-starting-player-button"
-                            sx={{ position: "absolute", right: -48 }}
-                            color={
-								startingPlayer && startingPlayer === playerTwoName
-									? "primary"
-									: "default"
-							}
-                            size="large">
-							<LooksOneIcon />
-						</IconButton>
-					</Box>
-				</Box>
-			</div>
+  return (
+    <Box
+      component="form"
+      sx={{
+        "& .MuiTextField-root": { m: 1, width: "30ch" },
+      }}
+      noValidate
+      autoComplete="off"
+    >
+      <div>
+        <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
+          <Box
+            sx={{
+              position: "relative",
+              display: "inline-flex",
+              width: "auto",
+              alignItems: "center",
+            }}
+          >
+            <TextField
+              id="outlined-multiline-flexible"
+              label="Player One"
+              multiline
+              value={playerOneName}
+              onChange={(e) => setPlayerOneName(e.target.value)}
+              sx={{ width: "25ch" }}
+            />
+            <IconButton
+              onClick={() => handleSetStartingPlayer(playerOneName)}
+              aria-label="set-starting-player-button"
+              sx={{ position: "absolute", right: -48 }}
+              color={
+                startingPlayer && startingPlayer === playerOneName
+                  ? "primary"
+                  : "default"
+              }
+              size="large"
+            >
+              <LooksOneIcon />
+            </IconButton>
+          </Box>
+        </Box>
 
-			<div>
-				<TextField
-					id="outlined-deck-one"
-					select
-					label="Player One Deck"
-					defaultValue=""
-					onChange={(e) => handlePlayerOneDeckChange(e)}
-				>
-					{allDecksConstant.map((option: DeckDisplay) => (
-						<MenuItem key={option.value} value={option.value}>
-							<Box sx={{ display: 'flex', alignItems: 'center' }}>
-							{option.label}
-								<Box sx={{ display: "flex" }}>
-									{option.sprites.map((sprite, index) => (
-										<img
-										key={index}
-										src={sprite}
-										alt={option.label}
-										style={{ width: "36px", height: "36px", marginLeft: "2px" }}
-										/>
-									))}
-								</Box>
-							</Box>
-						</MenuItem>
-					))}
-				</TextField>
+        <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
+          <Box
+            sx={{
+              position: "relative",
+              display: "inline-flex",
+              width: "auto",
+              alignItems: "center",
+            }}
+          >
+            <TextField
+              id="outlined-multiline-flexible"
+              label="Player Two"
+              multiline
+              value={playerTwoName}
+              onChange={(e) => setPlayerTwoName(e.target.value)}
+              sx={{ width: "25ch" }}
+            />
+            <IconButton
+              onClick={() => handleSetStartingPlayer(playerTwoName)}
+              aria-label="set-starting-player-button"
+              sx={{ position: "absolute", right: -48 }}
+              color={
+                startingPlayer && startingPlayer === playerTwoName
+                  ? "primary"
+                  : "default"
+              }
+              size="large"
+            >
+              <LooksOneIcon />
+            </IconButton>
+          </Box>
+        </Box>
+      </div>
 
-				<TextField
-					id="outlined-deck-two"
-					select
-					label="Player Two Deck"
-					defaultValue=""
-					onChange={(e) => handlePlayerTwoDeckChange(e)}
-				>
-					{allDecksConstant.map((option) => (
-						<MenuItem key={option.value} value={option.value}>
-							<Box sx={{ display: 'flex', alignItems: 'center' }}>
-								{option.label}
-								<Box sx={{ display: "flex" }}>
-									{option.sprites.map((sprite, index) => (
-										<img
-										key={index}
-										src={sprite}
-										alt={option.label}
-										style={{ width: "36px", height: "36px", marginLeft: "2px" }}
-										/>
-									))}
-								</Box>
-							</Box>
-						</MenuItem>
-					))}
-				</TextField>
-			</div>
+      <div>
+        <TextField
+          id="outlined-deck-one"
+          select
+          label="Player One Deck"
+          defaultValue=""
+          onChange={(e) => handlePlayerOneDeckChange(e)}
+        >
+          {allDecksConstant.map((option: DeckDisplay) => (
+            <MenuItem key={option.value} value={option.value}>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                {option.label}
+                <Box sx={{ display: "flex" }}>
+                  {option.sprites.map((sprite, index) => (
+                    <img
+                      key={index}
+                      src={sprite}
+                      alt={option.label}
+                      style={{
+                        width: "36px",
+                        height: "36px",
+                        marginLeft: "2px",
+                      }}
+                    />
+                  ))}
+                </Box>
+              </Box>
+            </MenuItem>
+          ))}
+        </TextField>
 
-			<div>
-				<TextField
-					id="winning-deck"
-					select
-					label="Winning Deck"
-					defaultValue=""
-					onChange={(e) => setWinningDeck(e.target.value)}
-				>
-					{winningDeckOptionsArray.map((option) => (
-						// @TODO: sprites here? Should I pass deck back?
-						<MenuItem key={option} value={option}>
-							{option}
-						</MenuItem>
-					))}
-				</TextField>
-			</div>
+        <TextField
+          id="outlined-deck-two"
+          select
+          label="Player Two Deck"
+          defaultValue=""
+          onChange={(e) => handlePlayerTwoDeckChange(e)}
+        >
+          {allDecksConstant.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                {option.label}
+                <Box sx={{ display: "flex" }}>
+                  {option.sprites.map((sprite, index) => (
+                    <img
+                      key={index}
+                      src={sprite}
+                      alt={option.label}
+                      style={{
+                        width: "36px",
+                        height: "36px",
+                        marginLeft: "2px",
+                      }}
+                    />
+                  ))}
+                </Box>
+              </Box>
+            </MenuItem>
+          ))}
+        </TextField>
+      </div>
 
-			<div className="notes-form">
-				<TextField
-					id="outlined-multiline-static"
-					label="Notes"
-					multiline
-					rows={3}
-					value={notes}
-					fullWidth={true}
-					onChange={(e) => setNotes(e.target.value)}
-				/>
-			</div>
-			<Button variant="outlined" onClick={handleSubmit}>
-				Submit
-			</Button>
-			{successMessage && <SnackbarSuccess message={successMessage} />}
-			<div className="accordion-matchup-component">
-				{/* show last 10 matchups with option to show all in second screen. Linked to which user created it */}
-				{/* @TODO: Matchup Pagination */}
-				<AccordionMatchup />
-			</div>
-		</Box>
-    );
+      <div>
+        <TextField
+          id="winning-deck"
+          select
+          label="Winning Deck"
+          defaultValue=""
+          onChange={(e) => setWinningDeck(e.target.value)}
+        >
+          {winningDeckOptionsArray.map((option) => (
+            // @TODO: sprites here? Should I pass deck back?
+            <MenuItem key={option} value={option}>
+              {option}
+            </MenuItem>
+          ))}
+        </TextField>
+      </div>
 
-	function determineWinningDeckOptions(deckName: string, playerDeckName: string) {
-		if (deckName === playerDeckName) {
-			setWinningDeckOptionsArray([deckName]);
-		} else {
-			setWinningDeckOptionsArray([playerDeckName, deckName, "Tie"]);
-		}
-	}
+      <div className="notes-form">
+        <TextField
+          id="outlined-multiline-static"
+          label="Notes"
+          multiline
+          rows={3}
+          value={notes}
+          fullWidth={true}
+          onChange={(e) => setNotes(e.target.value)}
+        />
+      </div>
+      <Button variant="outlined" onClick={handleSubmit}>
+        Submit
+      </Button>
+      {snackbarSuccessMessage && (
+        <SnackbarSuccess message={snackbarSuccessMessage} />
+      )}
+      {snackbarWarningMessage && (
+        <SnackbarSuccess message={snackbarWarningMessage} />
+      )}
+      <div className="accordion-matchup-component">
+        {/* show last 10 matchups with option to show all in second screen. Linked to which user created it */}
+        {/* @TODO: Matchup Pagination */}
+        <AccordionMatchup />
+      </div>
+    </Box>
+  );
+
+  function determineWinningDeckOptions(
+    deckName: string,
+    playerDeckName: string
+  ) {
+    if (deckName === playerDeckName) {
+      setWinningDeckOptionsArray([deckName]);
+    } else {
+      setWinningDeckOptionsArray([playerDeckName, deckName, "Tie"]);
+    }
+  }
 }

@@ -15,6 +15,7 @@ export interface UserState {
 
 const initialState: UserState = {
 	user: JSON.parse(localStorage.getItem("user") || "null"),
+	// user: useCookies(["user"])
 	userLoading: false,
 	loginSuccess: false,
 	logoutTime: undefined,

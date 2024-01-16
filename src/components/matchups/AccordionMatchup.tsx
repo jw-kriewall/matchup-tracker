@@ -11,11 +11,13 @@ import { getMatchups } from "../../apiCalls/matchups/getMatchups";
 import { store } from "../../data/store";
 import Box from '@mui/material/Box';
 import { deleteSingleMatchup } from "../../apiCalls/matchups/deleteMatchup";
+import { useCookies } from "react-cookie";
 
 export default function ControlledAccordions() {
 
 	const matchups: Matchup[] | undefined = useAppSelector((state) => state.matchupReducer.matchups)
-	const user = useAppSelector((state) => state.userReducer.user)
+	const [userCookies] = useCookies(["user"]);
+ 	const user = userCookies["user"]?.payload;
 
 	const [expanded, setExpanded] = React.useState<string | false>(false);
 	const [loading, setLoading] = React.useState<boolean>(false);
@@ -28,14 +30,19 @@ export default function ControlledAccordions() {
 
 	const dispatch = useAppDispatch();
 
-	const handleDeleteMatchup = (matchup: Matchup) => () => {
-		//@TODO: should setLoading value trigger a loading bar?
+	const handleDeleteMatchup = (matchup: Matchup) => async () => {
 		if (user) {
 			setLoading(true);
-			dispatch(deleteSingleMatchup(matchup));
-			setLoading(false);
+			try {
+				await dispatch(deleteSingleMatchup({user, matchup})).unwrap();
+				dispatch(getMatchups(user));
+			} catch (error) {
+				console.error("Failed to delete matchup:", error);
+			} finally {
+				setLoading(false);
+			}
 		}
-	}
+	};
 
 	const getMatchupsIfAuthorized = () => {
 		if (user) {
@@ -52,7 +59,6 @@ export default function ControlledAccordions() {
 		if (!isInitialized && user) {
 			getMatchupsIfAuthorized();
 		}
-		// getMatchupsIfAuthorized();
 	}, [isInitialized]);
 
 	function handleInit() {
