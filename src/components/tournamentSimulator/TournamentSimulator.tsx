@@ -58,11 +58,11 @@ function TournamentSimulator({ user }: simulatorProps) {
     );
 
     // Call the simulateTournament function with the necessary arguments
-    const simulationResults = simulateTournament(
+    const simulationResults = simulateTournament({
       deckCounts,
-      calculatedMatchupPercentages,
-      numberOfRounds
-    );
+      matchupPercentages: calculatedMatchupPercentages,
+      numberOfRounds,
+    });
 
     // Calculate average results
     const averageResults = calculateAverageResults(
@@ -177,73 +177,171 @@ function TournamentSimulator({ user }: simulatorProps) {
     losses: number;
   }
 
-  function simulateTournament(
-    deckCounts: { [deck: string]: number },
-    matchupPercentages: { [deck: string]: { [opponentDeck: string]: number } },
-    numberOfRounds: number
-  ): { [deck: string]: DeckPerformance } {
-    let results: { [deck: string]: DeckPerformance } = {};
-  
-    // Initialize results
-    Object.keys(deckCounts).forEach((deck) => {
-      results[deck] = { wins: 0, losses: 0 };
-    });
-  
-    for (let round = 0; round < numberOfRounds; round++) {
-      // Group decks by their current win count
-      let groupedDecks: { [winCount: number]: string[] } = {};
-      Object.keys(deckCounts).forEach((deck) => {
-        const winCount = results[deck].wins;
-        if (!groupedDecks[winCount]) {
-          groupedDecks[winCount] = [];
-        }
-        for (let i = 0; i < deckCounts[deck]; i++) {
-          groupedDecks[winCount].push(deck);
-        }
-      });
-  
-      // Sort groups by win count
-      const winGroups = Object.keys(groupedDecks).map(Number).sort((a, b) => a - b);
-  
-      // Pair decks within each group and simulate matches
-      winGroups.forEach((winCount) => {
-        let decksInGroup = groupedDecks[winCount];
-        
-        // Shuffle the decks in the current group to randomize pairings
-        decksInGroup.sort(() => Math.random() - 0.5);
-  
-        while (decksInGroup.length >= 2) {
-          let deck1 = decksInGroup.pop();
-          let deck2 = decksInGroup.pop();
-  
-          if (deck1 && deck2) {
-            // Determine the winner based on matchup percentage
-            const winProbability = matchupPercentages[deck1][deck2];
-            const randomValue = Math.random();
-            if (randomValue < winProbability) {
-              results[deck1].wins++;
-              results[deck2].losses++;
-            } else {
-              results[deck1].losses++;
-              results[deck2].wins++;
-            }
-    
-            console.log(`Round ${round + 1} - Matchup: ${deck1} vs ${deck2}, Result: ${randomValue < winProbability ? deck1 + " Wins" : deck2 + " Wins"}`);
-          }
-        }
-  
-        // If there's an odd number of decks, give the remaining deck a free win
-        if (decksInGroup.length === 1) {
-          let deckWithFreeWin = decksInGroup[0];
-          results[deckWithFreeWin].wins++;
-          console.log(`Round ${round + 1} - Deck with free win: ${deckWithFreeWin}`);
-        }
-      });
-    }
-  
-    return results;
+  interface Player {
+    id: number;
+    deckName: string;
+    record: DeckPerformance;
+    receivedBye: boolean;
   }
-  
+
+  interface TournamentSimulatorInput {
+    deckCounts: { [deck: string]: number };
+    matchupPercentages: { [deck: string]: { [opponentDeck: string]: number } };
+    numberOfRounds: number;
+  }
+
+  const createPlayers = (deckCounts: { [deck: string]: number }): Player[] => {
+    let players: Player[] = [];
+    let playerId = 0;
+
+    for (const deckName in deckCounts) {
+      for (let i = 0; i < deckCounts[deckName]; i++) {
+        players.push({
+          id: playerId++,
+          deckName: deckName,
+          record: { wins: 0, losses: 0 },
+          receivedBye: false,
+        });
+      }
+    }
+    return players;
+  };
+
+  const simulateTournament = ({
+    deckCounts,
+    matchupPercentages,
+    numberOfRounds,
+  }: TournamentSimulatorInput) => {
+    let players = createPlayers(deckCounts);
+
+    for (let round = 1; round <= numberOfRounds; round++) {
+      console.log(`Round ${round} starts`);
+
+      // Reset matchedPlayers for the new round
+      let matchedPlayers = new Set<number>();
+      let previousMatchups = new Map<number, Set<number>>();
+
+      // Handle byes if players are odd
+      if (players.length % 2 !== 0 && matchedPlayers.size < players.length) {
+        // Filter players who haven't received a bye yet
+        let eligiblePlayersForBye = players.filter(
+          (p) => !p.receivedBye && !matchedPlayers.has(p.id)
+        );
+
+        // Sort players by fewest wins, then by fewest losses
+        eligiblePlayersForBye.sort((a, b) => {
+          if (a.record.wins === b.record.wins) {
+            return a.record.losses - b.record.losses; // Fewest losses if wins are equal
+          }
+          return a.record.wins - b.record.wins; // Fewest wins first
+        });
+
+        // Pick a random player from the top N eligible players
+        // where N is the number of players with the fewest wins
+        let fewestWins = eligiblePlayersForBye[0].record.wins;
+        let topEligiblePlayers = eligiblePlayersForBye.filter(
+          (p) => p.record.wins === fewestWins
+        );
+        let randomIndex = Math.floor(Math.random() * topEligiblePlayers.length);
+        let playerForBye = topEligiblePlayers[randomIndex];
+
+        playerForBye.record.wins++;
+        playerForBye.receivedBye = true;
+        matchedPlayers.add(playerForBye.id);
+        console.log(
+          `Player ${playerForBye.id} with deck ${playerForBye.deckName} receives a bye`
+        );
+      }
+
+      // Pair players and simulate matches
+      for (let i = 0; i < players.length; i++) {
+        if (matchedPlayers.has(players[i].id)) continue;
+
+        let potentialOpponents = players.filter(
+          (p) =>
+            p.id !== players[i].id &&
+            !matchedPlayers.has(p.id) &&
+            !previousMatchups.get(players[i].id)?.has(p.id)
+        );
+
+        // Sort potential opponents by record closeness
+        potentialOpponents.sort((a, b) => {
+          let recordDiffA =
+            Math.abs(a.record.wins - players[i].record.wins) +
+            Math.abs(a.record.losses - players[i].record.losses);
+          let recordDiffB =
+            Math.abs(b.record.wins - players[i].record.wins) +
+            Math.abs(b.record.losses - players[i].record.losses);
+          return recordDiffA - recordDiffB;
+        });
+
+        if (potentialOpponents.length > 0) {
+          let opponent = potentialOpponents[0];
+          simulateMatch(players[i], opponent, matchupPercentages);
+          matchedPlayers.add(players[i].id).add(opponent.id);
+
+          // Update previous matchups
+          if (!previousMatchups.has(players[i].id))
+            previousMatchups.set(players[i].id, new Set<number>());
+          if (!previousMatchups.has(opponent.id))
+            previousMatchups.set(opponent.id, new Set<number>());
+          previousMatchups.get(players[i].id)?.add(opponent.id);
+          previousMatchups.get(opponent.id)?.add(players[i].id);
+        }
+      }
+
+      // Log round results
+      console.log(`Round ${round} results:`);
+      players.forEach((player) =>
+        console.log(
+          `Player ${player.id} (${player.deckName}): ${player.record.wins}-${player.record.losses}`
+        )
+      );
+    }
+
+    // Aggregate results
+    let aggregatedResults: { [deck: string]: DeckPerformance } = {};
+    players.forEach((player) => {
+      if (!aggregatedResults[player.deckName]) {
+        aggregatedResults[player.deckName] = { wins: 0, losses: 0 };
+      }
+      aggregatedResults[player.deckName].wins += player.record.wins;
+      aggregatedResults[player.deckName].losses += player.record.losses;
+    });
+
+    // Log final results
+    console.log("Final tournament results:");
+    for (const deckName in aggregatedResults) {
+      console.log(
+        `${deckName}: ${aggregatedResults[deckName].wins}-${aggregatedResults[deckName].losses}`
+      );
+    }
+
+    return aggregatedResults;
+  };
+
+  const simulateMatch = (
+    player1: Player,
+    player2: Player,
+    matchupPercentages: { [deck: string]: { [opponentDeck: string]: number } }
+  ) => {
+    let winPercentage =
+      matchupPercentages[player1.deckName][player2.deckName] || 50; // Default to 50% if matchup unknown
+    let matchResult = Math.random() * 100 < winPercentage;
+    if (matchResult) {
+      player1.record.wins++;
+      player2.record.losses++;
+      console.log(
+        `Player ${player1.id} (${player1.deckName}) wins against Player ${player2.id} (${player2.deckName})`
+      );
+    } else {
+      player1.record.losses++;
+      player2.record.wins++;
+      console.log(
+        `Player ${player2.id} (${player2.deckName}) wins against Player ${player1.id} (${player1.deckName})`
+      );
+    }
+  };
 
   return (
     <>
