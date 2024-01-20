@@ -212,6 +212,31 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
     return players;
   };
 
+  const assignBye = (players: Player[], matchedPlayers: Set<number>) => {
+    let eligiblePlayersForBye = players.filter(
+      (player) => !player.receivedBye && !matchedPlayers.has(player.id)
+    );
+
+    if (eligiblePlayersForBye.length > 0) {
+      // Sort by fewest wins, then randomly select one player if there's a tie
+      eligiblePlayersForBye.sort((a, b) => a.record.wins - b.record.wins);
+      const fewestWins = eligiblePlayersForBye[0].record.wins;
+      let tiedPlayers = eligiblePlayersForBye.filter(
+        (player) => player.record.wins === fewestWins
+      );
+
+      let randomIndex = Math.floor(Math.random() * tiedPlayers.length);
+      let playerForBye = tiedPlayers[randomIndex];
+
+      playerForBye.record.wins++; // Increment wins for the player who receives a bye
+      playerForBye.receivedBye = true;
+      matchedPlayers.add(playerForBye.id);
+      console.log(
+        `Player ${playerForBye.id} with deck ${playerForBye.deckName} receives a bye`
+      );
+    }
+  };
+
   const simulateTournament = ({
     deckCounts,
     matchupPercentages,
@@ -222,33 +247,11 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
     for (let round = 1; round <= numberOfRounds; round++) {
       console.log(`Round ${round} starts`);
 
-      // Reset matchedPlayers for the new round
       let matchedPlayers = new Set<number>();
       let previousMatchups = new Map<number, Set<number>>();
 
       if (players.length % 2 !== 0 && matchedPlayers.size < players.length) {
-        let eligiblePlayersForBye = players.filter(
-          (player) => !player.receivedBye && !matchedPlayers.has(player.id)
-        );
-
-        if (eligiblePlayersForBye.length > 0) {
-          // Sort by fewest wins, then randomly select one player if there's a tie
-          eligiblePlayersForBye.sort((a, b) => a.record.wins - b.record.wins);
-          const fewestWins = eligiblePlayersForBye[0].record.wins;
-          let tiedPlayers = eligiblePlayersForBye.filter(
-            (player) => player.record.wins === fewestWins
-          );
-
-          let randomIndex = Math.floor(Math.random() * tiedPlayers.length);
-          let playerForBye = tiedPlayers[randomIndex];
-
-          playerForBye.record.wins++; // Increment wins for the player who receives a bye
-          playerForBye.receivedBye = true;
-          matchedPlayers.add(playerForBye.id);
-          console.log(
-            `Player ${playerForBye.id} with deck ${playerForBye.deckName} receives a bye`
-          );
-        }
+        assignBye(players, matchedPlayers);
       }
 
       for (let i = 0; i < players.length; i++) {
