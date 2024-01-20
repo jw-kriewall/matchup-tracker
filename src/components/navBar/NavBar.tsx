@@ -56,6 +56,11 @@ export default function NavBar() {
             <ListItemText primary="Dashboard" />
           </ListItemButton>
         </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => handleNavigation("/simulator")}>
+            <ListItemText primary="Simulator" />
+          </ListItemButton>
+        </ListItem>
         {/* Add more ListItems here for additional pages */}
       </List>
     </Box>

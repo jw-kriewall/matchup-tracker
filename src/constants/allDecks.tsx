@@ -1,5 +1,6 @@
 import { DeckDisplay } from "../types/MatchupModels";
 //https://pokemondb.net/sprites
+//https://pokeapi.co/
 
 // @TODO: This data should be stored in Backend. Need CRUD endpoints ultimately.
 export const allDecksConstant: DeckDisplay[] = [
@@ -7,8 +8,8 @@ export const allDecksConstant: DeckDisplay[] = [
     value: "FS Mew",
     label: "FS Mew",
     sprites: [
-      "https://img.pokemondb.net/sprites/sword-shield/icon/mew.png",
-      "https://img.pokemondb.net/sprites/sword-shield/icon/meloetta.png",
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/151.png",
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/648.png",
     ],
   },
   {
@@ -39,7 +40,7 @@ export const allDecksConstant: DeckDisplay[] = [
     value: "Roaring Moon",
     label: "Roaring Moon",
     sprites: [
-      "https://img.pokemondb.net/sprites/scarlet-violet/icon/roaring-moon.png",
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1005.png",
     ],
   },
   {
@@ -68,7 +69,7 @@ export const allDecksConstant: DeckDisplay[] = [
     value: "Gholdengo",
     label: "Gholdengo",
     sprites: [
-      "https://img.pokemondb.net/sprites/scarlet-violet/icon/gholdengo.png",
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1000.png",
     ],
   },
 ];
