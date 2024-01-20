@@ -13,15 +13,15 @@ function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
-          <SessionManagement>
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/data" element={<TablePage />} />
-                <Route path="/simulator" element={<SimulatorPage />} />
-              </Routes>
-            </BrowserRouter>
-          </SessionManagement>
+        <SessionManagement>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/data" element={<TablePage />} />
+              <Route path="/simulator" element={<SimulatorPage />} />
+            </Routes>
+          </BrowserRouter>
+        </SessionManagement>
       </ThemeProvider>
     </>
   );

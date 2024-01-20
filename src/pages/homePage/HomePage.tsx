@@ -1,16 +1,12 @@
 import React from "react";
 import MatchupForm from "../../components/matchups/MatchupForm";
 import NavBar from "../../components/navBar/NavBar";
-import useUser from "../../hooks/userHook";
 import "./HomePage.css";
 import { useCookies } from "react-cookie";
 
 export default function HomePage() {
   const [userCookies] = useCookies(["user"]);
   const user = userCookies["user"]?.payload;
-
-  const [cookies] = useCookies(["userRole"]);
-  const userRole = cookies["userRole"]?.payload;
 
   if (!user) {
     return (
