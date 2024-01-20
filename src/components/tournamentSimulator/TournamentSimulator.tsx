@@ -6,7 +6,7 @@ import { CredentialResponse } from "@react-oauth/google";
 
 interface simulatorProps {
   user: CredentialResponse;
-  filteredDecks: string[]
+  filteredDecks: string[];
 }
 
 function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
@@ -25,13 +25,12 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
       if (!user) return; // Early return if no user
 
       try {
-        const response = await dispatch(getMatchupRecordsByDeck({ user }));
-        const fetchedData: TableData = response.payload;
-        setData(fetchedData);
+        // const response = await dispatch(getMatchupRecordsByDeck({ user }));
+        // const fetchedData: TableData = response.payload;
+        // setData(fetchedData);
 
         // Initialize matchup percentages
-        const initialMatchupPercentages =
-          initializeMatchupPercentages(fetchedData);
+        const initialMatchupPercentages = initializeMatchupPercentages();
         setMatchupPercentages(initialMatchupPercentages);
       } catch (error) {
         console.error("Error fetching data for decks", error);
@@ -42,13 +41,13 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
   }, [dispatch, user]); // Dependencies
 
   // Function to initialize matchup percentages
-  const initializeMatchupPercentages = (fetchedData: TableData) => {
+  const initializeMatchupPercentages = () => {
     const initialMatchupPercentages: {
       [deck: string]: { [opponentDeck: string]: number };
     } = {};
-    Object.keys(fetchedData).forEach((deck) => {
+    filteredDecks.forEach((deck) => {
       initialMatchupPercentages[deck] = {};
-      Object.keys(fetchedData).forEach((opponentDeck) => {
+      filteredDecks.forEach((opponentDeck) => {
         if (deck !== opponentDeck) {
           initialMatchupPercentages[deck][opponentDeck] = 0.5; // 50%
         }
@@ -227,6 +226,31 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
       let matchedPlayers = new Set<number>();
       let previousMatchups = new Map<number, Set<number>>();
 
+      if (players.length % 2 !== 0 && matchedPlayers.size < players.length) {
+        let eligiblePlayersForBye = players.filter(
+          (player) => !player.receivedBye && !matchedPlayers.has(player.id)
+        );
+
+        if (eligiblePlayersForBye.length > 0) {
+          // Sort by fewest wins, then randomly select one player if there's a tie
+          eligiblePlayersForBye.sort((a, b) => a.record.wins - b.record.wins);
+          const fewestWins = eligiblePlayersForBye[0].record.wins;
+          let tiedPlayers = eligiblePlayersForBye.filter(
+            (player) => player.record.wins === fewestWins
+          );
+
+          let randomIndex = Math.floor(Math.random() * tiedPlayers.length);
+          let playerForBye = tiedPlayers[randomIndex];
+
+          playerForBye.record.wins++; // Increment wins for the player who receives a bye
+          playerForBye.receivedBye = true;
+          matchedPlayers.add(playerForBye.id);
+          console.log(
+            `Player ${playerForBye.id} with deck ${playerForBye.deckName} receives a bye`
+          );
+        }
+      }
+
       for (let i = 0; i < players.length; i++) {
         if (matchedPlayers.has(players[i].id)) continue;
 
@@ -268,41 +292,6 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
       }
 
       // Handle byes if players are odd
-      if (players.length % 2 !== 0 && matchedPlayers.size < players.length) {
-        let eligiblePlayersForBye = players.filter(
-          (p) => !p.receivedBye && !matchedPlayers.has(p.id)
-        );
-
-        eligiblePlayersForBye.sort((a, b) => {
-          if (a.record.wins === b.record.wins) {
-            return a.record.losses - b.record.losses; // Fewest losses if wins are equal
-          }
-          return a.record.wins - b.record.wins; // Fewest wins first
-        });
-
-        if (eligiblePlayersForBye.length > 0) {
-          let fewestWins = Math.min(
-            ...eligiblePlayersForBye.map((p) => p.record?.wins ?? 0)
-          );
-          let topEligiblePlayers = eligiblePlayersForBye.filter(
-            (p) => (p.record?.wins ?? 0) === fewestWins
-          );
-
-          let randomIndex = Math.floor(
-            Math.random() * topEligiblePlayers.length
-          );
-          let playerForBye = topEligiblePlayers[randomIndex];
-
-          if (playerForBye && playerForBye.record) {
-            playerForBye.record.wins++;
-            playerForBye.receivedBye = true;
-            matchedPlayers.add(playerForBye.id);
-            console.log(
-              `Player ${playerForBye.id} with deck ${playerForBye.deckName} receives a bye`
-            );
-          }
-        }
-      }
 
       // Pair players and simulate matches
       for (let i = 0; i < players.length; i++) {
@@ -378,9 +367,9 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
     matchupPercentages: { [deck: string]: { [opponentDeck: string]: number } }
   ) => {
     let winPercentagePlayer1 =
-      matchupPercentages[player1.deckName][player2.deckName];
+      matchupPercentages[player1.deckName]?.[player2.deckName] ?? 0.5;
     let winPercentagePlayer2 =
-      matchupPercentages[player2.deckName][player1.deckName];
+      matchupPercentages[player2.deckName]?.[player1.deckName] ?? 0.5;
 
     // Handle cases where win percentages might be undefined
     if (winPercentagePlayer1 === undefined) winPercentagePlayer1 = 0.5; // Default to 50% (0.5) if matchup unknown
@@ -416,16 +405,16 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
         <thead>
           <tr>
             <th>Deck</th>
-            {Object.keys(deckCounts).map((opponentDeck) => (
+            {filteredDecks.map((opponentDeck) => (
               <th key={opponentDeck}>{opponentDeck}</th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {Object.keys(deckCounts).map((deck) => (
+          {filteredDecks.map((deck) => (
             <tr key={deck}>
               <td>{deck}</td>
-              {Object.keys(deckCounts).map((opponentDeck) => (
+              {filteredDecks.map((opponentDeck) => (
                 <td key={opponentDeck}>
                   {deck !== opponentDeck ? (
                     <input
@@ -453,7 +442,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
       </table>
 
       <div>
-        {Object.keys(data).map((deck) => (
+        {filteredDecks.map((deck) => (
           <div key={deck}>
             {deck}:
             <input
