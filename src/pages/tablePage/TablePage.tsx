@@ -3,9 +3,9 @@ import DataTable from "../../components/dataTable/DataTable";
 import DeckFilter from "../../components/deckFilter/DeckFilter";
 import NavBar from "../../components/navBar/NavBar";
 import { allDecksConstant } from "../../constants/allDecks";
-import "./TablePage.css";
 import CountMatchups from "../../components/matchups/countMatchups/CountMatchups";
 import { useCookies } from "react-cookie";
+import "./TablePage.css";
 
 export default function TablePage() {
   const initialDecks = allDecksConstant.map((deck) => deck.value);

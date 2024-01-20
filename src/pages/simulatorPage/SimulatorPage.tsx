@@ -30,7 +30,7 @@ export default function SimulatorPage() {
       </div>
 
       <div className="bento-box">
-        <TournamentSimulator user={user} />
+        <TournamentSimulator user={user} filteredDecks={initialDecks}/>
       </div>
     </div>
   );

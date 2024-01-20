@@ -6,9 +6,10 @@ import { CredentialResponse } from "@react-oauth/google";
 
 interface simulatorProps {
   user: CredentialResponse;
+  filteredDecks: string[]
 }
 
-function TournamentSimulator({ user }: simulatorProps) {
+function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
   const [data, setData] = useState<TableData>({});
   const [deckCounts, setDeckCounts] = useState<{ [deck: string]: number }>({});
   const [numberOfRounds, setNumberOfRounds] = useState<number>(0);
