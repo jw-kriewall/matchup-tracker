@@ -9,6 +9,17 @@ interface simulatorProps {
   filteredDecks: string[];
 }
 
+// @TODO: Bring in user data - should it be automatic or should it be set on a button click?
+// Button click is probably easier - so everything is initialized and then the API call is made. Ensures that no extra API calls are made.
+// API can be called once and button press just resets to 'cached' data.
+
+// @TODO: filtered decks can be a module like other page.
+
+// @TODO: aggregate simulation
+// Description: simulation over 1000 / 100 / 10000 games and aggregate
+
+// @TODO: The winner algorithm doesn't seem to work correctly as matchups with a 100 / 0 matchup should never lose.
+
 function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
   const [data, setData] = useState<TableData>({});
   const [deckCounts, setDeckCounts] = useState<{ [deck: string]: number }>({});
@@ -247,6 +258,8 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
     for (let round = 1; round <= numberOfRounds; round++) {
       console.log(`Round ${round} starts`);
 
+      shuffleArray(players);
+
       let matchedPlayers = new Set<number>();
       let previousMatchups = new Map<number, Set<number>>();
 
@@ -293,8 +306,6 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
           previousMatchups.get(opponent.id)?.add(players[i].id);
         }
       }
-
-      // Handle byes if players are odd
 
       // Pair players and simulate matches
       for (let i = 0; i < players.length; i++) {
@@ -363,6 +374,16 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 
     return aggregatedResults;
   };
+
+  function shuffleArray(array: Player[]) {
+    for (let i = array.length - 1; i > 0; i--) {
+      // Generate a random index from 0 to i
+      const j = Math.floor(Math.random() * (i + 1));
+
+      // Swap elements at indices i and j
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
 
   const simulateMatch = (
     player1: Player,
