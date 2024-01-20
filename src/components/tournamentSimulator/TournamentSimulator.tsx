@@ -221,6 +221,46 @@ function TournamentSimulator({ user }: simulatorProps) {
       let matchedPlayers = new Set<number>();
       let previousMatchups = new Map<number, Set<number>>();
 
+      for (let i = 0; i < players.length; i++) {
+        if (matchedPlayers.has(players[i].id)) continue;
+
+        let potentialOpponents = players.filter(
+          (p) =>
+            p.id !== players[i].id &&
+            !matchedPlayers.has(p.id) &&
+            !previousMatchups.get(players[i].id)?.has(p.id)
+        );
+
+        // Sort potential opponents by record closeness
+        potentialOpponents.sort((a, b) => {
+          // Ensure both players are defined and have a record
+          if (!a || !a.record || !b || !b.record) return 0;
+
+          let recordDiffA =
+            Math.abs(a.record.wins - players[i].record.wins) +
+            Math.abs(a.record.losses - players[i].record.losses);
+          let recordDiffB =
+            Math.abs(b.record.wins - players[i].record.wins) +
+            Math.abs(b.record.losses - players[i].record.losses);
+          return recordDiffA - recordDiffB;
+        });
+
+        if (potentialOpponents.length > 0) {
+          let opponent = potentialOpponents[0];
+          simulateMatch(players[i], opponent, matchupPercentages);
+          matchedPlayers.add(players[i].id).add(opponent.id);
+
+          // Update previous matchups
+          if (!previousMatchups.has(players[i].id))
+            previousMatchups.set(players[i].id, new Set<number>());
+          previousMatchups.get(players[i].id)?.add(opponent.id);
+
+          if (!previousMatchups.has(opponent.id))
+            previousMatchups.set(opponent.id, new Set<number>());
+          previousMatchups.get(opponent.id)?.add(players[i].id);
+        }
+      }
+
       // Handle byes if players are odd
       if (players.length % 2 !== 0 && matchedPlayers.size < players.length) {
         // Filter players who haven't received a bye yet
@@ -238,10 +278,13 @@ function TournamentSimulator({ user }: simulatorProps) {
 
         // Pick a random player from the top N eligible players
         // where N is the number of players with the fewest wins
-        let fewestWins = eligiblePlayersForBye[0].record.wins;
-        let topEligiblePlayers = eligiblePlayersForBye.filter(
-          (p) => p.record.wins === fewestWins
+        let fewestWins = Math.min(
+          ...eligiblePlayersForBye.map((p) => p.record?.wins ?? 0)
         );
+        let topEligiblePlayers = eligiblePlayersForBye.filter(
+          (p) => (p.record?.wins ?? 0) === fewestWins
+        );
+
         let randomIndex = Math.floor(Math.random() * topEligiblePlayers.length);
         let playerForBye = topEligiblePlayers[randomIndex];
 
@@ -266,6 +309,7 @@ function TournamentSimulator({ user }: simulatorProps) {
 
         // Sort potential opponents by record closeness
         potentialOpponents.sort((a, b) => {
+          if (!a || !a.record || !b || !b.record) return 0;
           let recordDiffA =
             Math.abs(a.record.wins - players[i].record.wins) +
             Math.abs(a.record.losses - players[i].record.losses);
@@ -325,21 +369,36 @@ function TournamentSimulator({ user }: simulatorProps) {
     player2: Player,
     matchupPercentages: { [deck: string]: { [opponentDeck: string]: number } }
   ) => {
-    let winPercentage =
-      matchupPercentages[player1.deckName][player2.deckName] || 50; // Default to 50% if matchup unknown
-    let matchResult = Math.random() * 100 < winPercentage;
-    if (matchResult) {
+    let winPercentagePlayer1 =
+      matchupPercentages[player1.deckName][player2.deckName];
+    let winPercentagePlayer2 =
+      matchupPercentages[player2.deckName][player1.deckName];
+
+    // Handle cases where win percentages might be undefined
+    if (winPercentagePlayer1 === undefined) winPercentagePlayer1 = 0.5; // Default to 50% (0.5) if matchup unknown
+    if (winPercentagePlayer2 === undefined) winPercentagePlayer2 = 0.5; // Default to 50% (0.5) if matchup unknown
+
+    // Simulate match based on win percentages
+    let randomRoll = Math.random();
+    if (randomRoll < winPercentagePlayer1) {
       player1.record.wins++;
       player2.record.losses++;
       console.log(
         `Player ${player1.id} (${player1.deckName}) wins against Player ${player2.id} (${player2.deckName})`
       );
-    } else {
+    } else if (randomRoll < winPercentagePlayer1 + winPercentagePlayer2) {
       player1.record.losses++;
       player2.record.wins++;
       console.log(
         `Player ${player2.id} (${player2.deckName}) wins against Player ${player1.id} (${player1.deckName})`
       );
+    }
+    // Handle the scenario where both win percentages sum to less than 1 (100%)
+    else {
+      console.log(
+        `Match between Player ${player1.id} (${player1.deckName}) and Player ${player2.id} (${player2.deckName}) is a draw`
+      );
+      // Optionally handle draw scenarios here
     }
   };
 
