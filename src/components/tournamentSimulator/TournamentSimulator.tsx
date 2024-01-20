@@ -21,39 +21,44 @@ function TournamentSimulator({ user }: simulatorProps) {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (user) {
-        try {
-          const response = await dispatch(getMatchupRecordsByDeck({ user }));
-          if (response) {
-            const fetchedData: TableData = response.payload;
-            setData(fetchedData);
+      if (!user) return; // Early return if no user
 
-            // Initialize matchup percentages to 50%
-            const initialMatchupPercentages: {
-              [deck: string]: { [opponentDeck: string]: number };
-            } = {};
-            Object.keys(fetchedData).forEach((deck) => {
-              initialMatchupPercentages[deck] = {};
-              Object.keys(fetchedData).forEach((opponentDeck) => {
-                if (deck !== opponentDeck) {
-                  initialMatchupPercentages[deck][opponentDeck] = 0.5; // 50%
-                }
-              });
-            });
-            setMatchupPercentages(initialMatchupPercentages);
-          }
-        } catch (error) {
-          console.error("Error fetching data for decks", error);
-        }
+      try {
+        const response = await dispatch(getMatchupRecordsByDeck({ user }));
+        const fetchedData: TableData = response.payload;
+        setData(fetchedData);
+
+        // Initialize matchup percentages
+        const initialMatchupPercentages =
+          initializeMatchupPercentages(fetchedData);
+        setMatchupPercentages(initialMatchupPercentages);
+      } catch (error) {
+        console.error("Error fetching data for decks", error);
       }
     };
 
     fetchData();
-  }, [dispatch, user]);
+  }, [dispatch, user]); // Dependencies
+
+  // Function to initialize matchup percentages
+  const initializeMatchupPercentages = (fetchedData: TableData) => {
+    const initialMatchupPercentages: {
+      [deck: string]: { [opponentDeck: string]: number };
+    } = {};
+    Object.keys(fetchedData).forEach((deck) => {
+      initialMatchupPercentages[deck] = {};
+      Object.keys(fetchedData).forEach((opponentDeck) => {
+        if (deck !== opponentDeck) {
+          initialMatchupPercentages[deck][opponentDeck] = 0.5; // 50%
+        }
+      });
+    });
+    return initialMatchupPercentages;
+  };
 
   const handleSimulation = () => {
     const calculatedMatchupPercentages = calculateMatchupPercentages(
-      data,
+      // data,
       matchupPercentages
     );
 
@@ -100,7 +105,7 @@ function TournamentSimulator({ user }: simulatorProps) {
   };
 
   function calculateMatchupPercentages(
-    data: TableData,
+    // data: TableData,
     userMatchupPercentages: {
       [deck: string]: { [opponentDeck: string]: number };
     }
@@ -263,12 +268,10 @@ function TournamentSimulator({ user }: simulatorProps) {
 
       // Handle byes if players are odd
       if (players.length % 2 !== 0 && matchedPlayers.size < players.length) {
-        // Filter players who haven't received a bye yet
         let eligiblePlayersForBye = players.filter(
           (p) => !p.receivedBye && !matchedPlayers.has(p.id)
         );
 
-        // Sort players by fewest wins, then by fewest losses
         eligiblePlayersForBye.sort((a, b) => {
           if (a.record.wins === b.record.wins) {
             return a.record.losses - b.record.losses; // Fewest losses if wins are equal
@@ -276,24 +279,28 @@ function TournamentSimulator({ user }: simulatorProps) {
           return a.record.wins - b.record.wins; // Fewest wins first
         });
 
-        // Pick a random player from the top N eligible players
-        // where N is the number of players with the fewest wins
-        let fewestWins = Math.min(
-          ...eligiblePlayersForBye.map((p) => p.record?.wins ?? 0)
-        );
-        let topEligiblePlayers = eligiblePlayersForBye.filter(
-          (p) => (p.record?.wins ?? 0) === fewestWins
-        );
+        if (eligiblePlayersForBye.length > 0) {
+          let fewestWins = Math.min(
+            ...eligiblePlayersForBye.map((p) => p.record?.wins ?? 0)
+          );
+          let topEligiblePlayers = eligiblePlayersForBye.filter(
+            (p) => (p.record?.wins ?? 0) === fewestWins
+          );
 
-        let randomIndex = Math.floor(Math.random() * topEligiblePlayers.length);
-        let playerForBye = topEligiblePlayers[randomIndex];
+          let randomIndex = Math.floor(
+            Math.random() * topEligiblePlayers.length
+          );
+          let playerForBye = topEligiblePlayers[randomIndex];
 
-        playerForBye.record.wins++;
-        playerForBye.receivedBye = true;
-        matchedPlayers.add(playerForBye.id);
-        console.log(
-          `Player ${playerForBye.id} with deck ${playerForBye.deckName} receives a bye`
-        );
+          if (playerForBye && playerForBye.record) {
+            playerForBye.record.wins++;
+            playerForBye.receivedBye = true;
+            matchedPlayers.add(playerForBye.id);
+            console.log(
+              `Player ${playerForBye.id} with deck ${playerForBye.deckName} receives a bye`
+            );
+          }
+        }
       }
 
       // Pair players and simulate matches
