@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CredentialResponse } from "@react-oauth/google";
+import "./TournamentSimulator.css";
 
 interface simulatorProps {
   user: CredentialResponse;
@@ -66,11 +67,9 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
   };
 
   const handleSimulation = () => {
-    const calculatedMatchupPercentages = calculateMatchupPercentages(
-      matchupPercentages
-    );
+    const calculatedMatchupPercentages =
+      calculateMatchupPercentages(matchupPercentages);
 
-    // Call the simulateTournament function with the necessary arguments
     const simulationResults = simulateTournament({
       deckCounts,
       matchupPercentages: calculatedMatchupPercentages,
@@ -108,11 +107,9 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
     }));
   };
 
-  function calculateMatchupPercentages(
-    userMatchupPercentages: {
-      [deck: string]: { [opponentDeck: string]: number };
-    }
-  ): { [deck: string]: { [opponentDeck: string]: number } } {
+  function calculateMatchupPercentages(userMatchupPercentages: {
+    [deck: string]: { [opponentDeck: string]: number };
+  }): { [deck: string]: { [opponentDeck: string]: number } } {
     let calculatedPercentages: {
       [deck: string]: { [opponentDeck: string]: number };
     } = {};
@@ -156,7 +153,6 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
         losses: parseFloat((results[deck].losses / deckTotal).toFixed(2)),
       };
     });
-
     return averageResults;
   }
 
@@ -164,7 +160,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
     [deck: string]: DeckPerformance;
   }): string {
     return Object.entries(simulationResults)
-      .sort((a, b) => b[1].wins - a[1].wins) 
+      .sort((a, b) => b[1].wins - a[1].wins)
       .map(
         ([deck, performance]) =>
           `${deck}: ${performance.wins} Wins, ${performance.losses} Losses`
@@ -178,7 +174,6 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
     if (isNaN(wins) || isNaN(losses) || wins + losses === 0) {
       return 0;
     }
-
     return wins / (wins + losses);
   }
 
@@ -375,10 +370,10 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 
   return (
     <>
-      <table>
+      <table className="simulator-table">
         <thead>
           <tr>
-            <th>Deck</th>
+            <th style={{ border: "none", background: "transparent" }}></th>
             {filteredDecks.map((opponentDeck) => (
               <th key={opponentDeck}>{opponentDeck}</th>
             ))}
@@ -387,7 +382,11 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
         <tbody>
           {filteredDecks.map((deck) => (
             <tr key={deck}>
-              <td>{deck}</td>
+              <td
+                className="test"
+              >
+                {deck}
+              </td>
               {filteredDecks.map((opponentDeck) => (
                 <td key={opponentDeck}>
                   {deck !== opponentDeck ? (
@@ -406,7 +405,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
                       step="0.01"
                     />
                   ) : (
-                    "-"
+                    ".5"
                   )}
                 </td>
               ))}
