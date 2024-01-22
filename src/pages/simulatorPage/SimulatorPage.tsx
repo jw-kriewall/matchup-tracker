@@ -1,16 +1,18 @@
-import React from "react";
-import MatchupForm from "../../components/matchups/MatchupForm";
+import React, { useState } from "react";
 import NavBar from "../../components/navBar/NavBar";
-import "./HomePage.css";
+import { allDecksConstant } from "../../constants/allDecks";
+import TournamentSimulator from "../../components/tournamentSimulator/TournamentSimulator";
 import { useCookies } from "react-cookie";
 
-export default function HomePage() {
+export default function SimulatorPage() {
+  const initialDecks = allDecksConstant.map((deck) => deck.value);
+  // const [selectedDecks, setSelectedDecks] = useState<string[]>(initialDecks);
   const [userCookies] = useCookies(["user"]);
   const user = userCookies["user"]?.payload;
 
   if (!user) {
     return (
-      <div className="App">
+      <div>
         <div className="navigation">
           <NavBar />
         </div>
@@ -22,15 +24,13 @@ export default function HomePage() {
   }
 
   return (
-    <div className="App">
+    <div>
       <div className="navigation">
         <NavBar />
       </div>
 
-      {/* {userRole === "admin" ? <h1>admin</h1> : <h1>user</h1>} */}
-
-      <div className="matchup-form">
-        <MatchupForm />
+      <div className="bento-box">
+        <TournamentSimulator user={user} filteredDecks={initialDecks}/>
       </div>
     </div>
   );
