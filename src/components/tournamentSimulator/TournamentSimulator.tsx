@@ -9,6 +9,24 @@ interface simulatorProps {
   filteredDecks: string[];
 }
 
+interface DeckPerformance {
+  wins: number;
+  losses: number;
+}
+
+interface Player {
+  id: number;
+  deckName: string;
+  record: DeckPerformance;
+  receivedBye: boolean;
+}
+
+interface TournamentSimulatorInput {
+  deckCounts: { [deck: string]: number };
+  matchupPercentages: { [deck: string]: { [opponentDeck: string]: number } };
+  numberOfRounds: number;
+}
+
 // @TODO: Bring in user data - should it be automatic or should it be set on a button click?
 // Button click is probably easier - so everything is initialized and then the API call is made. Ensures that no extra API calls are made.
 // API can be called once and button press just resets to 'cached' data.
@@ -21,7 +39,7 @@ interface simulatorProps {
 // @TODO: The winner algorithm doesn't seem to work correctly as matchups with a 100 / 0 matchup should never lose.
 
 function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
-  const [data, setData] = useState<TableData>({});
+  // const [data, setData] = useState<TableData>({});
   const [deckCounts, setDeckCounts] = useState<{ [deck: string]: number }>({});
   const [numberOfRounds, setNumberOfRounds] = useState<number>(0);
   const [results, setResults] = useState<string>("");
@@ -29,27 +47,13 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
     [deck: string]: { [opponentDeck: string]: number };
   }>({});
 
-  const dispatch = useAppDispatch();
-
   useEffect(() => {
-    const fetchData = async () => {
-      if (!user) return; // Early return if no user
-
-      try {
-        // const response = await dispatch(getMatchupRecordsByDeck({ user }));
-        // const fetchedData: TableData = response.payload;
-        // setData(fetchedData);
-
-        // Initialize matchup percentages
-        const initialMatchupPercentages = initializeMatchupPercentages();
-        setMatchupPercentages(initialMatchupPercentages);
-      } catch (error) {
-        console.error("Error fetching data for decks", error);
-      }
-    };
-
-    fetchData();
-  }, [dispatch, user]); // Dependencies
+    // const fetchData = async () => {
+    if (!user) return;
+    setMatchupPercentages(initializeMatchupPercentages());
+    // };
+    // fetchData();
+  }, [filteredDecks]);
 
   // Function to initialize matchup percentages
   const initializeMatchupPercentages = () => {
@@ -125,10 +129,10 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
       [deck: string]: { [opponentDeck: string]: number };
     } = {};
 
-    for (let deck in data) {
+    for (let deck in userMatchupPercentages) {
       calculatedPercentages[deck] = {};
 
-      for (let opponentDeck in data) {
+      for (let opponentDeck in userMatchupPercentages) {
         if (deck !== opponentDeck) {
           if (
             userMatchupPercentages[deck] &&
@@ -141,7 +145,8 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
             // Calculate default matchup percentage based on data
             // This is where you'd implement your logic to calculate percentages
             // For example, using the parseMatchupRecord function:
-            const record = data[deck][opponentDeck] || "0-0-0";
+            // const record = data[deck][opponentDeck] || "0-0-0";
+            const record = "1-1-0";
             calculatedPercentages[deck][opponentDeck] =
               parseMatchupRecord(record);
           }
@@ -186,24 +191,6 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
     }
 
     return wins / (wins + losses);
-  }
-
-  interface DeckPerformance {
-    wins: number;
-    losses: number;
-  }
-
-  interface Player {
-    id: number;
-    deckName: string;
-    record: DeckPerformance;
-    receivedBye: boolean;
-  }
-
-  interface TournamentSimulatorInput {
-    deckCounts: { [deck: string]: number };
-    matchupPercentages: { [deck: string]: { [opponentDeck: string]: number } };
-    numberOfRounds: number;
   }
 
   const createPlayers = (deckCounts: { [deck: string]: number }): Player[] => {
@@ -291,20 +278,20 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
           return recordDiffA - recordDiffB;
         });
 
-        if (potentialOpponents.length > 0) {
-          let opponent = potentialOpponents[0];
-          simulateMatch(players[i], opponent, matchupPercentages);
-          matchedPlayers.add(players[i].id).add(opponent.id);
+        // if (potentialOpponents.length > 0) {
+        //   let opponent = potentialOpponents[0];
+        //   simulateMatch(players[i], opponent, matchupPercentages);
+        //   matchedPlayers.add(players[i].id).add(opponent.id);
 
-          // Update previous matchups
-          if (!previousMatchups.has(players[i].id))
-            previousMatchups.set(players[i].id, new Set<number>());
-          previousMatchups.get(players[i].id)?.add(opponent.id);
+        //   // Update previous matchups
+        //   if (!previousMatchups.has(players[i].id))
+        //     previousMatchups.set(players[i].id, new Set<number>());
+        //   previousMatchups.get(players[i].id)?.add(opponent.id);
 
-          if (!previousMatchups.has(opponent.id))
-            previousMatchups.set(opponent.id, new Set<number>());
-          previousMatchups.get(opponent.id)?.add(players[i].id);
-        }
+        //   if (!previousMatchups.has(opponent.id))
+        //     previousMatchups.set(opponent.id, new Set<number>());
+        //   previousMatchups.get(opponent.id)?.add(players[i].id);
+        // }
       }
 
       // Pair players and simulate matches
@@ -330,6 +317,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
           return recordDiffA - recordDiffB;
         });
 
+        ///////////////////////////////
         if (potentialOpponents.length > 0) {
           let opponent = potentialOpponents[0];
           simulateMatch(players[i], opponent, matchupPercentages);
@@ -392,34 +380,27 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
   ) => {
     let winPercentagePlayer1 =
       matchupPercentages[player1.deckName]?.[player2.deckName] ?? 0.5;
-    let winPercentagePlayer2 =
-      matchupPercentages[player2.deckName]?.[player1.deckName] ?? 0.5;
 
-    // Handle cases where win percentages might be undefined
-    if (winPercentagePlayer1 === undefined) winPercentagePlayer1 = 0.5; // Default to 50% (0.5) if matchup unknown
-    if (winPercentagePlayer2 === undefined) winPercentagePlayer2 = 0.5; // Default to 50% (0.5) if matchup unknown
+    console.log(
+      `Win Percentage for ${player1.deckName} against ${player2.deckName}: ${winPercentagePlayer1}`
+    );
 
     // Simulate match based on win percentages
     let randomRoll = Math.random();
     if (randomRoll < winPercentagePlayer1) {
+      // Player 1 wins
       player1.record.wins++;
       player2.record.losses++;
       console.log(
         `Player ${player1.id} (${player1.deckName}) wins against Player ${player2.id} (${player2.deckName})`
       );
-    } else if (randomRoll < winPercentagePlayer1 + winPercentagePlayer2) {
+    } else {
+      // Player 2 wins
       player1.record.losses++;
       player2.record.wins++;
       console.log(
         `Player ${player2.id} (${player2.deckName}) wins against Player ${player1.id} (${player1.deckName})`
       );
-    }
-    // Handle the scenario where both win percentages sum to less than 1 (100%)
-    else {
-      console.log(
-        `Match between Player ${player1.id} (${player1.deckName}) and Player ${player2.id} (${player2.deckName}) is a draw`
-      );
-      // Optionally handle draw scenarios here
     }
   };
 
