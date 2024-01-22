@@ -2,7 +2,7 @@
   box-sizing: border-box;
 }
 
-.bento-box {
+.bento-box-sim {
   display: flex;
   flex-direction: row;
   padding: 20px;
@@ -38,7 +38,6 @@
 .data-table {
   flex-grow: 0;
   flex-shrink: 1;
-  flex-basis: calc(80% - 20px);
   overflow-x: auto;
 }
 

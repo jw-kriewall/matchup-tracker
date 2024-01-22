@@ -29,8 +29,10 @@ export default function SimulatorPage() {
         <NavBar />
       </div>
 
-      <div className="bento-box">
-        <TournamentSimulator user={user} filteredDecks={initialDecks}/>
+      <div className="bento-box-sim">
+        <div className="data-table">
+          <TournamentSimulator user={user} filteredDecks={initialDecks} />
+        </div>
       </div>
     </div>
   );
