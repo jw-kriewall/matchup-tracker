@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { TableData } from "../../types/TableTypes";
-import { useAppDispatch } from "../../hooks/hooks";
-import { getMatchupRecordsByDeck } from "../../apiCalls/dataTable/getIndividualMatchupRecordsByDeck";
 import { CredentialResponse } from "@react-oauth/google";
 
 interface simulatorProps {
@@ -36,7 +33,7 @@ interface TournamentSimulatorInput {
 // @TODO: aggregate simulation
 // Description: simulation over 1000 / 100 / 10000 games and aggregate
 
-// @TODO: The winner algorithm doesn't seem to work correctly as matchups with a 100 / 0 matchup should never lose.
+// @TODO: Suggested number of rounds based on total players
 
 function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
   // const [data, setData] = useState<TableData>({});
@@ -48,11 +45,8 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
   }>({});
 
   useEffect(() => {
-    // const fetchData = async () => {
     if (!user) return;
     setMatchupPercentages(initializeMatchupPercentages());
-    // };
-    // fetchData();
   }, [filteredDecks]);
 
   // Function to initialize matchup percentages
@@ -73,7 +67,6 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 
   const handleSimulation = () => {
     const calculatedMatchupPercentages = calculateMatchupPercentages(
-      // data,
       matchupPercentages
     );
 
@@ -84,16 +77,12 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
       numberOfRounds,
     });
 
-    // Calculate average results
     const averageResults = calculateAverageResults(
       simulationResults,
       deckCounts
     );
 
-    // Process and format the average results for display
     const formattedResults = formatSimulationResults(averageResults);
-
-    // Set the formatted results to be displayed
     setResults(formattedResults);
   };
 
@@ -120,7 +109,6 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
   };
 
   function calculateMatchupPercentages(
-    // data: TableData,
     userMatchupPercentages: {
       [deck: string]: { [opponentDeck: string]: number };
     }
@@ -138,7 +126,6 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
             userMatchupPercentages[deck] &&
             userMatchupPercentages[deck][opponentDeck] !== undefined
           ) {
-            // Use the user-provided matchup percentage
             calculatedPercentages[deck][opponentDeck] =
               userMatchupPercentages[deck][opponentDeck];
           } else {
@@ -172,10 +159,12 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 
     return averageResults;
   }
+
   function formatSimulationResults(simulationResults: {
     [deck: string]: DeckPerformance;
   }): string {
     return Object.entries(simulationResults)
+      .sort((a, b) => b[1].wins - a[1].wins) 
       .map(
         ([deck, performance]) =>
           `${deck}: ${performance.wins} Wins, ${performance.losses} Losses`
@@ -277,21 +266,6 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
             Math.abs(b.record.losses - players[i].record.losses);
           return recordDiffA - recordDiffB;
         });
-
-        // if (potentialOpponents.length > 0) {
-        //   let opponent = potentialOpponents[0];
-        //   simulateMatch(players[i], opponent, matchupPercentages);
-        //   matchedPlayers.add(players[i].id).add(opponent.id);
-
-        //   // Update previous matchups
-        //   if (!previousMatchups.has(players[i].id))
-        //     previousMatchups.set(players[i].id, new Set<number>());
-        //   previousMatchups.get(players[i].id)?.add(opponent.id);
-
-        //   if (!previousMatchups.has(opponent.id))
-        //     previousMatchups.set(opponent.id, new Set<number>());
-        //   previousMatchups.get(opponent.id)?.add(players[i].id);
-        // }
       }
 
       // Pair players and simulate matches
@@ -317,7 +291,6 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
           return recordDiffA - recordDiffB;
         });
 
-        ///////////////////////////////
         if (potentialOpponents.length > 0) {
           let opponent = potentialOpponents[0];
           simulateMatch(players[i], opponent, matchupPercentages);
@@ -333,7 +306,6 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
         }
       }
 
-      // Log round results
       console.log(`Round ${round} results:`);
       players.forEach((player) =>
         console.log(
@@ -365,10 +337,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 
   function shuffleArray(array: Player[]) {
     for (let i = array.length - 1; i > 0; i--) {
-      // Generate a random index from 0 to i
       const j = Math.floor(Math.random() * (i + 1));
-
-      // Swap elements at indices i and j
       [array[i], array[j]] = [array[j], array[i]];
     }
   }
