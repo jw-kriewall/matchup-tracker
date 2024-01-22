@@ -21,24 +21,22 @@
     gap: inherit;
   }
   
-  .deck-filter,
-  .matchup-count,
-  .data-table {
+  .deck-filter-sim,
+  .data-table-sim {
     padding: 10px;
     border-radius: 10px;
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   }
   
-  .deck-filter,
-  .matchup-count {
+  .deck-filter-sim {
     width: 100%;
   }
   
-  .data-table {
+  .data-table-sim {
     flex-grow: 0;
     flex-shrink: 1;
-    flex-basis: calc(80% - 20px);
+    /* flex-basis: calc(80% - 20px); */
     overflow-x: auto;
   }
   
@@ -47,9 +45,8 @@
       flex-direction: column;
     }
   
-    .left-column,
-    .data-table,
-    .deck-filter,
+    .data-table-sim,
+    .deck-filter-sim,
     .matchup-count {
       flex: 0 0 100%;
       max-width: 100%;

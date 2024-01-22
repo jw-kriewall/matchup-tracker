@@ -1,6 +1,10 @@
 .simulator-table {
     width: 100%;
-    border-collapse: collapse; /* Optional: for borders to be more connected */
+    border-collapse: separate; /* allows you to control spacing between cells */
+    border-spacing: 0;
+    background: #fff; /* a solid background for the table */
+    overflow: hidden; /* ensures shadows don't get clipped */
+    margin-bottom: 20px; 
 }
 
 .simulator-table th, .simulator-table td {
@@ -8,12 +12,11 @@
     border: 1px solid #ddd; /* Stylish border */
     text-align: center; /* Center alignment */
     font-size: 16px; /* Larger font size */
-    font-weight: 400;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); /* Optional: Box shadow for depth */
+    position: relative;
 }
 
 .simulator-table th {
-    background-color: #f4f4f4; /* Header background */
+    background-color: #ddeaee; /* Header background */
     font-weight: bold; /* Bold font for headers */
 }
 
@@ -27,11 +30,28 @@
     border: 1px solid #000000;
   }
 
-.test {
-    padding: 18px; /* Increase cell size */
-    border: 1px solid #ddd; /* Stylish border */
-    text-align: center; /* Center alignment */
-    font-size: 16px; /* Larger font size */
-    font-weight: 400;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); /* Optional: Box shadow for depth */
+.inputs-container {
+    display: flex;
+    flex-direction: column;
 }
+
+.deck-input {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .sim-tournament-btn {
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 16px;
+  }
+
+  .sim-tournament-btn:hover {
+    background-color: #146bc9;
+  }

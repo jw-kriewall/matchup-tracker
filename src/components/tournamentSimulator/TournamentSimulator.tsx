@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CredentialResponse } from "@react-oauth/google";
 import "./TournamentSimulator.css";
+import { Button } from "@mui/base";
 
 interface simulatorProps {
   user: CredentialResponse;
@@ -382,11 +383,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
         <tbody>
           {filteredDecks.map((deck) => (
             <tr key={deck}>
-              <td
-                className="test"
-              >
-                {deck}
-              </td>
+              <th>{deck}</th>
               {filteredDecks.map((opponentDeck) => (
                 <td key={opponentDeck}>
                   {deck !== opponentDeck ? (
@@ -414,9 +411,9 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
         </tbody>
       </table>
 
-      <div>
+      <div className="inputs-container">
         {filteredDecks.map((deck) => (
-          <div key={deck}>
+          <div key={deck} className="deck-input">
             {deck}:
             <input
               type="number"
@@ -433,7 +430,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
             onChange={(e) => setNumberOfRounds(parseInt(e.target.value))}
           />
         </div>
-        <button onClick={handleSimulation}>Simulate Tournament</button>
+        <Button className="sim-tournament-btn" onClick={handleSimulation}>Simulate Tournament</Button>
         {results && <div>Result: {results}</div>}
       </div>
     </>

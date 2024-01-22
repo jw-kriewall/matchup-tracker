@@ -3,6 +3,7 @@ import NavBar from "../../components/navBar/NavBar";
 import { allDecksConstant } from "../../constants/allDecks";
 import TournamentSimulator from "../../components/tournamentSimulator/TournamentSimulator";
 import { useCookies } from "react-cookie";
+import "./SimulatorPage.css";
 
 export default function SimulatorPage() {
   const initialDecks = allDecksConstant.map((deck) => deck.value);
@@ -30,7 +31,7 @@ export default function SimulatorPage() {
       </div>
 
       <div className="bento-box-sim">
-        <div className="data-table">
+        <div className="data-table-sim">
           <TournamentSimulator user={user} filteredDecks={initialDecks} />
         </div>
       </div>
