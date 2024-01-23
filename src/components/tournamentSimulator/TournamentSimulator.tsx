@@ -394,7 +394,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
           </TableHead>
           <TableBody>
             {filteredDecks.map((deck) => (
-              <tr key={deck}>
+              <TableRow key={deck}>
                 <th>{deck}</th>
                 {filteredDecks.map((opponentDeck) => (
                   <td key={opponentDeck}>
@@ -432,7 +432,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
                     )}
                   </td>
                 ))}
-              </tr>
+              </TableRow>
             ))}
           </TableBody>
         </Table>
