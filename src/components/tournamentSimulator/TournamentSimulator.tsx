@@ -381,74 +381,78 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 
   return (
     <>
-        <TableContainer sx={{ maxHeight: 540 }}>
-          <Table stickyHeader className="simulator-table">
-            <TableHead>
+      <TableContainer sx={{ maxHeight: 540, overflow: "auto" }}>
+        <Table
+          stickyHeader
+          className="simulator-table"
+          aria-label="sticky table"
+        >
+          <TableHead>
+            <TableRow>
+              <TableCell
+                style={{ border: "none", background: "transparent" }}
+              ></TableCell>
+              {filteredDecks.map((opponentDeck) => (
+                <TableCell key={opponentDeck}>{opponentDeck}</TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {filteredDecks.map((deck) => (
               <TableRow>
                 <TableCell
-                  style={{ border: "none", background: "transparent" }}
-                ></TableCell>
+                  key={deck}
+                  component="th"
+                  scope="row"
+                  style={{
+                    position: "sticky",
+                    left: 0,
+                    zIndex: 100,
+                  }}
+                >
+                  {deck}
+                </TableCell>
                 {filteredDecks.map((opponentDeck) => (
-                  <TableCell key={opponentDeck}>{opponentDeck}</TableCell>
+                  <TableCell key={opponentDeck}>
+                    {deck !== opponentDeck ? (
+                      <TextField
+                        id="outlined-number"
+                        type="number"
+                        InputProps={{
+                          style: { minWidth: "4rem" },
+                          inputProps: {
+                            max: 1,
+                            min: 0,
+                            step: 0.01,
+                          },
+                        }}
+                        inputMode="decimal"
+                        size="small"
+                        value={
+                          matchupPercentages[deck]?.[opponentDeck].toFixed(2) ||
+                          0
+                        }
+                        onChange={(e) =>
+                          updateMatchupPercentage(
+                            deck,
+                            opponentDeck,
+                            parseFloat(e.target.value)
+                          )
+                        }
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                    ) : (
+                      ".50"
+                    )}
+                  </TableCell>
                 ))}
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredDecks.map((deck) => (
-                <TableRow key={deck}>
-                  <TableCell
-                    component="th"
-                    scope="row"
-                    style={{
-                      position: "sticky",
-                      left: 0,
-                      zIndex: 100,
-                    }}
-                  >
-                    {deck}
-                  </TableCell>
-                  {filteredDecks.map((opponentDeck) => (
-                    <TableCell key={opponentDeck}>
-                      {deck !== opponentDeck ? (
-                        <TextField
-                          id="outlined-number"
-                          type="number"
-                          InputProps={{
-                            style: { minWidth: "4rem" },
-                            inputProps: {
-                              max: 1,
-                              min: 0,
-                              step: 0.01,
-                            },
-                          }}
-                          inputMode="decimal"
-                          size="small"
-                          value={
-                            matchupPercentages[deck]?.[opponentDeck].toFixed(
-                              2
-                            ) || 0
-                          }
-                          onChange={(e) =>
-                            updateMatchupPercentage(
-                              deck,
-                              opponentDeck,
-                              parseFloat(e.target.value)
-                            )
-                          }
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                        />
-                      ) : (
-                        ".50"
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
       <div className="inputs-container">
         {filteredDecks.map((deck) => (

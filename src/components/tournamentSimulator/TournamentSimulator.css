@@ -1,23 +1,20 @@
 .simulator-table {
-    width: 100%;
-    border-collapse: separate; /* allows you to control spacing between cells */
     border-spacing: 0;
-    background: #fff; /* a solid background for the table */
-    overflow: hidden; /* ensures shadows don't get clipped */
+    background: #fff;
     margin-bottom: 20px; 
 }
 
 .simulator-table th, .simulator-table td {
-    padding: 12px; /* Increase cell size */
-    border: 1px solid #ddd; /* Stylish border */
-    text-align: center; /* Center alignment */
-    font-size: 16px; /* Larger font size */
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 16px;
     width: 10%;
 }
 
 .simulator-table th {
-    background-color: #d3f3fd; /* Header background */
-    font-weight: bold; /* Bold font for headers */
+    background-color: #d3f3fd;
+    font-weight: bold;
 }
 
 .record-style {
@@ -42,7 +39,7 @@
   }
 
   .sim-tournament-btn {
-    background-color: #007bff; /* Bootstrap primary color */
+    background-color: #007bff;
     color: white;
     padding: 10px 15px;
     border: none;
