@@ -16,24 +16,24 @@ export const allDecksConstant: DeckDisplay[] = [
     value: "Charizard / Pidgeot",
     label: "Charizard / Pidgeot",
     sprites: [
-      "https://img.pokemondb.net/sprites/sword-shield/icon/charizard.png",
-      "https://img.pokemondb.net/sprites/sword-shield/icon/pidgeot.png",
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png",
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/18.png",
     ],
   },
   {
     value: "DTE Mew",
     label: "DTE Mew",
     sprites: [
-      "https://img.pokemondb.net/sprites/sword-shield/icon/mew.png",
-      "https://img.pokemondb.net/sprites/sword-shield/icon/genesect.png",
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/151.png",
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/649.png",
     ],
   },
   {
     value: "Miraidon / Flaaffy",
     label: "Miraidon / Flaaffy",
     sprites: [
-      "https://img.pokemondb.net/sprites/scarlet-violet/icon/miraidon.png",
-      "https://img.pokemondb.net/sprites/sword-shield/icon/flaaffy.png",
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1008.png",
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/180.png",
     ],
   },
   {
@@ -47,22 +47,60 @@ export const allDecksConstant: DeckDisplay[] = [
     value: "Snorlax Stall",
     label: "Snorlax Stall",
     sprites: [
-      "https://img.pokemondb.net/sprites/sword-shield/icon/snorlax.png",
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/143.png",
     ],
   },
   {
     value: "Lost Box Charizard",
     label: "Lost Box Charizard",
     sprites: [
-      "https://img.pokemondb.net/sprites/sword-shield/icon/comfey.png",
-      "https://img.pokemondb.net/sprites/sword-shield/icon/charizard.png",
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/764.png",
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png",
+    ],
+  },
+  {
+    value: "Giratina VStar",
+    label: "Giratina VStar",
+    sprites: [
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/487.png",
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/764.png",
+    ],
+  },
+  {
+    value: "RS Urshifu VMAX",
+    label: "RS Urshifu VMAX",
+    sprites: [
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/892.png",
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/818.png",
+    ],
+  },
+  {
+    value: "Chien Pao",
+    label: "Chein Pao",
+    sprites: [
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1002.png",
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/998.png",
+    ],
+  },
+  {
+    value: "Arceus",
+    label: "Arceus",
+    sprites: [
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/493.png",
+    ],
+  },
+  {
+    value: "Gardevoir",
+    label: "Gardevoir",
+    sprites: [
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/282.png",
     ],
   },
   {
     value: "Turbo Miraidon",
     label: "Turbo Miraidon",
     sprites: [
-      "https://img.pokemondb.net/sprites/scarlet-violet/icon/miraidon.png",
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1008.png",
     ],
   },
   {
@@ -70,6 +108,13 @@ export const allDecksConstant: DeckDisplay[] = [
     label: "Gholdengo",
     sprites: [
       "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1000.png",
+    ],
+  },
+  {
+    value: "Other",
+    label: "Other",
+    sprites: [
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/left-poke-ball.png",
     ],
   },
 ];
