@@ -1,6 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { CredentialResponse } from "@react-oauth/google";
 import "./TournamentSimulator.css";
+import { Button } from "@mui/base";
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+} from "@mui/material";
 
 interface simulatorProps {
   user: CredentialResponse;
@@ -370,70 +381,132 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 
   return (
     <>
-      <table className="simulator-table">
-        <thead>
-          <tr>
-            <th style={{ border: "none", background: "transparent" }}></th>
-            {filteredDecks.map((opponentDeck) => (
-              <th key={opponentDeck}>{opponentDeck}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {filteredDecks.map((deck) => (
-            <tr key={deck}>
-              <td
-                className="test"
-              >
-                {deck}
-              </td>
+      <TableContainer sx={{ maxHeight: 540, overflow: "auto" }}>
+        <Table
+          stickyHeader
+          className="simulator-table"
+          aria-label="sticky table"
+        >
+          <TableHead>
+            <TableRow>
+              <TableCell
+                style={{ border: "none", background: "transparent" }}
+              ></TableCell>
               {filteredDecks.map((opponentDeck) => (
-                <td key={opponentDeck}>
-                  {deck !== opponentDeck ? (
-                    <input
-                      type="number"
-                      value={matchupPercentages[deck]?.[opponentDeck] || 0}
-                      onChange={(e) =>
-                        updateMatchupPercentage(
-                          deck,
-                          opponentDeck,
-                          parseFloat(e.target.value)
-                        )
-                      }
-                      min="0"
-                      max="1"
-                      step="0.01"
-                    />
-                  ) : (
-                    ".5"
-                  )}
-                </td>
+                <TableCell key={opponentDeck}>{opponentDeck}</TableCell>
               ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {filteredDecks.map((deck) => (
+              <TableRow>
+                <TableCell
+                  key={deck}
+                  component="th"
+                  scope="row"
+                  style={{
+                    position: "sticky",
+                    left: 0,
+                    zIndex: 100,
+                  }}
+                >
+                  {deck}
+                </TableCell>
+                {filteredDecks.map((opponentDeck) => (
+                  <TableCell key={opponentDeck}>
+                    {deck !== opponentDeck ? (
+                      <TextField
+                        id="outlined-number"
+                        type="number"
+                        InputProps={{
+                          style: { minWidth: "4rem" },
+                          inputProps: {
+                            max: 1,
+                            min: 0,
+                            step: 0.01,
+                          },
+                        }}
+                        inputMode="decimal"
+                        size="small"
+                        value={
+                          matchupPercentages[deck]?.[opponentDeck].toFixed(2) ||
+                          0
+                        }
+                        onChange={(e) =>
+                          updateMatchupPercentage(
+                            deck,
+                            opponentDeck,
+                            parseFloat(e.target.value)
+                          )
+                        }
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                    ) : (
+                      ".50"
+                    )}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
-      <div>
+      <div className="inputs-container">
         {filteredDecks.map((deck) => (
-          <div key={deck}>
+          <div key={deck} className="deck-input">
             {deck}:
-            <input
+            <TextField
+              id="outlined-number"
               type="number"
+              InputProps={{
+                style: { minWidth: "4rem" },
+                inputProps: {
+                  max: 10000,
+                  min: 0,
+                },
+              }}
+              inputMode="numeric"
+              size="small"
               value={deckCounts[deck] || 0}
               onChange={(e) => updateDeckCount(deck, parseInt(e.target.value))}
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
           </div>
         ))}
         <div>
           Number of Rounds:
-          <input
+          {/* <input
             type="number"
             value={numberOfRounds}
             onChange={(e) => setNumberOfRounds(parseInt(e.target.value))}
+          /> */}
+          <TextField
+            id="outlined-number"
+            type="number"
+            InputProps={{
+              style: { minWidth: "4rem" },
+              inputProps: {
+                max: 1000,
+                min: 0,
+              },
+            }}
+            inputMode="numeric"
+            size="small"
+            value={numberOfRounds}
+            onChange={(e) => setNumberOfRounds(parseInt(e.target.value))}
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
         </div>
-        <button onClick={handleSimulation}>Simulate Tournament</button>
+        <Button className="sim-tournament-btn" onClick={handleSimulation}>
+          Simulate Tournament
+        </Button>
         {results && <div>Result: {results}</div>}
       </div>
     </>

@@ -2,7 +2,7 @@
   box-sizing: border-box;
 }
 
-.bento-box-sim {
+.bento-box {
   display: flex;
   flex-direction: row;
   padding: 20px;
