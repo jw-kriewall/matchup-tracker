@@ -13,10 +13,11 @@
     text-align: center; /* Center alignment */
     font-size: 16px; /* Larger font size */
     position: relative;
+    width: 10%;
 }
 
 .simulator-table th {
-    background-color: #ddeaee; /* Header background */
+    background-color: #d3f3fd; /* Header background */
     font-weight: bold; /* Bold font for headers */
 }
 
