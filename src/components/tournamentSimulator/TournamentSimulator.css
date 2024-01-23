@@ -8,11 +8,10 @@
 }
 
 .simulator-table th, .simulator-table td {
-    padding: 18px; /* Increase cell size */
+    padding: 12px; /* Increase cell size */
     border: 1px solid #ddd; /* Stylish border */
     text-align: center; /* Center alignment */
     font-size: 16px; /* Larger font size */
-    position: relative;
     width: 10%;
 }
 
