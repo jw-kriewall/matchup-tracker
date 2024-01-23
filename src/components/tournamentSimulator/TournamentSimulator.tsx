@@ -3,6 +3,7 @@ import { CredentialResponse } from "@react-oauth/google";
 import "./TournamentSimulator.css";
 import { Button } from "@mui/base";
 import {
+  Paper,
   Table,
   TableBody,
   TableCell,
@@ -380,121 +381,130 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 
   return (
     <>
-      <TableContainer sx={{ maxHeight: 440 }}>
-        <Table stickyHeader className="simulator-table">
-          <TableHead>
-            <TableRow>
-              <TableCell
-                style={{ border: "none", background: "transparent" }}
-              ></TableCell>
-              {filteredDecks.map((opponentDeck) => (
-                <TableCell key={opponentDeck}>{opponentDeck}</TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredDecks.map((deck) => (
-              <TableRow key={deck}>
-                <th>{deck}</th>
+        <TableContainer sx={{ maxHeight: 540 }}>
+          <Table stickyHeader className="simulator-table">
+            <TableHead>
+              <TableRow>
+                <TableCell
+                  style={{ border: "none", background: "transparent" }}
+                ></TableCell>
                 {filteredDecks.map((opponentDeck) => (
-                  <td key={opponentDeck}>
-                    {deck !== opponentDeck ? (
-                      <TextField
-                        id="outlined-number"
-                        type="number"
-                        InputProps={{
-                          style: { minWidth: "4rem" },
-                          inputProps: {
-                            max: 1,
-                            min: 0,
-                            step: 0.01,
-                          },
-                        }}
-                        inputMode="decimal"
-                        size="small"
-                        value={
-                          matchupPercentages[deck]?.[opponentDeck].toFixed(2) ||
-                          0
-                        }
-                        onChange={(e) =>
-                          updateMatchupPercentage(
-                            deck,
-                            opponentDeck,
-                            parseFloat(e.target.value)
-                          )
-                        }
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                      />
-                    ) : (
-                      ".50"
-                    )}
-                  </td>
+                  <TableCell key={opponentDeck}>{opponentDeck}</TableCell>
                 ))}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {filteredDecks.map((deck) => (
+                <TableRow key={deck}>
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    style={{
+                      position: "sticky",
+                      left: 0,
+                      zIndex: 100,
+                    }}
+                  >
+                    {deck}
+                  </TableCell>
+                  {filteredDecks.map((opponentDeck) => (
+                    <TableCell key={opponentDeck}>
+                      {deck !== opponentDeck ? (
+                        <TextField
+                          id="outlined-number"
+                          type="number"
+                          InputProps={{
+                            style: { minWidth: "4rem" },
+                            inputProps: {
+                              max: 1,
+                              min: 0,
+                              step: 0.01,
+                            },
+                          }}
+                          inputMode="decimal"
+                          size="small"
+                          value={
+                            matchupPercentages[deck]?.[opponentDeck].toFixed(
+                              2
+                            ) || 0
+                          }
+                          onChange={(e) =>
+                            updateMatchupPercentage(
+                              deck,
+                              opponentDeck,
+                              parseFloat(e.target.value)
+                            )
+                          }
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                        />
+                      ) : (
+                        ".50"
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
-        <div className="inputs-container">
-          {filteredDecks.map((deck) => (
-            <div key={deck} className="deck-input">
-              {deck}:
-              <TextField
-                id="outlined-number"
-                type="number"
-                InputProps={{
-                  style: { minWidth: "4rem" },
-                  inputProps: {
-                    max: 10000,
-                    min: 0,
-                  },
-                }}
-                inputMode="numeric"
-                size="small"
-                value={deckCounts[deck] || 0}
-                onChange={(e) =>
-                  updateDeckCount(deck, parseInt(e.target.value))
-                }
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </div>
-          ))}
-          <div>
-            Number of Rounds:
-            {/* <input
-            type="number"
-            value={numberOfRounds}
-            onChange={(e) => setNumberOfRounds(parseInt(e.target.value))}
-          /> */}
+      <div className="inputs-container">
+        {filteredDecks.map((deck) => (
+          <div key={deck} className="deck-input">
+            {deck}:
             <TextField
               id="outlined-number"
               type="number"
               InputProps={{
                 style: { minWidth: "4rem" },
                 inputProps: {
-                  max: 1000,
+                  max: 10000,
                   min: 0,
                 },
               }}
               inputMode="numeric"
               size="small"
-              value={numberOfRounds}
-              onChange={(e) => setNumberOfRounds(parseInt(e.target.value))}
+              value={deckCounts[deck] || 0}
+              onChange={(e) => updateDeckCount(deck, parseInt(e.target.value))}
               InputLabelProps={{
                 shrink: true,
               }}
             />
           </div>
-          <Button className="sim-tournament-btn" onClick={handleSimulation}>
-            Simulate Tournament
-          </Button>
-          {results && <div>Result: {results}</div>}
+        ))}
+        <div>
+          Number of Rounds:
+          {/* <input
+            type="number"
+            value={numberOfRounds}
+            onChange={(e) => setNumberOfRounds(parseInt(e.target.value))}
+          /> */}
+          <TextField
+            id="outlined-number"
+            type="number"
+            InputProps={{
+              style: { minWidth: "4rem" },
+              inputProps: {
+                max: 1000,
+                min: 0,
+              },
+            }}
+            inputMode="numeric"
+            size="small"
+            value={numberOfRounds}
+            onChange={(e) => setNumberOfRounds(parseInt(e.target.value))}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
         </div>
-      </TableContainer>
+        <Button className="sim-tournament-btn" onClick={handleSimulation}>
+          Simulate Tournament
+        </Button>
+        {results && <div>Result: {results}</div>}
+      </div>
     </>
   );
 }
