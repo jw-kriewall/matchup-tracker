@@ -4,6 +4,7 @@ import { Matchup } from "../../types/MatchupModels";
 import { CredentialResponse } from "@react-oauth/google";
 
 const apiUrl = process.env.REACT_APP_API_URL;
+const version = process.env.REACT_APP_API_VERSION;
 
 export const deleteSingleMatchup = createAsyncThunk(
 	"matchups/delete",
@@ -16,7 +17,7 @@ export const deleteSingleMatchup = createAsyncThunk(
 	}) => {
 		try {
 			await axios({
-				url: `${apiUrl}/matchups/delete/${matchup.id}`,
+				url: `${apiUrl}/api/${version}/matchups/delete/${matchup.id}`,
 				method: "DELETE",
 				headers: {
 					"Access-Control-Allow-Origin": "*",

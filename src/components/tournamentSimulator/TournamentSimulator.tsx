@@ -3,7 +3,6 @@ import { CredentialResponse } from "@react-oauth/google";
 import "./TournamentSimulator.css";
 import { Button } from "@mui/base";
 import {
-  Paper,
   Table,
   TableBody,
   TableCell,
@@ -409,6 +408,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
                     left: 0,
                     zIndex: 100,
                   }}
+                  // variant="standard"
                 >
                   {deck}
                 </TableCell>
@@ -418,6 +418,11 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
                       <TextField
                         id="outlined-number"
                         type="number"
+                        error={
+                          matchupPercentages[deck]?.[opponentDeck].valueOf() >
+                            1 ||
+                          matchupPercentages[deck]?.[opponentDeck].valueOf() < 0
+                        }
                         InputProps={{
                           style: { minWidth: "4rem" },
                           inputProps: {
@@ -426,8 +431,10 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
                             step: 0.01,
                           },
                         }}
-                        inputMode="decimal"
+                        // inputMode="decimal"
                         size="small"
+                        // variant="standard",
+                        // helperText="Incorrect entry."
                         value={
                           matchupPercentages[deck]?.[opponentDeck].toFixed(2) ||
                           0
