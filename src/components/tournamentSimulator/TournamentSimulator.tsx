@@ -426,21 +426,15 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
                           matchupPercentages[deck]?.[opponentDeck].valueOf() < 0
                         }
                         InputProps={{
-                          style: { minWidth: "6rem" },
+                          style: { minWidth: "5rem" },
                           inputProps: {
                             max: 100,
                             min: 0,
                             step: 0.1,
                           },
                         }}
-                        // inputMode="decimal"
                         size="small"
-                        // variant="standard",
-                        // helperText="Incorrect entry."
-                        value={
-                          matchupPercentages[deck]?.[opponentDeck].toFixed(1) ||
-                          0
-                        }
+                        value={matchupPercentages[deck]?.[opponentDeck]}
                         onChange={(e) =>
                           updateMatchupPercentage(
                             deck,
@@ -453,7 +447,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
                         }}
                       />
                     ) : (
-                      "50.0"
+                      "50"
                     )}
                   </TableCell>
                 ))}
