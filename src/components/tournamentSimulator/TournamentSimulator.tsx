@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { CredentialResponse } from "@react-oauth/google";
 import "./TournamentSimulator.css";
 import { Button } from "@mui/base";
@@ -10,6 +10,7 @@ import {
   TableHead,
   TableRow,
   TextField,
+  debounce,
 } from "@mui/material";
 
 interface simulatorProps {
@@ -69,7 +70,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
       initialMatchupPercentages[deck] = {};
       filteredDecks.forEach((opponentDeck) => {
         if (deck !== opponentDeck) {
-          initialMatchupPercentages[deck][opponentDeck] = 0.5; // 50%
+          initialMatchupPercentages[deck][opponentDeck] = 50.0;
         }
       });
     });
@@ -112,7 +113,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
       },
       [opponentDeck]: {
         ...prev[opponentDeck],
-        [deck]: 1 - percentage,
+        [deck]: 100 - percentage,
       },
     }));
   };
@@ -159,8 +160,10 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
     Object.keys(results).forEach((deck) => {
       const deckTotal = deckCounts[deck];
       averageResults[deck] = {
-        wins: parseFloat((results[deck].wins / deckTotal).toFixed(2)),
-        losses: parseFloat((results[deck].losses / deckTotal).toFixed(2)),
+        wins: parseFloat(((results[deck].wins / deckTotal) * 100).toFixed(1)),
+        losses: parseFloat(
+          ((results[deck].losses / deckTotal) * 100).toFixed(1)
+        ),
       };
     });
     return averageResults;
@@ -180,11 +183,10 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 
   function parseMatchupRecord(record: string): number {
     const [wins, losses, draws] = record.split("-").map(Number);
-
     if (isNaN(wins) || isNaN(losses) || wins + losses === 0) {
-      return 0;
+      return 50.0; // default to 50% if invalid data
     }
-    return wins / (wins + losses);
+    return (wins / (wins + losses)) * 100; // convert to percentage
   }
 
   const createPlayers = (deckCounts: { [deck: string]: number }): Player[] => {
@@ -353,7 +355,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
     matchupPercentages: { [deck: string]: { [opponentDeck: string]: number } }
   ) => {
     let winPercentagePlayer1 =
-      matchupPercentages[player1.deckName]?.[player2.deckName] ?? 0.5;
+      matchupPercentages[player1.deckName]?.[player2.deckName] ?? 50.0;
 
     console.log(
       `Win Percentage for ${player1.deckName} against ${player2.deckName}: ${winPercentagePlayer1}`
@@ -420,15 +422,15 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
                         type="number"
                         error={
                           matchupPercentages[deck]?.[opponentDeck].valueOf() >
-                            1 ||
+                            100 ||
                           matchupPercentages[deck]?.[opponentDeck].valueOf() < 0
                         }
                         InputProps={{
-                          style: { minWidth: "4rem" },
+                          style: { minWidth: "6rem" },
                           inputProps: {
-                            max: 1,
+                            max: 100,
                             min: 0,
-                            step: 0.01,
+                            step: 0.1,
                           },
                         }}
                         // inputMode="decimal"
@@ -436,7 +438,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
                         // variant="standard",
                         // helperText="Incorrect entry."
                         value={
-                          matchupPercentages[deck]?.[opponentDeck].toFixed(2) ||
+                          matchupPercentages[deck]?.[opponentDeck].toFixed(1) ||
                           0
                         }
                         onChange={(e) =>
@@ -451,7 +453,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
                         }}
                       />
                     ) : (
-                      ".50"
+                      "50.0"
                     )}
                   </TableCell>
                 ))}
