@@ -3,6 +3,7 @@ import { Matchup } from "../../types/MatchupModels";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 const apiUrl = process.env.REACT_APP_API_URL;
+const version = process.env.REACT_APP_API_VERSION;
 
 export const addNewMatchup = createAsyncThunk(
 	"matchups/Add",
@@ -14,7 +15,7 @@ export const addNewMatchup = createAsyncThunk(
 		matchup: Matchup;
 	}) => {
 		try {
-			const response = await fetch(`${apiUrl}/matchups/add`, {
+			const response = await fetch(`${apiUrl}/api/${version}/matchups/add`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
