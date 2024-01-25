@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CredentialResponse } from "@react-oauth/google";
 import "./TournamentSimulator.css";
 import { Button } from "@mui/base";
@@ -10,7 +10,6 @@ import {
   TableHead,
   TableRow,
   TextField,
-  debounce,
 } from "@mui/material";
 
 interface simulatorProps {
