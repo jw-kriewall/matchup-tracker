@@ -10,7 +10,6 @@ export interface UserState {
 	user: UserWithRole | null;
 	userLoading: boolean;
 	loginSuccess: boolean;
-	logoutTime: Date | undefined;
 }
 
 const initialState: UserState = {
@@ -18,7 +17,6 @@ const initialState: UserState = {
 	// user: useCookies(["user"])
 	userLoading: false,
 	loginSuccess: false,
-	logoutTime: undefined,
 };
 
 const userAuthSlice = createSlice({
@@ -29,13 +27,10 @@ const userAuthSlice = createSlice({
 			state.userLoading = false;
 			state.user = action.payload;
 			state.loginSuccess = true;
-			state.logoutTime = new Date(new Date().getTime() + 60 * 60 * 1000);
-			// localStorage.setItem("user", JSON.stringify(action.payload));
 		},
 		logout: (state) => {
 			state.userLoading = false;
 			state.user = null;
-			state.logoutTime = undefined;
 			state.loginSuccess = false;
 			localStorage.clear();
 		},
