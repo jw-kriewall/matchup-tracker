@@ -4,7 +4,7 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import { allDecksConstant } from "../../constants/allDecks";
 import Button from "@mui/material/Button";
-import AccordionMatchup from "./AccordionMatchup";
+import AccordionMatchup from "./accordionMatchup/AccordionMatchup";
 import { DeckDisplay, Matchup } from "../../types/MatchupModels";
 import jwt_decode from "jwt-decode";
 import { DecodedJwtToken } from "../../types/DecodedJwtToken";
