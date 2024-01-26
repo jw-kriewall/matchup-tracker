@@ -96,7 +96,7 @@ export default function ControlledAccordions() {
         <h3>LOADING...</h3>
       ) : (
         <TableContainer component={Paper}>
-          <Table aria-label="collapsible table">
+          <Table aria-label="collapsible table" stickyHeader>
             <TableHead>
               <TableRow>
                 <TableCell />
