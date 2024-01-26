@@ -32,36 +32,33 @@ const SessionManagement: any = ({ children }: any) => {
 
   useEffect(() => {
     if (logoutTime !== undefined && user) {
-      console.log(logoutTime);
       const checkTime = () => {
         const currentTime = new Date().getTime() / 1000;
-        console.log(logoutTime - currentTime);
-        const fiveMinutesBeforeLogout = logoutTime - 5 * 60 * 1000;
-        const twoMinutesBeforeLogout = logoutTime - 2 * 60 * 1000;
+        const fiveMinutesBeforeLogout = logoutTime - 5 * 60;
+        const twoMinutesBeforeLogout = logoutTime - 2 * 60;
 
         if (
-          currentTime <= fiveMinutesBeforeLogout &&
-          currentTime > twoMinutesBeforeLogout &&
+          currentTime >= fiveMinutesBeforeLogout &&
+          currentTime < twoMinutesBeforeLogout &&
           !infoShown
         ) {
           setShowSnackbarInfo(true);
           setInfoShown(true);
+          console.log("info Shown");
         }
 
         if (
-          currentTime <= twoMinutesBeforeLogout &&
-          currentTime > logoutTime &&
+          currentTime >= twoMinutesBeforeLogout &&
+          currentTime < logoutTime &&
           !warningShown
         ) {
           setShowSnackbarWarning(true);
           setWarningShown(true);
+          console.log("Warning Shown");
         }
 
         if (currentTime >= logoutTime && infoShown && warningShown && user) {
           //@TODO: Check this...
-          setShowSnackbarInfo(false);
-          setShowSnackbarWarning(false);
-          setInfoShown(false);
           dispatch(logoutAction());
           window.location.href = "/";
         }
