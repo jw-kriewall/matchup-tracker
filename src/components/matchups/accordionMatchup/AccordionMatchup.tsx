@@ -56,7 +56,7 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
   };
 
   return (
-    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+    <Box sx={{ flexShrink: 0, margin: 0 }}>
       <IconButton
         onClick={handleBackButtonClick}
         disabled={page === 0}
@@ -175,15 +175,18 @@ export default function ControlledAccordions() {
             onRowsPerPageChange={handleChangeRowsPerPage}
             ActionsComponent={TablePaginationActions}
           />
-          <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
+          <TableContainer
+            component={Paper}
+            sx={{ maxHeight: 500, minHeight: 500 }}
+          >
             <Table aria-label="collapsible table" stickyHeader>
               <TableHead>
                 <TableRow>
                   <TableCell />
-                  <TableCell>Game</TableCell>
+                  <TableCell align="left">Game</TableCell>
                   <TableCell align="center">Matchup</TableCell>
                   <TableCell align="center">Winner</TableCell>
-                  <TableCell align="right">Delete</TableCell>
+                  <TableCell align="center">Delete</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -211,7 +214,7 @@ export default function ControlledAccordions() {
                         <TableCell align="center">
                           {matchup.winningDeck}
                         </TableCell>
-                        <TableCell align="right">
+                        <TableCell align="center">
                           <Button
                             variant="outlined"
                             color="error"
