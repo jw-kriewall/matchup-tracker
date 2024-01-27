@@ -1,0 +1,15 @@
+.table-pagination {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-end; /* Adjust this as needed */
+    flex-direction: row;
+    padding-right: 4%;
+  }
+
+.MuiTablePagination-toolbar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  /* @TODO: Can all this be removed?*/

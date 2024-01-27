@@ -5,6 +5,7 @@ import jwt_decode from "jwt-decode";
 import { DecodedJwtToken } from "../../types/DecodedJwtToken";
 
 const apiUrl = process.env.REACT_APP_API_URL;
+const version = process.env.REACT_APP_API_VERSION;
 
 export const getUserRole = createAsyncThunk(
 	"user/getRole",
@@ -15,7 +16,7 @@ export const getUserRole = createAsyncThunk(
 				const email = decodedToken.email;
 				const username = decodedToken.name;
 				const response = await axios.post(
-					`${apiUrl}/api/user/role`,
+					`${apiUrl}/api/${version}/user/role`,
 					{ email: email, username: username },
 					{
 						headers: {
