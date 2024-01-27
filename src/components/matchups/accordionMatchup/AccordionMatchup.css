@@ -12,6 +12,4 @@
     align-items: center;
   }
 
-  /* .MuiTablePagination-selectLabel {
-    padding: 1rem;
-  } */
+  /* @TODO: Can all this be removed?*/
