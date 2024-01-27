@@ -1,5 +1,5 @@
 .table-pagination {
-    display: flex;
+    display: flex !important;
     justify-content: flex-end !important;
     padding: 0 !important;
   }
