@@ -18,11 +18,70 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  useTheme,
 } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { TablePagination } from "@mui/base";
+import TablePagination from "@mui/material/TablePagination";
+import IconButton from "@mui/material/IconButton";
+import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import "./AccordionMatchup.css";
+//https://mui.com/base-ui/react-table-pagination/
+
+interface TablePaginationActionsProps {
+  count: number;
+  page: number;
+  rowsPerPage: number;
+  onPageChange: (
+    event: React.MouseEvent<HTMLButtonElement>,
+    newPage: number
+  ) => void;
+}
+
+function TablePaginationActions(props: TablePaginationActionsProps) {
+  const theme = useTheme();
+  const { count, page, rowsPerPage, onPageChange } = props;
+
+  const handleBackButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    onPageChange(event, page - 1);
+  };
+
+  const handleNextButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    onPageChange(event, page + 1);
+  };
+
+  return (
+    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+      <IconButton
+        onClick={handleBackButtonClick}
+        disabled={page === 0}
+        aria-label="previous page"
+      >
+        {theme.direction === "rtl" ? (
+          <KeyboardArrowRight />
+        ) : (
+          <KeyboardArrowLeft />
+        )}
+      </IconButton>
+      <IconButton
+        onClick={handleNextButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="next page"
+      >
+        {theme.direction === "rtl" ? (
+          <KeyboardArrowLeft />
+        ) : (
+          <KeyboardArrowRight />
+        )}
+      </IconButton>
+    </Box>
+  );
+}
 
 export default function ControlledAccordions() {
   const matchups: Matchup[] | undefined = useAppSelector(
@@ -47,13 +106,6 @@ export default function ControlledAccordions() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-
-  const reversedMatchups = [...matchups].reverse();
-
-  //   const handleChange =
-  //     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-  //       setExpanded(isExpanded ? panel : false);
-  //     };
 
   const dispatch = useAppDispatch();
 
@@ -114,12 +166,14 @@ export default function ControlledAccordions() {
         <>
           <TablePagination
             className="table-pagination"
-            rowsPerPageOptions={[10, 25, 100]}
+            rowsPerPageOptions={[10, 25, 100, { label: "All", value: -1 }]}
+            // colSpan={2}
             count={matchups.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
+            ActionsComponent={TablePaginationActions}
           />
           <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
             <Table aria-label="collapsible table" stickyHeader>
@@ -128,7 +182,8 @@ export default function ControlledAccordions() {
                   <TableCell />
                   <TableCell>Game</TableCell>
                   <TableCell align="center">Matchup</TableCell>
-                  <TableCell align="right">Winner</TableCell>
+                  <TableCell align="center">Winner</TableCell>
+                  <TableCell align="right">Delete</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -153,8 +208,10 @@ export default function ControlledAccordions() {
                           {matchup.playerOneDeck.name} VS{" "}
                           {matchup.playerTwoDeck.name}
                         </TableCell>
-                        <TableCell align="right">
+                        <TableCell align="center">
                           {matchup.winningDeck}
+                        </TableCell>
+                        <TableCell align="right">
                           <Button
                             variant="outlined"
                             color="error"
@@ -162,15 +219,6 @@ export default function ControlledAccordions() {
                           >
                             <DeleteIcon />
                           </Button>
-                        </TableCell>
-                        <TableCell align="right">
-                          {/* <Button
-                            variant="outlined"
-                            color="error"
-                            onClick={() => handleDeleteMatchup(matchup)()}
-                          >
-                            <DeleteIcon />
-                          </Button> */}
                         </TableCell>
                       </TableRow>
                       <TableRow>
