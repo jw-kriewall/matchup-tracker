@@ -1,5 +1,5 @@
 import React from "react";
-import MatchupForm from "../../components/matchups/MatchupForm";
+import MatchupForm from "../../components/matchups/matchupForm/MatchupForm";
 import NavBar from "../../components/navBar/NavBar";
 import "./HomePage.css";
 import { useCookies } from "react-cookie";

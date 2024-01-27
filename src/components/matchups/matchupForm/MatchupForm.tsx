@@ -2,18 +2,18 @@ import React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
-import { allDecksConstant } from "../../constants/allDecks";
+import { allDecksConstant } from "../../../constants/allDecks";
 import Button from "@mui/material/Button";
-import AccordionMatchup from "./accordionMatchup/AccordionMatchup";
-import { DeckDisplay, Matchup } from "../../types/MatchupModels";
+import AccordionMatchup from "../accordionMatchup/AccordionMatchup";
+import { DeckDisplay, Matchup } from "../../../types/MatchupModels";
 import jwt_decode from "jwt-decode";
-import { DecodedJwtToken } from "../../types/DecodedJwtToken";
-import { addNewMatchup } from "../../apiCalls/matchups/addMatchup";
+import { DecodedJwtToken } from "../../../types/DecodedJwtToken";
+import { addNewMatchup } from "../../../apiCalls/matchups/addMatchup";
 import { IconButton } from "@mui/material";
 import { CredentialResponse } from "@react-oauth/google";
 import LooksOneIcon from "@mui/icons-material/LooksOne";
-import SnackbarSuccess from "../snackbarNotifications/SnackbarSuccess";
-import { useAppDispatch } from "../../hooks/hooks";
+import SnackbarSuccess from "../../snackbarNotifications/SnackbarSuccess";
+import { useAppDispatch } from "../../../hooks/hooks";
 import { useCookies } from "react-cookie";
 
 export default function MatchupForm() {
@@ -108,7 +108,8 @@ export default function MatchupForm() {
     try {
       await dispatch(addNewMatchup({ user, matchup }));
       setNotes("");
-      setSnackbarSuccessMessage("Matchup successfully added!");
+      await setSnackbarSuccessMessage("Matchup successfully added!");
+      setSnackbarSuccessMessage("");
     } catch (err) {
       console.error(err);
       setSnackbarWarningMessage("Failed to add matchup. Please try again.");
@@ -193,6 +194,8 @@ export default function MatchupForm() {
       </div>
 
       <div>
+        {/* @TODO: Fix height of dropdowns */}
+        {/* @TODO: Fix SnackbarNotification to show after every successful submit */}
         <TextField
           id="outlined-deck-one"
           select
@@ -292,8 +295,6 @@ export default function MatchupForm() {
         <SnackbarSuccess message={snackbarWarningMessage} />
       )}
       <div className="accordion-matchup-component">
-        {/* show last 10 matchups with option to show all in second screen. Linked to which user created it */}
-        {/* @TODO: Matchup Pagination */}
         <AccordionMatchup />
       </div>
     </Box>
@@ -304,7 +305,7 @@ export default function MatchupForm() {
     playerDeckName: string
   ) {
     if (deckName === playerDeckName) {
-      setWinningDeckOptionsArray([deckName]);
+      setWinningDeckOptionsArray([deckName, "Tie"]);
     } else {
       setWinningDeckOptionsArray([playerDeckName, deckName, "Tie"]);
     }

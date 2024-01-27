@@ -167,7 +167,7 @@ export default function ControlledAccordions() {
           <TablePagination
             className="table-pagination"
             rowsPerPageOptions={[10, 25, 100, { label: "All", value: -1 }]}
-            // colSpan={2}
+            colSpan={2}
             count={matchups.length}
             rowsPerPage={rowsPerPage}
             page={page}
