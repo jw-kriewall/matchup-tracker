@@ -15,6 +15,7 @@ import LooksOneIcon from "@mui/icons-material/LooksOne";
 import SnackbarSuccess from "../../snackbarNotifications/SnackbarSuccess";
 import { useAppDispatch } from "../../../hooks/hooks";
 import { useCookies } from "react-cookie";
+import DeckSelectField from "../../shared/deckInputDropdown";
 
 export default function MatchupForm() {
   const [playerOneName, setPlayerOneName] = React.useState<string>("");
@@ -195,83 +196,16 @@ export default function MatchupForm() {
 
       <div>
         {/* @TODO: Fix SnackbarNotification to show after every successful submit */}
-        <TextField
+        <DeckSelectField
           id="outlined-deck-one"
-          select
           label="Player One Deck"
-          defaultValue=""
-          SelectProps={{
-            MenuProps: {
-              PaperProps: {
-                style: {
-                  maxHeight: 200,
-                },
-              },
-            },
-          }}
           onChange={(e) => handlePlayerOneDeckChange(e)}
-        >
-          {allDecksConstant.map((option: DeckDisplay) => (
-            <MenuItem key={option.value} value={option.value}>
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                {option.label}
-                <Box sx={{ display: "flex" }}>
-                  {option.sprites.map((sprite, index) => (
-                    <img
-                      key={index}
-                      src={sprite}
-                      alt={option.label}
-                      style={{
-                        width: "36px",
-                        height: "36px",
-                        marginLeft: "2px",
-                      }}
-                    />
-                  ))}
-                </Box>
-              </Box>
-            </MenuItem>
-          ))}
-        </TextField>
-
-        <TextField
+        />
+        <DeckSelectField
           id="outlined-deck-two"
-          select
           label="Player Two Deck"
-          defaultValue=""
-          SelectProps={{
-            MenuProps: {
-              PaperProps: {
-                style: {
-                  maxHeight: 200,
-                },
-              },
-            },
-          }}
           onChange={(e) => handlePlayerTwoDeckChange(e)}
-        >
-          {allDecksConstant.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                {option.label}
-                <Box sx={{ display: "flex" }}>
-                  {option.sprites.map((sprite, index) => (
-                    <img
-                      key={index}
-                      src={sprite}
-                      alt={option.label}
-                      style={{
-                        width: "36px",
-                        height: "36px",
-                        marginLeft: "2px",
-                      }}
-                    />
-                  ))}
-                </Box>
-              </Box>
-            </MenuItem>
-          ))}
-        </TextField>
+        />
       </div>
 
       <div>
