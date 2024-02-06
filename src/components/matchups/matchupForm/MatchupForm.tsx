@@ -194,13 +194,21 @@ export default function MatchupForm() {
       </div>
 
       <div>
-        {/* @TODO: Fix height of dropdowns */}
         {/* @TODO: Fix SnackbarNotification to show after every successful submit */}
         <TextField
           id="outlined-deck-one"
           select
           label="Player One Deck"
           defaultValue=""
+          SelectProps={{
+            MenuProps: {
+              PaperProps: {
+                style: {
+                  maxHeight: 200,
+                },
+              },
+            },
+          }}
           onChange={(e) => handlePlayerOneDeckChange(e)}
         >
           {allDecksConstant.map((option: DeckDisplay) => (
@@ -231,6 +239,15 @@ export default function MatchupForm() {
           select
           label="Player Two Deck"
           defaultValue=""
+          SelectProps={{
+            MenuProps: {
+              PaperProps: {
+                style: {
+                  maxHeight: 200,
+                },
+              },
+            },
+          }}
           onChange={(e) => handlePlayerTwoDeckChange(e)}
         >
           {allDecksConstant.map((option) => (
