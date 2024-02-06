@@ -446,7 +446,16 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
                         }}
                       />
                     ) : (
-                      "50"
+                      <TextField
+                        disabled
+                        id="outlined-number"
+                        type="number"
+                        InputProps={{
+                          style: { minWidth: "5rem" },
+                        }}
+                        size="small"
+                        value="50"
+                      />
                     )}
                   </TableCell>
                 ))}
@@ -459,34 +468,33 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
       <div className="inputs-container">
         {filteredDecks.map((deck) => (
           <div key={deck} className="deck-input">
-            {deck}:
-            <TextField
-              id="outlined-number"
-              type="number"
-              InputProps={{
-                style: { minWidth: "4rem" },
-                inputProps: {
-                  max: 10000,
-                  min: 0,
-                },
-              }}
-              inputMode="numeric"
-              size="small"
-              value={deckCounts[deck] || 0}
-              onChange={(e) => updateDeckCount(deck, parseInt(e.target.value))}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
+            <span className="deck-input-text">{deck}:</span>
+            <div className="deck-input-field">
+              <TextField
+                id="outlined-number"
+                type="number"
+                InputProps={{
+                  style: { minWidth: "4rem" },
+                  inputProps: {
+                    max: 10000,
+                    min: 0,
+                  },
+                }}
+                inputMode="numeric"
+                size="small"
+                value={deckCounts[deck] || 0}
+                onChange={(e) =>
+                  updateDeckCount(deck, parseInt(e.target.value))
+                }
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </div>
           </div>
         ))}
-        <div>
+        <div className="round-input">
           Number of Rounds:
-          {/* <input
-            type="number"
-            value={numberOfRounds}
-            onChange={(e) => setNumberOfRounds(parseInt(e.target.value))}
-          /> */}
           <TextField
             id="outlined-number"
             type="number"

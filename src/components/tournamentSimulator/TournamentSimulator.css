@@ -9,7 +9,6 @@
     border: 1px solid #ddd;
     text-align: center;
     font-size: 16px;
-    width: 10%;
 }
 
 .simulator-table th {
@@ -21,22 +20,40 @@
     background-color: #fff;
     border-radius: 4px;
     display: inline-block;
-    margin: auto;
     padding: 5px 10px;
     margin: -7px -12px; /* To prevent adjustment to the table dimensions, margin needs to offset padding + border */
     border: 1px solid #000000;
   }
 
-.inputs-container {
+  .inputs-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .deck-input {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+.round-input {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
-.deck-input {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
+.deck-input-text {
+  margin-left: 2rem;
+}
+
+.deck-input-field {
+  flex-grow: 1;
+  display: flex;
+  min-width: 20px;
+  max-width: 200px;
+}
 
   .sim-tournament-btn {
     background-color: #007bff;
