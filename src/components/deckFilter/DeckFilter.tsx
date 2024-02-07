@@ -13,7 +13,20 @@ interface DeckFilterProps {
   onSelectedDecksChange: (selectedDecks: string[]) => void;
 }
 
-function DeckFilter({ selectedDecks, initialDecks, onSelectedDecksChange }: DeckFilterProps) {
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: 200,
+      width: 250,
+    },
+  },
+};
+
+function DeckFilter({
+  selectedDecks,
+  initialDecks,
+  onSelectedDecksChange,
+}: DeckFilterProps) {
   const handleDeckChange = (event: SelectChangeEvent<string[]>) => {
     const value = event.target.value as string[];
     onSelectedDecksChange(value);
@@ -26,11 +39,22 @@ function DeckFilter({ selectedDecks, initialDecks, onSelectedDecksChange }: Deck
         labelId="deck-select-label"
         id="deck-select"
         multiple
+        MenuProps={MenuProps}
         value={selectedDecks}
         onChange={handleDeckChange}
         input={<OutlinedInput id="deck-select-label" label="Select Decks" />}
         renderValue={(selected) => (
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', whiteSpace: 'nowrap', gap: 0.5, overflow: 'hidden', textOverflow: 'ellipsis', maxHeight: '72px' }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              whiteSpace: "nowrap",
+              gap: 0.5,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              maxHeight: "72px",
+            }}
+          >
             {selected.map((value: string) => (
               <Chip
                 key={value}
@@ -57,6 +81,6 @@ function DeckFilter({ selectedDecks, initialDecks, onSelectedDecksChange }: Deck
       </Select>
     </FormControl>
   );
-};
+}
 
 export default DeckFilter;

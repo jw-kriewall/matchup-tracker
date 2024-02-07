@@ -5,7 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { allDecksConstant } from "../../../constants/allDecks";
 import Button from "@mui/material/Button";
 import AccordionMatchup from "../accordionMatchup/AccordionMatchup";
-import { DeckDisplay, Matchup } from "../../../types/MatchupModels";
+import { Matchup } from "../../../types/MatchupModels";
 import jwt_decode from "jwt-decode";
 import { DecodedJwtToken } from "../../../types/DecodedJwtToken";
 import { addNewMatchup } from "../../../apiCalls/matchups/addMatchup";
@@ -15,6 +15,9 @@ import LooksOneIcon from "@mui/icons-material/LooksOne";
 import SnackbarSuccess from "../../snackbarNotifications/SnackbarSuccess";
 import { useAppDispatch } from "../../../hooks/hooks";
 import { useCookies } from "react-cookie";
+import DeckInputDropdown from "../../shared/deckInputDropdown";
+import SnackbarWarning from "../../snackbarNotifications/SnackbarWarning";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 export default function MatchupForm() {
   const [playerOneName, setPlayerOneName] = React.useState<string>("");
@@ -33,6 +36,7 @@ export default function MatchupForm() {
     React.useState<string>("");
   const [snackbarWarningMessage, setSnackbarWarningMessage] =
     React.useState<string>("");
+  const [snackbarKey, setSnackbarKey] = React.useState<number>(0);
   const [cookies] = useCookies(["userRole"]);
   const [userCookies] = useCookies(["user"]);
 
@@ -106,13 +110,15 @@ export default function MatchupForm() {
     console.log(matchup);
 
     try {
-      await dispatch(addNewMatchup({ user, matchup }));
+      const actionResult = await dispatch(addNewMatchup({ user, matchup }));
+      const result = unwrapResult(actionResult);
       setNotes("");
-      await setSnackbarSuccessMessage("Matchup successfully added!");
-      setSnackbarSuccessMessage("");
+      setSnackbarSuccessMessage("Matchup successfully added!");
+      setSnackbarKey((prevKey) => prevKey + 1);
     } catch (err) {
       console.error(err);
       setSnackbarWarningMessage("Failed to add matchup. Please try again.");
+      setSnackbarKey((prevKey) => prevKey + 1);
     }
   };
 
@@ -194,67 +200,20 @@ export default function MatchupForm() {
       </div>
 
       <div>
-        {/* @TODO: Fix height of dropdowns */}
         {/* @TODO: Fix SnackbarNotification to show after every successful submit */}
-        <TextField
+        {/* @TODO: Pass in the allDecksConstant as a combo of constants and user specific decks */}
+        <DeckInputDropdown
           id="outlined-deck-one"
-          select
           label="Player One Deck"
-          defaultValue=""
+          decks={allDecksConstant}
           onChange={(e) => handlePlayerOneDeckChange(e)}
-        >
-          {allDecksConstant.map((option: DeckDisplay) => (
-            <MenuItem key={option.value} value={option.value}>
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                {option.label}
-                <Box sx={{ display: "flex" }}>
-                  {option.sprites.map((sprite, index) => (
-                    <img
-                      key={index}
-                      src={sprite}
-                      alt={option.label}
-                      style={{
-                        width: "36px",
-                        height: "36px",
-                        marginLeft: "2px",
-                      }}
-                    />
-                  ))}
-                </Box>
-              </Box>
-            </MenuItem>
-          ))}
-        </TextField>
-
-        <TextField
+        />
+        <DeckInputDropdown
           id="outlined-deck-two"
-          select
           label="Player Two Deck"
-          defaultValue=""
+          decks={allDecksConstant}
           onChange={(e) => handlePlayerTwoDeckChange(e)}
-        >
-          {allDecksConstant.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                {option.label}
-                <Box sx={{ display: "flex" }}>
-                  {option.sprites.map((sprite, index) => (
-                    <img
-                      key={index}
-                      src={sprite}
-                      alt={option.label}
-                      style={{
-                        width: "36px",
-                        height: "36px",
-                        marginLeft: "2px",
-                      }}
-                    />
-                  ))}
-                </Box>
-              </Box>
-            </MenuItem>
-          ))}
-        </TextField>
+        />
       </div>
 
       <div>
@@ -289,10 +248,10 @@ export default function MatchupForm() {
         Submit
       </Button>
       {snackbarSuccessMessage && (
-        <SnackbarSuccess message={snackbarSuccessMessage} />
+        <SnackbarSuccess key={snackbarKey} message={snackbarSuccessMessage} />
       )}
       {snackbarWarningMessage && (
-        <SnackbarSuccess message={snackbarWarningMessage} />
+        <SnackbarWarning key={snackbarKey} message={snackbarWarningMessage} />
       )}
       <div className="accordion-matchup-component">
         <AccordionMatchup />
@@ -305,7 +264,7 @@ export default function MatchupForm() {
     playerDeckName: string
   ) {
     if (deckName === playerDeckName) {
-      setWinningDeckOptionsArray([deckName, "Tie"]);
+      setWinningDeckOptionsArray(["Tie"]);
     } else {
       setWinningDeckOptionsArray([playerDeckName, deckName, "Tie"]);
     }

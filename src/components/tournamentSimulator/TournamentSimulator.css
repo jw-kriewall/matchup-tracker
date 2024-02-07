@@ -1,54 +1,83 @@
 .simulator-table {
-    border-spacing: 0;
-    background: #fff;
-    margin-bottom: 20px; 
+  border-spacing: 0;
+  background: #fff;
+  margin-bottom: 20px; 
 }
 
 .simulator-table th, .simulator-table td {
-    padding: 12px;
-    border: 1px solid #ddd;
-    text-align: center;
-    font-size: 16px;
-    width: 10%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: center;
+  font-size: 16px;
 }
 
 .simulator-table th {
-    background-color: #d3f3fd;
-    font-weight: bold;
+  background-color: #d3f3fd;
+  font-weight: bold;
 }
 
 .record-style {
-    background-color: #fff;
-    border-radius: 4px;
-    display: inline-block;
-    margin: auto;
-    padding: 5px 10px;
-    margin: -7px -12px; /* To prevent adjustment to the table dimensions, margin needs to offset padding + border */
-    border: 1px solid #000000;
-  }
+  background-color: #fff;
+  border-radius: 4px;
+  display: inline-block;
+  padding: 5px 10px;
+  margin: -7px -12px; /* To prevent adjustment to the table dimensions, margin needs to offset padding + border */
+  border: 1px solid #000000;
+}
 
-.inputs-container {
-    display: flex;
-    flex-direction: column;
+@media (min-width: 1024px) {
+  .inputs-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
 }
 
 .deck-input {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
 
-  .sim-tournament-btn {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px;
-    font-size: 16px;
-  }
+.round-input {
+  display: flex;
+  align-items: center;
+}
 
-  .sim-tournament-btn:hover {
-    background-color: #146bc9;
-  }
+.inputs-container {
+  max-height: 200px;
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+.divider {
+  margin: 16px !important;
+}
+
+.deck-input-text {
+  margin-left: 2.5rem;
+}
+
+.deck-input-field {
+  margin-right: 2.5rem;
+}
+
+.deck-input {
+  margin: 4px;
+}
+
+.sim-tournament-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 4px;
+  font-size: 16px;
+}
+
+.sim-tournament-btn:hover {
+  background-color: #146bc9;
+}
