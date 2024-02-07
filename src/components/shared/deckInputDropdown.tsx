@@ -2,13 +2,14 @@ import React from "react";
 import { TextField, MenuItem, Box } from "@mui/material";
 import { allDecksConstant } from "../../constants/allDecks";
 
-interface DeckSelectFieldProps {
+interface DeckInputDropdownProps {
   id: string;
   label: string;
+//   decks: DeckDisplay
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const DeckSelectField = ({ id, label, onChange }: DeckSelectFieldProps) => {
+const DeckInputDropdown = ({ id, label, onChange }: DeckInputDropdownProps) => {
   return (
     <TextField
       id={id}
@@ -51,4 +52,4 @@ const DeckSelectField = ({ id, label, onChange }: DeckSelectFieldProps) => {
   );
 };
 
-export default DeckSelectField;
+export default DeckInputDropdown;

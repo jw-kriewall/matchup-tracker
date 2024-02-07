@@ -15,7 +15,7 @@ import LooksOneIcon from "@mui/icons-material/LooksOne";
 import SnackbarSuccess from "../../snackbarNotifications/SnackbarSuccess";
 import { useAppDispatch } from "../../../hooks/hooks";
 import { useCookies } from "react-cookie";
-import DeckSelectField from "../../shared/deckInputDropdown";
+import DeckInputDropdown from "../../shared/deckInputDropdown";
 
 export default function MatchupForm() {
   const [playerOneName, setPlayerOneName] = React.useState<string>("");
@@ -196,12 +196,12 @@ export default function MatchupForm() {
 
       <div>
         {/* @TODO: Fix SnackbarNotification to show after every successful submit */}
-        <DeckSelectField
+        <DeckInputDropdown
           id="outlined-deck-one"
           label="Player One Deck"
           onChange={(e) => handlePlayerOneDeckChange(e)}
         />
-        <DeckSelectField
+        <DeckInputDropdown
           id="outlined-deck-two"
           label="Player Two Deck"
           onChange={(e) => handlePlayerTwoDeckChange(e)}
