@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CredentialResponse } from "@react-oauth/google";
 import "./TournamentSimulator.css";
 import { Button } from "@mui/base";
+import Divider from "@mui/material/Divider";
 import {
   Table,
   TableBody,
@@ -465,6 +466,8 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
         </Table>
       </TableContainer>
 
+      <Divider className="divider" />
+
       <div className="inputs-container">
         {filteredDecks.map((deck) => (
           <div key={deck} className="deck-input">
@@ -493,32 +496,33 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
             </div>
           </div>
         ))}
-        <div className="round-input">
-          Number of Rounds:
-          <TextField
-            id="outlined-number"
-            type="number"
-            InputProps={{
-              style: { minWidth: "4rem" },
-              inputProps: {
-                max: 1000,
-                min: 0,
-              },
-            }}
-            inputMode="numeric"
-            size="small"
-            value={numberOfRounds}
-            onChange={(e) => setNumberOfRounds(parseInt(e.target.value))}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-        </div>
-        <Button className="sim-tournament-btn" onClick={handleSimulation}>
-          Simulate Tournament
-        </Button>
-        {results && <div>Result: {results}</div>}
       </div>
+      <Divider className="divider" />
+      <div className="round-input">
+        Number of Rounds:
+        <TextField
+          id="outlined-number"
+          type="number"
+          InputProps={{
+            style: { minWidth: "4rem" },
+            inputProps: {
+              max: 1000,
+              min: 0,
+            },
+          }}
+          inputMode="numeric"
+          size="small"
+          value={numberOfRounds}
+          onChange={(e) => setNumberOfRounds(parseInt(e.target.value))}
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+      </div>
+      <Button className="sim-tournament-btn" onClick={handleSimulation}>
+        Simulate Tournament
+      </Button>
+      {results && <div>Result: {results}</div>}
     </>
   );
 }
