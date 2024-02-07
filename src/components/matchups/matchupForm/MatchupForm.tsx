@@ -16,6 +16,8 @@ import SnackbarSuccess from "../../snackbarNotifications/SnackbarSuccess";
 import { useAppDispatch } from "../../../hooks/hooks";
 import { useCookies } from "react-cookie";
 import DeckInputDropdown from "../../shared/deckInputDropdown";
+import SnackbarWarning from "../../snackbarNotifications/SnackbarWarning";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 export default function MatchupForm() {
   const [playerOneName, setPlayerOneName] = React.useState<string>("");
@@ -108,14 +110,15 @@ export default function MatchupForm() {
     console.log(matchup);
 
     try {
-      await dispatch(addNewMatchup({ user, matchup }));
+      const actionResult = await dispatch(addNewMatchup({ user, matchup }));
+      const result = unwrapResult(actionResult);
       setNotes("");
       setSnackbarSuccessMessage("Matchup successfully added!");
-      setSnackbarKey(prevKey => prevKey + 1);
+      setSnackbarKey((prevKey) => prevKey + 1);
     } catch (err) {
       console.error(err);
       setSnackbarWarningMessage("Failed to add matchup. Please try again.");
-      setSnackbarKey(prevKey => prevKey + 1);
+      setSnackbarKey((prevKey) => prevKey + 1);
     }
   };
 
@@ -248,7 +251,7 @@ export default function MatchupForm() {
         <SnackbarSuccess key={snackbarKey} message={snackbarSuccessMessage} />
       )}
       {snackbarWarningMessage && (
-        <SnackbarSuccess key={snackbarKey} message={snackbarWarningMessage} />
+        <SnackbarWarning key={snackbarKey} message={snackbarWarningMessage} />
       )}
       <div className="accordion-matchup-component">
         <AccordionMatchup />
@@ -261,7 +264,7 @@ export default function MatchupForm() {
     playerDeckName: string
   ) {
     if (deckName === playerDeckName) {
-      setWinningDeckOptionsArray([deckName, "Tie"]);
+      setWinningDeckOptionsArray(["Tie"]);
     } else {
       setWinningDeckOptionsArray([playerDeckName, deckName, "Tie"]);
     }
