@@ -5,7 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { allDecksConstant } from "../../../constants/allDecks";
 import Button from "@mui/material/Button";
 import AccordionMatchup from "../accordionMatchup/AccordionMatchup";
-import { DeckDisplay, Matchup } from "../../../types/MatchupModels";
+import { Matchup } from "../../../types/MatchupModels";
 import jwt_decode from "jwt-decode";
 import { DecodedJwtToken } from "../../../types/DecodedJwtToken";
 import { addNewMatchup } from "../../../apiCalls/matchups/addMatchup";
@@ -196,14 +196,17 @@ export default function MatchupForm() {
 
       <div>
         {/* @TODO: Fix SnackbarNotification to show after every successful submit */}
+        {/* @TODO: Pass in the allDecksConstant as a combo of constants and user specific decks */}
         <DeckInputDropdown
           id="outlined-deck-one"
           label="Player One Deck"
+          decks={allDecksConstant}
           onChange={(e) => handlePlayerOneDeckChange(e)}
         />
         <DeckInputDropdown
           id="outlined-deck-two"
           label="Player Two Deck"
+          decks={allDecksConstant}
           onChange={(e) => handlePlayerTwoDeckChange(e)}
         />
       </div>

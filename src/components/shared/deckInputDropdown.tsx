@@ -1,15 +1,15 @@
 import React from "react";
 import { TextField, MenuItem, Box } from "@mui/material";
-import { allDecksConstant } from "../../constants/allDecks";
+import { DeckDisplay } from "../../types/MatchupModels";
 
 interface DeckInputDropdownProps {
   id: string;
   label: string;
-//   decks: DeckDisplay
+  decks: DeckDisplay[]
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const DeckInputDropdown = ({ id, label, onChange }: DeckInputDropdownProps) => {
+const DeckInputDropdown = ({ id, label, decks, onChange }: DeckInputDropdownProps) => {
   return (
     <TextField
       id={id}
@@ -27,7 +27,7 @@ const DeckInputDropdown = ({ id, label, onChange }: DeckInputDropdownProps) => {
       }}
       onChange={onChange}
     >
-      {allDecksConstant.map((option) => (
+      {decks.map((option) => (
         <MenuItem key={option.value} value={option.value}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             {option.label}
