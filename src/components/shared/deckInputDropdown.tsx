@@ -5,11 +5,16 @@ import { DeckDisplay } from "../../types/MatchupModels";
 interface DeckInputDropdownProps {
   id: string;
   label: string;
-  decks: DeckDisplay[]
+  decks: DeckDisplay[];
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const DeckInputDropdown = ({ id, label, decks, onChange }: DeckInputDropdownProps) => {
+const DeckInputDropdown = ({
+  id,
+  label,
+  decks,
+  onChange,
+}: DeckInputDropdownProps) => {
   return (
     <TextField
       id={id}

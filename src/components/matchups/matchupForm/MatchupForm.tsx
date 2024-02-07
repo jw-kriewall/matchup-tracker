@@ -34,6 +34,7 @@ export default function MatchupForm() {
     React.useState<string>("");
   const [snackbarWarningMessage, setSnackbarWarningMessage] =
     React.useState<string>("");
+  const [snackbarKey, setSnackbarKey] = React.useState<number>(0);
   const [cookies] = useCookies(["userRole"]);
   const [userCookies] = useCookies(["user"]);
 
@@ -109,11 +110,12 @@ export default function MatchupForm() {
     try {
       await dispatch(addNewMatchup({ user, matchup }));
       setNotes("");
-      await setSnackbarSuccessMessage("Matchup successfully added!");
-      setSnackbarSuccessMessage("");
+      setSnackbarSuccessMessage("Matchup successfully added!");
+      setSnackbarKey(prevKey => prevKey + 1);
     } catch (err) {
       console.error(err);
       setSnackbarWarningMessage("Failed to add matchup. Please try again.");
+      setSnackbarKey(prevKey => prevKey + 1);
     }
   };
 
@@ -243,10 +245,10 @@ export default function MatchupForm() {
         Submit
       </Button>
       {snackbarSuccessMessage && (
-        <SnackbarSuccess message={snackbarSuccessMessage} />
+        <SnackbarSuccess key={snackbarKey} message={snackbarSuccessMessage} />
       )}
       {snackbarWarningMessage && (
-        <SnackbarSuccess message={snackbarWarningMessage} />
+        <SnackbarSuccess key={snackbarKey} message={snackbarWarningMessage} />
       )}
       <div className="accordion-matchup-component">
         <AccordionMatchup />
