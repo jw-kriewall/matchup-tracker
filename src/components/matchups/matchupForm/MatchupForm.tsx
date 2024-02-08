@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import { allDecksConstant } from "../../../constants/allDecks";
 import Button from "@mui/material/Button";
 import AccordionMatchup from "../accordionMatchup/AccordionMatchup";
-import { Matchup } from "../../../types/MatchupModels";
+import { DeckDisplay, Matchup } from "../../../types/MatchupModels";
 import jwt_decode from "jwt-decode";
 import { DecodedJwtToken } from "../../../types/DecodedJwtToken";
 import { addNewMatchup } from "../../../apiCalls/matchups/addMatchup";
@@ -18,6 +18,7 @@ import { useCookies } from "react-cookie";
 import DeckInputDropdown from "../../shared/deckInputDropdown";
 import SnackbarWarning from "../../snackbarNotifications/SnackbarWarning";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { getUserDeckDisplay } from "../../../apiCalls/users/getUserDeckDisplay";
 
 export default function MatchupForm() {
   const [playerOneName, setPlayerOneName] = React.useState<string>("");
@@ -37,6 +38,9 @@ export default function MatchupForm() {
   const [snackbarWarningMessage, setSnackbarWarningMessage] =
     React.useState<string>("");
   const [snackbarKey, setSnackbarKey] = React.useState<number>(0);
+  const [userDeckDisplays, setUserDeckDisplays] = React.useState<DeckDisplay[]>(
+    []
+  );
   const [cookies] = useCookies(["userRole"]);
   const [userCookies] = useCookies(["user"]);
 
@@ -48,6 +52,17 @@ export default function MatchupForm() {
   >([]);
 
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (user) {
+      dispatch(getUserDeckDisplay(user))
+        .unwrap() // Unwrap is used to extract the payload from the fulfilled action
+        .then((deckDisplays) => setUserDeckDisplays(deckDisplays))
+        .catch((error) =>
+          console.error("Failed to fetch user deck displays:", error)
+        );
+    }
+  }, [user, dispatch]);
 
   const handlePlayerOneDeckChange = (e: any) => {
     e.preventDefault();
@@ -64,7 +79,6 @@ export default function MatchupForm() {
   const handleSetStartingPlayer = (playerName: string) => {
     setStartingPlayer(playerName);
   };
-
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
@@ -205,13 +219,13 @@ export default function MatchupForm() {
         <DeckInputDropdown
           id="outlined-deck-one"
           label="Player One Deck"
-          decks={allDecksConstant}
+          decks={allDecksConstant.concat(userDeckDisplays)}
           onChange={(e) => handlePlayerOneDeckChange(e)}
         />
         <DeckInputDropdown
           id="outlined-deck-two"
           label="Player Two Deck"
-          decks={allDecksConstant}
+          decks={allDecksConstant.concat(userDeckDisplays)}
           onChange={(e) => handlePlayerTwoDeckChange(e)}
         />
       </div>
