@@ -12,6 +12,9 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
+import { TableData } from "../../types/TableTypes";
+import { useSelector } from 'react-redux';
+import { selectTableData } from "../../redux/TableDataSlice";
 
 interface simulatorProps {
   user: CredentialResponse;
@@ -49,6 +52,7 @@ interface TournamentSimulatorInput {
 
 function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
   // const [data, setData] = useState<TableData>({});
+  const tableData = useSelector(selectTableData); 
   const [deckCounts, setDeckCounts] = useState<{ [deck: string]: number }>({});
   const [numberOfRounds, setNumberOfRounds] = useState<number>(0);
   const [results, setResults] = useState<string>("");
@@ -59,7 +63,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
   useEffect(() => {
     if (!user) return;
     setMatchupPercentages(initializeMatchupPercentages());
-  }, [filteredDecks]);
+  }, [filteredDecks, tableData.data]);
 
   // Function to initialize matchup percentages
   const initializeMatchupPercentages = () => {
@@ -70,7 +74,9 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
       initialMatchupPercentages[deck] = {};
       filteredDecks.forEach((opponentDeck) => {
         if (deck !== opponentDeck) {
-          initialMatchupPercentages[deck][opponentDeck] = 50.0;
+          const matchupData = tableData.data[deck]?.[opponentDeck];
+          const matchupPercentage = matchupData ? +parseFloat(matchupData).toFixed(1) * 100 : 50.0;
+          initialMatchupPercentages[deck][opponentDeck] = !isNaN(matchupPercentage) ? matchupPercentage : 50.0;
         }
       });
     });
@@ -113,7 +119,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
       },
       [opponentDeck]: {
         ...prev[opponentDeck],
-        [deck]: 100 - percentage,
+        [deck]: +((100 - percentage).toFixed(1)),
       },
     }));
   };
