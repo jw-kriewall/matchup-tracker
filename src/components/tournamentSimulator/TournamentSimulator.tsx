@@ -75,8 +75,16 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
       filteredDecks.forEach((opponentDeck) => {
         if (deck !== opponentDeck) {
           const matchupData = tableData.data[deck]?.[opponentDeck];
-          const matchupPercentage = matchupData ? +parseFloat(matchupData).toFixed(1) * 100 : 50.0;
-          initialMatchupPercentages[deck][opponentDeck] = !isNaN(matchupPercentage) ? matchupPercentage : 50.0;
+          let matchupPercentage = 50.0; // Default to 50%
+
+        if (matchupData) {
+          const [wins, losses, ties] = matchupData.split('-').map(Number);
+          const totalGames = wins + losses;
+          if (totalGames > 0) {
+            matchupPercentage = +((wins / totalGames) * 100).toFixed(1);
+          }
+        }
+          initialMatchupPercentages[deck][opponentDeck] = matchupPercentage;
         }
       });
     });
