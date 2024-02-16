@@ -22,5 +22,6 @@ export type Deck = {
 export type DeckDisplay = {
 	value: string,
 	label: string,
+	format?: string,
 	sprites: string[],
 }
