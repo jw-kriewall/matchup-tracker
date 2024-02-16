@@ -65,18 +65,22 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 
 	useEffect(() => {
 		if (!user) return;
+
 		const fetchData = async () => {
-			if (Object.keys(tableData.data).length === 0) {
-				try {
-					await dispatch(getMatchupRecordsByDeck({ user }));
-				} catch (error) {
-					console.error("Error fetching data for decks", error);
-				}
+			try {
+				await dispatch(getMatchupRecordsByDeck({ user }));
+			} catch (error) {
+				console.error("Error fetching data for decks", error);
 			}
 		};
 		fetchData();
-		setMatchupPercentages(initializeMatchupPercentages());
-	}, [filteredDecks, tableData.data]);
+	}, [user, dispatch]);
+
+	useEffect(() => {
+		if (Object.keys(tableData.data).length > 0) {
+			setMatchupPercentages(initializeMatchupPercentages());
+		}
+	}, [tableData.data, filteredDecks]);
 
 	// Function to initialize matchup percentages
 	const initializeMatchupPercentages = () => {

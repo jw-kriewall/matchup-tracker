@@ -18,7 +18,8 @@ export default function HomePage() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (user) {
+    // @TODO: persist this if possible. Currently calling the api everytime the home page is hit.
+    if (user && userDeckDisplays.length === 0) {
       dispatch(getUserDeckDisplay(user))
         .unwrap() // Unwrap is used to extract the payload from the fulfilled action
         .then((deckDisplays) => setUserDeckDisplays(deckDisplays))
@@ -26,7 +27,7 @@ export default function HomePage() {
           console.error("Failed to fetch user deck displays:", error)
         );
     }
-  }, [user, dispatch]);
+  }, [user, dispatch, userDeckDisplays.length]);
 
   if (!user) {
     return (

@@ -8,6 +8,7 @@ import { CredentialResponse } from "@react-oauth/google";
 import "./DataTable.css";
 import { useSelector } from "react-redux";
 import { selectTableData } from "../../redux/TableDataSlice";
+import { selectMatchups } from "../../redux/MatchupFeedSlice";
 
 interface DataTableProps {
 	selectedDecks: string[];
@@ -17,12 +18,15 @@ interface DataTableProps {
 function DataTable({ selectedDecks, user}: DataTableProps) {
 	const dispatch = useAppDispatch();
 	const tableDataState = useSelector(selectTableData);
+	const matchupDataState = useSelector(selectMatchups);
 	const [tableData, setTableData] = useState<TableData>({});
 	const [hoveredCell, setHoveredCell] = useState<string | null>(null);
 
 	useEffect(() => {
 		const fetchData = async () => {
-			if (user && Object.keys(tableDataState.data).length === 0) {
+			console.log(tableDataState.data)
+			console.log(matchupDataState.matchups)
+			if (user) {
 				try {
 					const response = await dispatch(getMatchupRecordsByDeck({ user }));
 					if (response) {
@@ -32,9 +36,9 @@ function DataTable({ selectedDecks, user}: DataTableProps) {
 					console.error("Error fetching data for decks", error);
 				}
 			}
-			else {
-				setTableData(tableDataState.data);
-			}
+			// else {
+			// 	setTableData(tableDataState.data);
+			// }
 		};
 		fetchData();
 	}, [dispatch, user]);
