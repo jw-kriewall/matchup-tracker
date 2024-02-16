@@ -133,7 +133,7 @@ export default function ControlledAccordions() {
   };
 
   const getMatchupsIfAuthorized = () => {
-    if (user) {
+    if (user && matchups.length === 0) {
       dispatch(getMatchups(user))
         .unwrap()
         .then(handleInit)
