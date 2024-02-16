@@ -160,9 +160,9 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
     Object.keys(results).forEach((deck) => {
       const deckTotal = deckCounts[deck];
       averageResults[deck] = {
-        wins: parseFloat(((results[deck].wins / deckTotal) * 100).toFixed(1)),
+        wins: parseFloat(((results[deck].wins / deckTotal) ).toFixed(2)),
         losses: parseFloat(
-          ((results[deck].losses / deckTotal) * 100).toFixed(1)
+          ((results[deck].losses / deckTotal) ).toFixed(2)
         ),
       };
     });
@@ -172,6 +172,8 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
   function formatSimulationResults(simulationResults: {
     [deck: string]: DeckPerformance;
   }): string {
+
+    // console.log("Simulation results: " + simulationResults)
     return Object.entries(simulationResults)
       .sort((a, b) => b[1].wins - a[1].wins)
       .map(
