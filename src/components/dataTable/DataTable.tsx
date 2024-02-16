@@ -6,6 +6,8 @@ import { useAppDispatch } from "../../hooks/hooks";
 import { calculateWinPercentage, formatWinPercentage } from "./DataTableUtil";
 import { CredentialResponse } from "@react-oauth/google";
 import "./DataTable.css";
+import { useSelector } from "react-redux";
+import { selectTableData } from "../../redux/TableDataSlice";
 
 interface DataTableProps {
 	selectedDecks: string[];
@@ -14,12 +16,13 @@ interface DataTableProps {
 
 function DataTable({ selectedDecks, user}: DataTableProps) {
 	const dispatch = useAppDispatch();
+	const tableDataState = useSelector(selectTableData);
 	const [tableData, setTableData] = useState<TableData>({});
 	const [hoveredCell, setHoveredCell] = useState<string | null>(null);
 
 	useEffect(() => {
 		const fetchData = async () => {
-			if (user) {
+			if (user && Object.keys(tableDataState.data).length === 0) {
 				try {
 					const response = await dispatch(getMatchupRecordsByDeck({ user }));
 					if (response) {
@@ -28,6 +31,9 @@ function DataTable({ selectedDecks, user}: DataTableProps) {
 				} catch (error) {
 					console.error("Error fetching data for decks", error);
 				}
+			}
+			else {
+				setTableData(tableDataState.data);
 			}
 		};
 		fetchData();
