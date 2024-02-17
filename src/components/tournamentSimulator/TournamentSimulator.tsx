@@ -59,6 +59,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 	const [deckCounts, setDeckCounts] = useState<{ [deck: string]: number }>({});
 	const [numberOfRounds, setNumberOfRounds] = useState<number>(0);
 	const [results, setResults] = useState<string>("");
+	const [isActualData, setIsActualData] = useState(true);
 	const [matchupPercentages, setMatchupPercentages] = useState<{
 		[deck: string]: { [opponentDeck: string]: number };
 	}>({});
@@ -82,6 +83,11 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 		}
 	}, [tableData.data, filteredDecks]);
 
+	useEffect(() => {
+		const newMatchupPercentages = initializeMatchupPercentages();
+		setMatchupPercentages(newMatchupPercentages);
+	}, [isActualData, filteredDecks, tableData.data]);
+
 	// Function to initialize matchup percentages
 	const initializeMatchupPercentages = () => {
 		const initialMatchupPercentages: {
@@ -94,7 +100,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 					const matchupData = tableData.data[deck]?.[opponentDeck];
 					let matchupPercentage = 50.0; // Default to 50%
 
-					if (matchupData) {
+					if (isActualData && matchupData) {
 						const [wins, losses, ties] = matchupData.split("-").map(Number);
 						const totalGames = wins + losses;
 						if (totalGames > 0) {
@@ -551,6 +557,9 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 			</div>
 			<Button className="sim-tournament-btn" onClick={handleSimulation}>
 				Simulate Tournament
+			</Button>
+			<Button onClick={() => setIsActualData(!isActualData)}>
+				{isActualData ? "Reset Table" : "Show My Percentages"}
 			</Button>
 			{results && <div>Result: {results}</div>}
 		</>
