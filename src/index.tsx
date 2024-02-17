@@ -1,29 +1,33 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { Provider } from 'react-redux';
-import { store } from './data/store';
-import { GoogleOAuthProvider } from '@react-oauth/google';
-import { CookiesProvider } from 'react-cookie';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { Provider } from "react-redux";
+import { store, persistor } from "./data/store";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { CookiesProvider } from "react-cookie";
+import { PersistGate } from "redux-persist/integration/react";
 
 // @TODO: clientID should be env variable
-const clientId = "946171427391-9q1lkna1ibpgq49g2fivl8m2edg6304a.apps.googleusercontent.com";
+const clientId =
+	"946171427391-9q1lkna1ibpgq49g2fivl8m2edg6304a.apps.googleusercontent.com";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+	document.getElementById("root") as HTMLElement
 );
 root.render(
-  <GoogleOAuthProvider clientId={clientId}>
-    <React.StrictMode>
-      <Provider store={store}>
-        <CookiesProvider>
-          <App />
-        </CookiesProvider>
-      </Provider>
-    </React.StrictMode>
-  </GoogleOAuthProvider>
+	<GoogleOAuthProvider clientId={clientId}>
+		<React.StrictMode>
+			<Provider store={store}>
+				<CookiesProvider>
+					<PersistGate loading={<div>Loading...</div>} persistor={persistor}>
+						<App />
+					</PersistGate>
+				</CookiesProvider>
+			</Provider>
+		</React.StrictMode>
+	</GoogleOAuthProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
