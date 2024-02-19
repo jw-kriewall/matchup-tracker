@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CredentialResponse } from "@react-oauth/google";
 import "./TournamentSimulator.css";
-import { Button } from "@mui/base";
+import Button from '@mui/material/Button';
 import Divider from "@mui/material/Divider";
 import {
 	Table,
@@ -17,6 +17,8 @@ import { useSelector } from "react-redux";
 import { selectTableData } from "../../redux/TableDataSlice";
 import { useAppDispatch } from "../../hooks/hooks";
 import { getMatchupRecordsByDeck } from "../../apiCalls/dataTable/getIndividualMatchupRecordsByDeck";
+import ImportExportIcon from '@mui/icons-material/ImportExport';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
 interface simulatorProps {
 	user: CredentialResponse;
@@ -555,12 +557,21 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 					}}
 				/>
 			</div>
+
 			<Button className="sim-tournament-btn" onClick={handleSimulation}>
 				Simulate Tournament
 			</Button>
-			<Button onClick={() => setIsActualData(!isActualData)}>
-				{isActualData ? "Reset Table" : "Show My Percentages"}
-			</Button>
+
+			{isActualData ?
+				<Button className="data-btn" variant="outlined" startIcon={<RestartAltIcon/>} onClick={() => setIsActualData(!isActualData)}>
+					Reset Table
+				</Button> 
+				:
+				<Button className="data-btn" variant="outlined" startIcon={<ImportExportIcon />} onClick={() => setIsActualData(!isActualData)}>
+					Import Data
+				</Button>
+			}
+			
 			{results && <div>Result: {results}</div>}
 		</>
 	);
