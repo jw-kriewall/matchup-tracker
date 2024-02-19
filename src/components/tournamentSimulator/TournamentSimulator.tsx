@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { CredentialResponse } from "@react-oauth/google";
 import "./TournamentSimulator.css";
-import { Button } from "@mui/base";
+import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import {
+	LinearProgress,
 	Table,
 	TableBody,
 	TableCell,
@@ -12,11 +13,12 @@ import {
 	TableRow,
 	TextField,
 } from "@mui/material";
-import { TableData } from "../../types/TableTypes";
 import { useSelector } from "react-redux";
 import { selectTableData } from "../../redux/TableDataSlice";
 import { useAppDispatch } from "../../hooks/hooks";
 import { getMatchupRecordsByDeck } from "../../apiCalls/dataTable/getIndividualMatchupRecordsByDeck";
+import ImportExportIcon from "@mui/icons-material/ImportExport";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
 interface simulatorProps {
 	user: CredentialResponse;
@@ -59,6 +61,8 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 	const [deckCounts, setDeckCounts] = useState<{ [deck: string]: number }>({});
 	const [numberOfRounds, setNumberOfRounds] = useState<number>(0);
 	const [results, setResults] = useState<string>("");
+	const [isActualData, setIsActualData] = useState(true);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [matchupPercentages, setMatchupPercentages] = useState<{
 		[deck: string]: { [opponentDeck: string]: number };
 	}>({});
@@ -82,6 +86,11 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 		}
 	}, [tableData.data, filteredDecks]);
 
+	useEffect(() => {
+		const newMatchupPercentages = initializeMatchupPercentages();
+		setMatchupPercentages(newMatchupPercentages);
+	}, [isActualData, filteredDecks, tableData.data]);
+
 	// Function to initialize matchup percentages
 	const initializeMatchupPercentages = () => {
 		const initialMatchupPercentages: {
@@ -94,7 +103,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 					const matchupData = tableData.data[deck]?.[opponentDeck];
 					let matchupPercentage = 50.0; // Default to 50%
 
-					if (matchupData) {
+					if (isActualData && matchupData) {
 						const [wins, losses, ties] = matchupData.split("-").map(Number);
 						const totalGames = wins + losses;
 						if (totalGames > 0) {
@@ -109,22 +118,30 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 	};
 
 	const handleSimulation = () => {
-		const calculatedMatchupPercentages =
-			calculateMatchupPercentages(matchupPercentages);
+		setIsLoading(true);
+		console.log(isLoading);
+		try {
+			const calculatedMatchupPercentages =
+				calculateMatchupPercentages(matchupPercentages);
 
-		const simulationResults = simulateTournament({
-			deckCounts,
-			matchupPercentages: calculatedMatchupPercentages,
-			numberOfRounds,
-		});
+			const simulationResults = simulateTournament({
+				deckCounts,
+				matchupPercentages: calculatedMatchupPercentages,
+				numberOfRounds,
+			});
 
-		const averageResults = calculateAverageResults(
-			simulationResults,
-			deckCounts
-		);
+			const averageResults = calculateAverageResults(
+				simulationResults,
+				deckCounts
+			);
 
-		const formattedResults = formatSimulationResults(averageResults);
-		setResults(formattedResults);
+			const formattedResults = formatSimulationResults(averageResults);
+			setResults(formattedResults);
+		} catch (error) {
+			console.error("Simulation error:", error);
+		}
+		setIsLoading(false);
+		console.log(isLoading);
 	};
 
 	const updateDeckCount = (deck: string, count: number) => {
@@ -549,10 +566,48 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 					}}
 				/>
 			</div>
-			<Button className="sim-tournament-btn" onClick={handleSimulation}>
+
+			<div className="sim-btn-bottom">
+
+			<Button
+				variant="contained"
+				className="sim-tournament-btn"
+				onClick={handleSimulation}
+				>
 				Simulate Tournament
 			</Button>
-			{results && <div>Result: {results}</div>}
+
+			{isActualData ? (
+				<Button
+					className="data-btn"
+					variant="outlined"
+					startIcon={<RestartAltIcon />}
+					onClick={() => setIsActualData(!isActualData)}
+					>
+					Reset Table
+				</Button>
+			) : (
+				<Button
+				className="data-btn"
+				variant="outlined"
+				startIcon={<ImportExportIcon />}
+				onClick={() => setIsActualData(!isActualData)}
+				>
+					Import Data
+				</Button>
+			)}
+			</div>
+			<>
+
+			{/* @TODO: Fix loading. */}
+			{
+				isLoading ? (
+					<div>Loading results...</div> // Show a loading message or a spinner
+					) : results ? (
+						<div>Result: {results}</div> 
+						) : null
+					}
+					</>
 		</>
 	);
 }
