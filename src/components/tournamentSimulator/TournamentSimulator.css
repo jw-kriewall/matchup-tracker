@@ -74,9 +74,8 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  /* margin-top: 4px; */
-  margin: 8px 4px 4px 4px;
   font-size: 16px;
+  /* margin-right: 14px; */
 }
 
 .data-btn {
@@ -86,4 +85,11 @@
 
 .sim-tournament-btn:hover {
   background-color: #146bc9;
+}
+
+.sim-btn-bottom {
+  display: flex;
+  align-items: center;
+  margin: 8px 4px 4px 4px;
+  gap: 12px;
 }

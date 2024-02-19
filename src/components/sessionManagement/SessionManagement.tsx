@@ -60,6 +60,8 @@ const SessionManagement: any = ({ children }: any) => {
         if (currentTime >= logoutTime && infoShown && warningShown && user) {
           //@TODO: Check this...
           dispatch(logoutAction());
+          setInfoShown(false);
+          setWarningShown(false);
           window.location.href = "/";
         }
       };
