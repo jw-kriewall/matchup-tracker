@@ -19,6 +19,8 @@ import { useAppDispatch } from "../../hooks/hooks";
 import { getMatchupRecordsByDeck } from "../../apiCalls/dataTable/getIndividualMatchupRecordsByDeck";
 import ImportExportIcon from "@mui/icons-material/ImportExport";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import ResultsModal from "./ResultsModal";
+import CircularProgress from '@mui/material/CircularProgress';
 
 interface simulatorProps {
 	user: CredentialResponse;
@@ -63,6 +65,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 	const [results, setResults] = useState<string>("");
 	const [isActualData, setIsActualData] = useState(true);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [modalOpen, setModalOpen] = useState(false);
 	const [matchupPercentages, setMatchupPercentages] = useState<{
 		[deck: string]: { [opponentDeck: string]: number };
 	}>({});
@@ -120,29 +123,34 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 	const handleSimulation = () => {
 		setIsLoading(true);
 		console.log(isLoading);
-		try {
-			const calculatedMatchupPercentages =
-				calculateMatchupPercentages(matchupPercentages);
+		setTimeout(async () => {
+			try {
+				const calculatedMatchupPercentages =
+					calculateMatchupPercentages(matchupPercentages);
+				const simulationResults = simulateTournament({
+					deckCounts,
+					matchupPercentages: calculatedMatchupPercentages,
+					numberOfRounds,
+				});
 
-			const simulationResults = simulateTournament({
-				deckCounts,
-				matchupPercentages: calculatedMatchupPercentages,
-				numberOfRounds,
-			});
-
-			const averageResults = calculateAverageResults(
-				simulationResults,
-				deckCounts
-			);
-
-			const formattedResults = formatSimulationResults(averageResults);
-			setResults(formattedResults);
-		} catch (error) {
-			console.error("Simulation error:", error);
-		}
-		setIsLoading(false);
-		console.log(isLoading);
+				const averageResults = calculateAverageResults(
+					simulationResults,
+					deckCounts
+				);
+				const formattedResults = formatSimulationResults(averageResults);
+				setResults(formattedResults);
+				setModalOpen(true);
+			} catch (error) {
+				console.error("Simulation error:", error);
+			} finally {
+				setIsLoading(false);
+			}
+		}, 0);
 	};
+
+	const handleCloseModal = () => {
+		setModalOpen(false);
+	  };
 
 	const updateDeckCount = (deck: string, count: number) => {
 		setDeckCounts({ ...deckCounts, [deck]: count });
@@ -568,46 +576,44 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 			</div>
 
 			<div className="sim-btn-bottom">
-
-			<Button
-				variant="contained"
-				className="sim-tournament-btn"
-				onClick={handleSimulation}
-				>
-				Simulate Tournament
-			</Button>
-
-			{isActualData ? (
 				<Button
-					className="data-btn"
-					variant="outlined"
-					startIcon={<RestartAltIcon />}
-					onClick={() => setIsActualData(!isActualData)}
+					variant="contained"
+					className="sim-tournament-btn"
+					onClick={handleSimulation}
+				>
+					Simulate Tournament
+				</Button>
+
+				{isActualData ? (
+					<Button
+						className="data-btn"
+						variant="outlined"
+						startIcon={<RestartAltIcon />}
+						onClick={() => setIsActualData(!isActualData)}
 					>
-					Reset Table
-				</Button>
-			) : (
-				<Button
-				className="data-btn"
-				variant="outlined"
-				startIcon={<ImportExportIcon />}
-				onClick={() => setIsActualData(!isActualData)}
-				>
-					Import Data
-				</Button>
-			)}
+						Reset Table
+					</Button>
+				) : (
+					<Button
+						className="data-btn"
+						variant="outlined"
+						startIcon={<ImportExportIcon />}
+						onClick={() => setIsActualData(!isActualData)}
+					>
+						Import Data
+					</Button>
+				)}
 			</div>
 			<>
-
-			{/* @TODO: Fix loading. */}
-			{
-				isLoading ? (
-					<div>Loading results...</div> // Show a loading message or a spinner
-					) : results ? (
-						<div>Result: {results}</div> 
-						) : null
-					}
-					</>
+				{isLoading ? (
+					<div className="overlay-style">
+					<CircularProgress color="inherit" />
+				  </div>
+				) : results ? (
+					// <div className="overlay results">Result: {results}</div>
+					<ResultsModal open={modalOpen} handleClose={handleCloseModal} results={results}/>
+				) : null}
+			</>
 		</>
 	);
 }
