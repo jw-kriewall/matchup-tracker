@@ -4,6 +4,7 @@ import "./TournamentSimulator.css";
 import Button from '@mui/material/Button';
 import Divider from "@mui/material/Divider";
 import {
+	LinearProgress,
 	Table,
 	TableBody,
 	TableCell,
@@ -12,7 +13,6 @@ import {
 	TableRow,
 	TextField,
 } from "@mui/material";
-import { TableData } from "../../types/TableTypes";
 import { useSelector } from "react-redux";
 import { selectTableData } from "../../redux/TableDataSlice";
 import { useAppDispatch } from "../../hooks/hooks";
@@ -62,6 +62,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 	const [numberOfRounds, setNumberOfRounds] = useState<number>(0);
 	const [results, setResults] = useState<string>("");
 	const [isActualData, setIsActualData] = useState(true);
+	const [isLoading, setIsLoading] = useState(false);
 	const [matchupPercentages, setMatchupPercentages] = useState<{
 		[deck: string]: { [opponentDeck: string]: number };
 	}>({});
@@ -117,6 +118,8 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 	};
 
 	const handleSimulation = () => {
+		setIsLoading(true);
+		try {
 		const calculatedMatchupPercentages =
 			calculateMatchupPercentages(matchupPercentages);
 
@@ -133,6 +136,10 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 
 		const formattedResults = formatSimulationResults(averageResults);
 		setResults(formattedResults);
+		} catch (error) {
+			console.error("Simulation error:", error);
+	  	}
+	  setIsLoading(false);
 	};
 
 	const updateDeckCount = (deck: string, count: number) => {
@@ -558,7 +565,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 				/>
 			</div>
 
-			<Button className="sim-tournament-btn" onClick={handleSimulation}>
+			<Button variant="contained" className="sim-tournament-btn" onClick={handleSimulation}>
 				Simulate Tournament
 			</Button>
 
