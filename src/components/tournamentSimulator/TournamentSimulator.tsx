@@ -603,14 +603,14 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 						Import Data
 					</Button>
 				)}
+				{ isLoading && (
+					<div className="overlay-style">
+					<CircularProgress color="inherit" size={100}/>
+				  </div>
+				) }
 			</div>
 			<>
-				{isLoading ? (
-					<div className="overlay-style">
-					<CircularProgress color="inherit" />
-				  </div>
-				) : results ? (
-					// <div className="overlay results">Result: {results}</div>
+				{results ? (
 					<ResultsModal open={modalOpen} handleClose={handleCloseModal} results={results}/>
 				) : null}
 			</>
