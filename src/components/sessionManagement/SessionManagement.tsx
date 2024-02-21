@@ -40,6 +40,7 @@ const SessionManagement: any = ({ children }: any) => {
         if (
           currentTime >= fiveMinutesBeforeLogout &&
           currentTime < twoMinutesBeforeLogout &&
+          user &&
           !infoShown
         ) {
           setShowSnackbarInfo(true);
@@ -50,6 +51,7 @@ const SessionManagement: any = ({ children }: any) => {
         if (
           currentTime >= twoMinutesBeforeLogout &&
           currentTime < logoutTime &&
+          user &&
           !warningShown
         ) {
           setShowSnackbarWarning(true);

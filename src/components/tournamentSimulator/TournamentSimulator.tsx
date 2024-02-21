@@ -226,7 +226,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 	function formatSimulationResults(simulationResults: {
 		[deck: string]: DeckPerformance;
 	}): string {
-		// console.log("Simulation results: " + simulationResults)
+		// @TODO: format this as a String[]
 		return Object.entries(simulationResults)
 			.sort((a, b) => b[1].wins - a[1].wins)
 			.map(
