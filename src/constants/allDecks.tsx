@@ -4,14 +4,14 @@ import { DeckDisplay } from "../types/MatchupModels";
 
 // @TODO: This data should be stored in Backend. Need CRUD endpoints ultimately.
 export const allDecksConstant: DeckDisplay[] = [
-  {
-    value: "FS Mew",
-    label: "FS Mew",
-    sprites: [
-      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/151.png",
-      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/648.png",
-    ],
-  },
+  // {
+  //   value: "FS Mew",
+  //   label: "FS Mew",
+  //   sprites: [
+  //     "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/151.png",
+  //     "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/648.png",
+  //   ],
+  // },
   {
     value: "Charizard / Pidgeot",
     label: "Charizard / Pidgeot",

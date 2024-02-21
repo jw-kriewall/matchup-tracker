@@ -93,3 +93,16 @@
   margin: 8px 4px 4px 4px;
   gap: 12px;
 }
+
+.overlay-style {
+  position: fixed; /* Fixed relative to the viewport */
+  top: 0;
+  left: 0;
+  width: 100%; /* Full width of the viewport */
+  height: 100%; /* Full height of the viewport */
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  background-color: rgba(0, 0, 0, 0.2); /* Semi-transparent black */
+  z-index: 2000; /* High z-index to ensure it covers other content */
+}
