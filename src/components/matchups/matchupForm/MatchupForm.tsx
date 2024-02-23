@@ -69,6 +69,45 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
   const handleSetStartingPlayer = (playerName: string) => {
     setStartingPlayer(playerName);
   };
+  const parseGameLog = (log: string) => {
+    const lines = log.split('\n');
+    let playerOneName = '', playerTwoName = '', startingPlayer = '', winningDeck = '', playerOneDeck = '', playerTwoDeck = '';
+    let turnOneCount = 0;
+  
+    lines.forEach(line => {
+      if (line.includes('Turn # 1')) {
+        turnOneCount++;
+        const parts = line.split(' - ');
+        const usernameWithTurn = parts[1];
+        const username = usernameWithTurn.replace("'s Turn", '');
+        
+        if (turnOneCount === 1) {
+          playerOneName = username;
+          startingPlayer = username;
+        } else if (turnOneCount === 2) {
+          playerTwoName = username;
+        }
+      }
+      if (line.includes('wins.')) {
+        const winnerName = line.split(' ')[0];
+        winningDeck = winnerName === playerOneName ? "Player One's Deck" : "Player Two's Deck"; // Placeholder for deck names
+      }
+    });
+    return { playerOneName, playerTwoName, startingPlayer, winningDeck };
+  };
+  const handleGameLogChange = (e: any) => {
+    const gameLog = e.target.value;
+    const { playerOneName, playerTwoName, startingPlayer, winningDeck } = parseGameLog(gameLog);
+  
+    setNotes(gameLog)
+    setPlayerOneName(playerOneName);
+    setPlayerTwoName(playerTwoName);
+    setStartingPlayer(startingPlayer);
+    setWinningDeck(winningDeck);
+  
+    // You might also determine playerOneDeckName, playerTwoDeckName here
+  };
+  
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
@@ -245,7 +284,8 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
           rows={3}
           value={notes}
           fullWidth={true}
-          onChange={(e) => setNotes(e.target.value)}
+          // onChange={(e) => setNotes(e.target.value)}
+          onChange={handleGameLogChange}
         />
       </div>
       <Button variant="outlined" onClick={handleSubmit}>
