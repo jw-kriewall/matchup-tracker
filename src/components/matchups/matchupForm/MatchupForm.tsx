@@ -20,297 +20,400 @@ import SnackbarWarning from "../../snackbarNotifications/SnackbarWarning";
 import { unwrapResult } from "@reduxjs/toolkit";
 
 interface matchupFormProps {
-  userDeckDisplays: DeckDisplay[];
+	userDeckDisplays: DeckDisplay[];
 }
 
 export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
-  const [playerOneName, setPlayerOneName] = React.useState<string>("");
-  const [playerTwoName, setPlayerTwoName] = React.useState<string>("");
-  const [playerOneDeckName, setPlayerOneDeckName] = React.useState<string>("");
-  const [playerTwoDeckName, setPlayerTwoDeckName] = React.useState<string>("");
-  const [playerOneDecklist, setPlayerOneDecklist] =
-    React.useState<string>("blank");
-  const [playerTwoDecklist, setPlayerTwoDecklist] =
-    React.useState<string>("blank");
-  const [startingPlayer, setStartingPlayer] = React.useState<string>("");
-  const [winningDeck, setWinningDeck] = React.useState<string>("");
-  const [format, setFormat] = React.useState<string>("");
-  const [notes, setNotes] = React.useState<string>("");
-  const [snackbarSuccessMessage, setSnackbarSuccessMessage] =
-    React.useState<string>("");
-  const [snackbarWarningMessage, setSnackbarWarningMessage] =
-    React.useState<string>("");
-  const [snackbarKey, setSnackbarKey] = React.useState<number>(0);
+	const [playerOneName, setPlayerOneName] = React.useState<string>("");
+	const [playerTwoName, setPlayerTwoName] = React.useState<string>("");
+	const [playerOneDeckName, setPlayerOneDeckName] = React.useState<string>("");
+	const [playerTwoDeckName, setPlayerTwoDeckName] = React.useState<string>("");
+	const [playerOneDecklist, setPlayerOneDecklist] =
+		React.useState<string>("blank");
+	const [playerTwoDecklist, setPlayerTwoDecklist] =
+		React.useState<string>("blank");
+	const [startingPlayer, setStartingPlayer] = React.useState<string>("");
+	const [winningDeck, setWinningDeck] = React.useState<string>("");
+	const [format, setFormat] = React.useState<string>("");
+	const [notes, setNotes] = React.useState<string>("");
+	const [snackbarSuccessMessage, setSnackbarSuccessMessage] =
+		React.useState<string>("");
+	const [snackbarWarningMessage, setSnackbarWarningMessage] =
+		React.useState<string>("");
+	const [snackbarKey, setSnackbarKey] = React.useState<number>(0);
 
-  const [cookies] = useCookies(["userRole"]);
-  const [userCookies] = useCookies(["user"]);
+	const [cookies] = useCookies(["userRole"]);
+	const [userCookies] = useCookies(["user"]);
 
-  const userRole = cookies["userRole"]?.payload;
-  const user: CredentialResponse = userCookies["user"]?.payload;
+	const userRole = cookies["userRole"]?.payload;
+	const user: CredentialResponse = userCookies["user"]?.payload;
 
-  const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<
-    string[]
-  >([]);
+	const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<
+		string[]
+	>([]);
 
-  const dispatch = useAppDispatch();
+	const dispatch = useAppDispatch();
 
-  const handlePlayerOneDeckChange = (e: any) => {
-    e.preventDefault();
-    let deckName = e.target.value;
-    setPlayerOneDeckName(deckName);
-    determineWinningDeckOptions(deckName, playerTwoDeckName);
-  };
-  const handlePlayerTwoDeckChange = (e: any) => {
-    e.preventDefault();
-    let deckName = e.target.value;
-    setPlayerTwoDeckName(deckName);
-    determineWinningDeckOptions(deckName, playerOneDeckName);
-  };
-  const handleSetStartingPlayer = (playerName: string) => {
-    setStartingPlayer(playerName);
-  };
-  const parseGameLog = (log: string) => {
-    const lines = log.split('\n');
-    let playerOneName = '', playerTwoName = '', startingPlayer = '', winningDeck = '', playerOneDeck = '', playerTwoDeck = '';
-    let turnOneCount = 0;
+	const handlePlayerOneDeckChange = (e: any) => {
+		e.preventDefault();
+		let deckName = e.target.value;
+		setPlayerOneDeckName(deckName);
+		determineWinningDeckOptions(deckName, playerTwoDeckName);
+	};
+	const handlePlayerTwoDeckChange = (e: any) => {
+		e.preventDefault();
+		let deckName = e.target.value;
+		setPlayerTwoDeckName(deckName);
+		determineWinningDeckOptions(deckName, playerOneDeckName);
+	};
+	const handleSetStartingPlayer = (playerName: string) => {
+		setStartingPlayer(playerName);
+	};
+	const deckSignatures = {
+		"Charizard": ["Charizard"],
+		"Lugia": ["Lugia", "Archeops"],
+		// "DTE Mew": ["Moltres"],
+		"Snorlax Stall": ["Penny", "Snorlax"],
+    "Roaring Moon": ["Galarian Moltres", "Dark Patch"]
+		// Add more decks and their signatures here
+	};
+
+  // const deduceDeck = (cards: Set<string>) => {
+  //   let bestMatch = { deckName: "Unknown", matchCount: 0 };
+  //   for (const [deckName, signatureCards] of Object.entries(deckSignatures)) {
+  //     const matchCount = signatureCards.filter(card => cards.has(card)).length;
+  //     if (matchCount > bestMatch.matchCount) {
+  //       bestMatch = { deckName, matchCount };
+  //     }
+  //   }
+  //   return bestMatch.deckName;
+  // };
+
+	const deduceDeck = (cards: Set<string>) => {
+		for (const [deckName, signatureCards] of Object.entries(deckSignatures)) {
+			if (signatureCards.every((card) => cards.has(card))) {
+				console.log(deckName);
+				return deckName; // Return the first matching deck
+			}
+		}
+		return "Unknown"; // Default if no match is found
+	};
   
-    lines.forEach(line => {
-      if (line.includes('Turn # 1')) {
-        turnOneCount++;
-        const parts = line.split(' - ');
-        const usernameWithTurn = parts[1];
-        const username = usernameWithTurn.replace("'s Turn", '');
-        
-        if (turnOneCount === 1) {
+  const parseGameLog = (log: string) => {
+    const lines = log.split("\n");
+    let playerOneName = "",
+        playerTwoName = "",
+        startingPlayer = "",
+        winningDeck = "Unknown";
+    let playerOneDeck = "Unknown",
+        playerTwoDeck = "Unknown";
+    let currentPlayer = "";
+  
+    const allCardNames = new Set<string>();
+    Object.values(deckSignatures).forEach(cards => {
+      cards.forEach(card => allCardNames.add(card));
+    });
+  
+    const playerOneCards = new Set<string>();
+    const playerTwoCards = new Set<string>();
+  
+    lines.forEach((line) => {
+      if (playerOneName && line.includes(`- ${playerOneName}`)) return;
+      if (playerTwoName && line.includes(`- ${playerTwoName}`)) return;
+      // Determine and assign starting player
+      if (line.includes("Turn # 1")) {
+        const parts = line.split(" - ");
+        const username = parts[1].replace("'s Turn", "");
+        if (!playerOneName) {
           playerOneName = username;
           startingPlayer = username;
-        } else if (turnOneCount === 2) {
+          // currentPlayer = "Player One";
+        } else if (!playerTwoName) {
           playerTwoName = username;
+          // currentPlayer = "Player Two";
         }
+
       }
-      if (line.includes('wins.')) {
-        const winnerName = line.split(' ')[0];
-        winningDeck = winnerName === playerOneName ? "Player One's Deck" : "Player Two's Deck"; // Placeholder for deck names
+
+      // Determine currentPlayer based on the turn to correctly assign played cards
+      if (line.includes("'s Turn")) {
+          currentPlayer = line.includes(playerOneName) ? "Player One" : "Player Two";
       }
+
+      const processLine = (line: string, currentPlayer: string) => {
+        allCardNames.forEach(cardName => {
+          if (line.includes(cardName)) {
+            if (currentPlayer === "Player One") {
+              playerOneCards.add(cardName);
+              console.log("Player One Cards:", Array.from(playerOneCards));
+            } else if (currentPlayer === "Player Two") {
+              playerTwoCards.add(cardName);
+              console.log("Player Two Cards:", Array.from(playerTwoCards));
+
+            }
+          }
+        });
+      };
+      console.log(`Processing line: ${line}, as ${currentPlayer}`);
+
+      processLine(line, currentPlayer);
+  
     });
-    return { playerOneName, playerTwoName, startingPlayer, winningDeck };
-  };
-  const handleGameLogChange = (e: any) => {
-    const gameLog = e.target.value;
-    const { playerOneName, playerTwoName, startingPlayer, winningDeck } = parseGameLog(gameLog);
   
-    setNotes(gameLog)
-    setPlayerOneName(playerOneName);
-    setPlayerTwoName(playerTwoName);
-    setStartingPlayer(startingPlayer);
-    setWinningDeck(winningDeck);
+    // Deduce decks after processing all cards
+    playerOneDeck = deduceDeck(playerOneCards);
+    playerTwoDeck = deduceDeck(playerTwoCards);
   
-    // You might also determine playerOneDeckName, playerTwoDeckName here
-  };
-  
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-
-    let username = "";
-    let email = "";
-
-    let token = user.credential;
-
-    if (token) {
-      try {
-        const decodedToken: DecodedJwtToken = jwt_decode(token);
-        email = decodedToken.email;
-        username = decodedToken.name;
-      } catch (error) {
-        console.error("Error decoding JWT: ", error);
-      }
+    // Adjust winningDeck based on deduced decks
+    const winningLine = lines.find(line => line.includes("wins."));
+    if (winningLine) {
+        const winnerName = winningLine.split(" ")[0];
+        winningDeck = winnerName === playerOneName ? playerOneDeck : playerTwoDeck;
     }
 
-    const matchup: Matchup = {
-      // matchup schema goes here...
-      id: undefined,
+    
+
+    return {
       playerOneName,
-      playerOneDeck: {
-        name: playerOneDeckName,
-        cards: playerOneDecklist,
-      },
       playerTwoName,
-      playerTwoDeck: {
-        name: playerTwoDeckName,
-        cards: playerTwoDecklist,
-      },
       startingPlayer,
       winningDeck,
-      format,
-      createdOn: new Date(),
-      createdBy: {
-        username: username,
-        role: userRole,
-        email: email,
-      },
-      notes,
+      playerOneDeck,
+      playerTwoDeck,
     };
-    console.log(matchup);
-
-    try {
-      const actionResult = await dispatch(addNewMatchup({ user, matchup }));
-      const result = unwrapResult(actionResult);
-      setNotes("");
-      setSnackbarSuccessMessage("Matchup successfully added!");
-      setSnackbarKey((prevKey) => prevKey + 1);
-    } catch (err) {
-      console.error(err);
-      setSnackbarWarningMessage("Failed to add matchup. Please try again.");
-      setSnackbarKey((prevKey) => prevKey + 1);
-    }
   };
 
-  return (
-    <Box
-      component="form"
-      sx={{
-        "& .MuiTextField-root": { m: 1, width: "30ch" },
-      }}
-      noValidate
-      autoComplete="off"
-    >
-      <div>
-        <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
-          <Box
-            sx={{
-              position: "relative",
-              display: "inline-flex",
-              width: "auto",
-              alignItems: "center",
-            }}
-          >
-            <TextField
-              id="outlined-multiline-flexible"
-              label="Player One"
-              multiline
-              value={playerOneName}
-              onChange={(e) => setPlayerOneName(e.target.value)}
-              sx={{ width: "25ch" }}
-            />
-            <IconButton
-              onClick={() => handleSetStartingPlayer(playerOneName)}
-              aria-label="set-starting-player-button"
-              sx={{ position: "absolute", right: -48 }}
-              color={
-                startingPlayer && startingPlayer === playerOneName
-                  ? "primary"
-                  : "default"
-              }
-              size="large"
-            >
-              <LooksOneIcon />
-            </IconButton>
-          </Box>
-        </Box>
+	const handleGameLogChange = (e: any) => {
+		const gameLog = e.target.value;
+		const { playerOneName, playerTwoName, startingPlayer, winningDeck, playerOneDeck, playerTwoDeck } =
+			parseGameLog(gameLog);
 
-        <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
-          <Box
-            sx={{
-              position: "relative",
-              display: "inline-flex",
-              width: "auto",
-              alignItems: "center",
-            }}
-          >
-            <TextField
-              id="outlined-multiline-flexible"
-              label="Player Two"
-              multiline
-              value={playerTwoName}
-              onChange={(e) => setPlayerTwoName(e.target.value)}
-              sx={{ width: "25ch" }}
-            />
-            <IconButton
-              onClick={() => handleSetStartingPlayer(playerTwoName)}
-              aria-label="set-starting-player-button"
-              sx={{ position: "absolute", right: -48 }}
-              color={
-                startingPlayer && startingPlayer === playerTwoName
-                  ? "primary"
-                  : "default"
-              }
-              size="large"
-            >
-              <LooksOneIcon />
-            </IconButton>
-          </Box>
-        </Box>
-      </div>
+		setNotes(gameLog);
+		setPlayerOneName(playerOneName);
+		setPlayerTwoName(playerTwoName);
+		setStartingPlayer(startingPlayer);
+    setPlayerOneDeckName(playerOneDeck);
+    setPlayerTwoDeckName(playerTwoDeck);
+    updateWinningDeckOptions();
+		setWinningDeck(winningDeck);
 
-      <div>
-        {/* @TODO: Fix SnackbarNotification to show after every successful submit */}
-        {/* @TODO: Pass in the allDecksConstant as a combo of constants and user specific decks */}
-        <DeckInputDropdown
-          id="outlined-deck-one"
-          label="Player One Deck"
-          decks={allDecksConstant.concat(userDeckDisplays)}
-          onChange={(e) => handlePlayerOneDeckChange(e)}
-        />
-        <DeckInputDropdown
-          id="outlined-deck-two"
-          label="Player Two Deck"
-          decks={allDecksConstant.concat(userDeckDisplays)}
-          onChange={(e) => handlePlayerTwoDeckChange(e)}
-        />
-      </div>
+    
+	};
 
-      <div>
-        <TextField
-          id="winning-deck"
-          select
-          label="Winning Deck"
-          defaultValue=""
-          onChange={(e) => setWinningDeck(e.target.value)}
-        >
-          {winningDeckOptionsArray.map((option) => (
-            // @TODO: sprites here? Should I pass deck back?
-            <MenuItem key={option} value={option}>
-              {option}
-            </MenuItem>
-          ))}
-        </TextField>
-      </div>
-
-      <div className="notes-form">
-        <TextField
-          id="outlined-multiline-static"
-          label="Notes"
-          multiline
-          rows={3}
-          value={notes}
-          fullWidth={true}
-          // onChange={(e) => setNotes(e.target.value)}
-          onChange={handleGameLogChange}
-        />
-      </div>
-      <Button variant="outlined" onClick={handleSubmit}>
-        Submit
-      </Button>
-      {snackbarSuccessMessage && (
-        <SnackbarSuccess key={snackbarKey} message={snackbarSuccessMessage} />
-      )}
-      {snackbarWarningMessage && (
-        <SnackbarWarning key={snackbarKey} message={snackbarWarningMessage} />
-      )}
-      <div className="accordion-matchup-component">
-        <AccordionMatchup />
-      </div>
-    </Box>
-  );
-
-  function determineWinningDeckOptions(
-    deckName: string,
-    playerDeckName: string
-  ) {
-    if (deckName === playerDeckName) {
-      setWinningDeckOptionsArray(["Tie"]);
-    } else {
-      setWinningDeckOptionsArray([playerDeckName, deckName, "Tie"]);
+  const updateWinningDeckOptions = () => {
+    const newOptions = [playerOneDeckName, playerTwoDeckName];
+    if (playerOneDeckName !== playerTwoDeckName) { // Add "Tie" option if decks are different
+        newOptions.push("Tie");
     }
-  }
+    setWinningDeckOptionsArray(newOptions);
+};
+
+	const handleSubmit = async (e: any) => {
+		e.preventDefault();
+
+		let username = "";
+		let email = "";
+
+		let token = user.credential;
+
+		if (token) {
+			try {
+				const decodedToken: DecodedJwtToken = jwt_decode(token);
+				email = decodedToken.email;
+				username = decodedToken.name;
+			} catch (error) {
+				console.error("Error decoding JWT: ", error);
+			}
+		}
+
+		const matchup: Matchup = {
+			// matchup schema goes here...
+			id: undefined,
+			playerOneName,
+			playerOneDeck: {
+				name: playerOneDeckName,
+				cards: playerOneDecklist,
+			},
+			playerTwoName,
+			playerTwoDeck: {
+				name: playerTwoDeckName,
+				cards: playerTwoDecklist,
+			},
+			startingPlayer,
+			winningDeck,
+			format,
+			createdOn: new Date(),
+			createdBy: {
+				username: username,
+				role: userRole,
+				email: email,
+			},
+			notes,
+		};
+		console.log(matchup);
+
+		try {
+			const actionResult = await dispatch(addNewMatchup({ user, matchup }));
+			const result = unwrapResult(actionResult);
+			setNotes("");
+			setSnackbarSuccessMessage("Matchup successfully added!");
+			setSnackbarKey((prevKey) => prevKey + 1);
+		} catch (err) {
+			console.error(err);
+			setSnackbarWarningMessage("Failed to add matchup. Please try again.");
+			setSnackbarKey((prevKey) => prevKey + 1);
+		}
+	};
+
+	return (
+		<Box
+			component="form"
+			sx={{
+				"& .MuiTextField-root": { m: 1, width: "30ch" },
+			}}
+			noValidate
+			autoComplete="off"
+		>
+			<div>
+				<Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
+					<Box
+						sx={{
+							position: "relative",
+							display: "inline-flex",
+							width: "auto",
+							alignItems: "center",
+						}}
+					>
+						<TextField
+							id="outlined-multiline-flexible"
+							label="Player One"
+							multiline
+							value={playerOneName}
+							onChange={(e) => setPlayerOneName(e.target.value)}
+							sx={{ width: "25ch" }}
+						/>
+						<IconButton
+							onClick={() => handleSetStartingPlayer(playerOneName)}
+							aria-label="set-starting-player-button"
+							sx={{ position: "absolute", right: -48 }}
+							color={
+								startingPlayer && startingPlayer === playerOneName
+									? "primary"
+									: "default"
+							}
+							size="large"
+						>
+							<LooksOneIcon />
+						</IconButton>
+					</Box>
+				</Box>
+
+				<Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
+					<Box
+						sx={{
+							position: "relative",
+							display: "inline-flex",
+							width: "auto",
+							alignItems: "center",
+						}}
+					>
+						<TextField
+							id="outlined-multiline-flexible"
+							label="Player Two"
+							multiline
+							value={playerTwoName}
+							onChange={(e) => setPlayerTwoName(e.target.value)}
+							sx={{ width: "25ch" }}
+						/>
+						<IconButton
+							onClick={() => handleSetStartingPlayer(playerTwoName)}
+							aria-label="set-starting-player-button"
+							sx={{ position: "absolute", right: -48 }}
+							color={
+								startingPlayer && startingPlayer === playerTwoName
+									? "primary"
+									: "default"
+							}
+							size="large"
+						>
+							<LooksOneIcon />
+						</IconButton>
+					</Box>
+				</Box>
+			</div>
+
+			<div>
+				{/* @TODO: Fix SnackbarNotification to show after every successful submit */}
+				{/* @TODO: Pass in the allDecksConstant as a combo of constants and user specific decks */}
+				<DeckInputDropdown
+					id="outlined-deck-one"
+					label="Player One Deck"
+					decks={allDecksConstant.concat(userDeckDisplays)}
+          value={playerOneDeckName}
+					onChange={(e) => handlePlayerOneDeckChange(e)}
+				/>
+				<DeckInputDropdown
+					id="outlined-deck-two"
+					label="Player Two Deck"
+					decks={allDecksConstant.concat(userDeckDisplays)}
+          value={playerTwoDeckName}
+					onChange={(e) => handlePlayerTwoDeckChange(e)}
+				/>
+			</div>
+
+			<div>
+				<TextField
+					id="winning-deck"
+					select
+					label="Winning Deck"
+          value={winningDeck}
+					defaultValue=""
+					onChange={(e) => setWinningDeck(e.target.value)}
+				>
+					{winningDeckOptionsArray.map((option) => (
+						// @TODO: sprites here? Should I pass deck back?
+						<MenuItem key={option} value={option}>
+							{option}
+						</MenuItem>
+					))}
+				</TextField>
+			</div>
+
+			<div className="notes-form">
+				<TextField
+					id="outlined-multiline-static"
+					label="Notes"
+					multiline
+					rows={3}
+					value={notes}
+					fullWidth={true}
+					// onChange={(e) => setNotes(e.target.value)}
+					onChange={handleGameLogChange}
+				/>
+			</div>
+			<Button variant="outlined" onClick={handleSubmit}>
+				Submit
+			</Button>
+			{snackbarSuccessMessage && (
+				<SnackbarSuccess key={snackbarKey} message={snackbarSuccessMessage} />
+			)}
+			{snackbarWarningMessage && (
+				<SnackbarWarning key={snackbarKey} message={snackbarWarningMessage} />
+			)}
+			<div className="accordion-matchup-component">
+				<AccordionMatchup />
+			</div>
+		</Box>
+	);
+
+	function determineWinningDeckOptions(
+		deckName: string,
+		playerDeckName: string
+	) {
+		if (deckName === playerDeckName) {
+			setWinningDeckOptionsArray([deckName, "Tie"]);
+		} else {
+			setWinningDeckOptionsArray([playerDeckName, deckName, "Tie"]);
+		}
+	}
 }

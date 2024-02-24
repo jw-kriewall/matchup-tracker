@@ -6,6 +6,7 @@ interface DeckInputDropdownProps {
   id: string;
   label: string;
   decks: DeckDisplay[];
+  value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -13,6 +14,7 @@ const DeckInputDropdown = ({
   id,
   label,
   decks,
+  value,
   onChange,
 }: DeckInputDropdownProps) => {
   return (
@@ -20,6 +22,7 @@ const DeckInputDropdown = ({
       id={id}
       select
       label={label}
+      value={value}
       defaultValue=""
       SelectProps={{
         MenuProps: {
