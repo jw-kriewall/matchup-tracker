@@ -117,4 +117,11 @@ export const allDecksConstant: DeckDisplay[] = [
       "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/left-poke-ball.png",
     ],
   },
+  {
+    value: "Unknown",
+    label: "Unknown",
+    sprites: [
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201.png",
+    ],
+  },
 ];
