@@ -120,7 +120,7 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
       if (line.includes("   ")) return; // Skip lines with card effects
       
 
-      if (line.includes("chose tails for the opening coin flip") || line.includes("won the coin toss")) {
+      if (line.includes("for the opening coin flip") || line.includes("won the coin toss")) {
           const parts = line.split(" ");
           const playerName = parts[0];
           if (!playerOneName) {
@@ -134,11 +134,15 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
         const turnInfo = line.match(/Turn # \d+ - (.+)'s Turn/);
         
         if (turnInfo) {
-            const playerName = turnInfo[1]; // Directly capture the player's name
-            // Set currentPlayer based on playerName
-            currentPlayer = playerName;
-            console.log("Who is current player? " + currentPlayer);
-        }
+          const playerName = turnInfo[1]; // Directly capture the player's name
+          // If we've not yet identified playerTwoName, do so here based on whose turn it is
+          if (!playerTwoName && playerName !== playerOneName) {
+              playerTwoName = playerName;
+          }
+          // Set currentPlayer based on playerName
+          currentPlayer = playerName;
+          console.log("Who is current player? " + currentPlayer);
+      }
     }
 
       const processLine = (line: string, currentPlayer: string) => {
