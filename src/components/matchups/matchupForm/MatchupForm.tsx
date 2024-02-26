@@ -140,6 +140,9 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
               playerTwoName = playerName;
           }
           // Set currentPlayer based on playerName
+          if (!startingPlayer) {
+            startingPlayer = currentPlayer;
+          }
           currentPlayer = playerName;
           console.log("Who is current player? " + currentPlayer);
       }
