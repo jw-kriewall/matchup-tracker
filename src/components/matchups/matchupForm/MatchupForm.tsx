@@ -70,34 +70,35 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 		setStartingPlayer(playerName);
 	};
 	const deckSignatures = {
-		"Charizard / Pidgeot": ["Charizard"],
+		"Charizard / Pidgeot": ["Charmander", "Charizard", "Pidgeot", "Pidgey"],
 		"Lugia": ["Lugia", "Archeops", "Mincinno"],
 		"Snorlax Stall": ["Penny", "Snorlax"],
-    "Roaring Moon": ["Galarian Moltres", "Dark Patch"]
+    "Roaring Moon": ["Galarian Moltres", "Dark Patch", "Roaring Moon"]
 		// Add more decks and their signatures here
-	};
+	}; 
 
-  // const deduceDeck = (cards: Set<string>) => {
-  //   let bestMatch = { deckName: "Unknown", matchCount: 0 };
-  //   for (const [deckName, signatureCards] of Object.entries(deckSignatures)) {
-  //     const matchCount = signatureCards.filter(card => cards.has(card)).length;
-  //     if (matchCount > bestMatch.matchCount) {
-  //       bestMatch = { deckName, matchCount };
-  //     }
-  //   }
-  //   return bestMatch.deckName;
-  // };
+  const deduceDeck = (cards: Set<string>) => {
+    let bestMatches: string[] = [];
+    let highestMatchCount = 0;
 
-	const deduceDeck = (cards: Set<string>) => {
-		for (const [deckName, signatureCards] of Object.entries(deckSignatures)) {
-			if (signatureCards.every((card) => cards.has(card))) {
-				console.log(deckName);
-				return deckName; // Return the first matching deck
-			}
-		}
-		return "Unknown"; // Default if no match is found
-	};
-  
+    for (const [deckName, signatureCards] of Object.entries(deckSignatures)) {
+        const matchCount = signatureCards.reduce((count, card) => cards.has(card) ? count + 1 : count, 0);
+
+        if (matchCount > highestMatchCount) {
+            highestMatchCount = matchCount;
+            bestMatches = [deckName]; // Reset with current best match
+        } else if (matchCount === highestMatchCount && matchCount !== 0) {
+            bestMatches.push(deckName); // Add to ties if match count is equal to the highest
+        }
+    }
+
+    // Handle the case where there may be multiple best matches
+    if (bestMatches.length >= 1) {
+      return bestMatches[0]; // Return the single best match
+    }
+    return "Unknown"; // Default if no match is found
+};
+
   const parseGameLog = (log: string) => {
     const lines = log.split("\n");
     let playerOneName = "",
@@ -163,11 +164,8 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
           }
         });
       };
-      
       console.log(`Processing line: ${line}, as ${currentPlayer}`);
-
       processLine(line, currentPlayer);
-  
     });
   
     // Deduce decks after processing all cards
@@ -180,8 +178,6 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
         const winnerName = winningLine.split(" ")[0];
         winningDeck = winnerName === playerOneName ? playerOneDeck : playerTwoDeck;
     }
-
-    
 
     return {
       playerOneName,
@@ -204,13 +200,11 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 		setStartingPlayer(startingPlayer);
     setPlayerOneDeckName(playerOneDeck);
     setPlayerTwoDeckName(playerTwoDeck);
-    updateWinningDeckOptions();
+    updateWinningDeckOptions(playerOneDeck, playerTwoDeck);
 		setWinningDeck(winningDeck);
-
-    
 	};
 
-  const updateWinningDeckOptions = () => {
+  const updateWinningDeckOptions = (playerOneDeckName: string, playerTwoDeckName: string) => {
     const newOptions = [playerOneDeckName, playerTwoDeckName];
     if (playerOneDeckName !== playerTwoDeckName) { // Add "Tie" option if decks are different
         newOptions.push("Tie");
