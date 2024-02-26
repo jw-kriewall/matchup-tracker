@@ -17,7 +17,7 @@ import { useAppDispatch } from "../../../hooks/hooks";
 import { useCookies } from "react-cookie";
 import DeckInputDropdown from "../../shared/deckInputDropdown";
 import SnackbarWarning from "../../snackbarNotifications/SnackbarWarning";
-import { unwrapResult } from "@reduxjs/toolkit";
+import { current, unwrapResult } from "@reduxjs/toolkit";
 
 interface matchupFormProps {
 	userDeckDisplays: DeckDisplay[];
@@ -70,9 +70,8 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 		setStartingPlayer(playerName);
 	};
 	const deckSignatures = {
-		"Charizard": ["Charizard"],
-		"Lugia": ["Lugia", "Archeops"],
-		// "DTE Mew": ["Moltres"],
+		"Charizard / Pidgeot": ["Charizard"],
+		"Lugia": ["Lugia", "Archeops", "Mincinno"],
 		"Snorlax Stall": ["Penny", "Snorlax"],
     "Roaring Moon": ["Galarian Moltres", "Dark Patch"]
 		// Add more decks and their signatures here
@@ -107,6 +106,8 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
         winningDeck = "Unknown";
     let playerOneDeck = "Unknown",
         playerTwoDeck = "Unknown";
+    const playerOneCards = new Set<string>();
+    const playerTwoCards = new Set<string>();
     let currentPlayer = "";
   
     const allCardNames = new Set<string>();
@@ -114,39 +115,40 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
       cards.forEach(card => allCardNames.add(card));
     });
   
-    const playerOneCards = new Set<string>();
-    const playerTwoCards = new Set<string>();
-  
     lines.forEach((line) => {
-      if (playerOneName && line.includes(`- ${playerOneName}`)) return;
-      if (playerTwoName && line.includes(`- ${playerTwoName}`)) return;
-      // Determine and assign starting player
-      if (line.includes("Turn # 1")) {
-        const parts = line.split(" - ");
-        const username = parts[1].replace("'s Turn", "");
-        if (!playerOneName) {
-          playerOneName = username;
-          startingPlayer = username;
-          // currentPlayer = "Player One";
-        } else if (!playerTwoName) {
-          playerTwoName = username;
-          // currentPlayer = "Player Two";
+      // if (line.includes("- ")) return; // Skip lines with card effects
+      if (line.includes("   ")) return; // Skip lines with card effects
+      
+
+      if (line.includes("chose tails for the opening coin flip") || line.includes("won the coin toss")) {
+          const parts = line.split(" ");
+          const playerName = parts[0];
+          if (!playerOneName) {
+              playerOneName = playerName;
+          } else if (!playerTwoName && playerName !== playerOneName) {
+              playerTwoName = playerName;
+          }
+      }
+      
+      else if (line.includes("Turn #")) {
+        const turnInfo = line.match(/Turn # \d+ - (.+)'s Turn/);
+        
+        if (turnInfo) {
+            const playerName = turnInfo[1]; // Directly capture the player's name
+            // Set currentPlayer based on playerName
+            currentPlayer = playerName;
+            console.log("Who is current player? " + currentPlayer);
         }
-
-      }
-
-      // Determine currentPlayer based on the turn to correctly assign played cards
-      if (line.includes("'s Turn")) {
-          currentPlayer = line.includes(playerOneName) ? "Player One" : "Player Two";
-      }
+    }
 
       const processLine = (line: string, currentPlayer: string) => {
         allCardNames.forEach(cardName => {
           if (line.includes(cardName)) {
-            if (currentPlayer === "Player One") {
+            // If current player is equal to playerOne, skip lines that include playerTwo. A stronger algo could be created.
+            if (currentPlayer === playerOneName && !line.includes(playerTwoName)) {
               playerOneCards.add(cardName);
               console.log("Player One Cards:", Array.from(playerOneCards));
-            } else if (currentPlayer === "Player Two") {
+            } else if (currentPlayer === playerTwoName && !line.includes(playerOneName)) {
               playerTwoCards.add(cardName);
               console.log("Player Two Cards:", Array.from(playerTwoCards));
 
@@ -154,6 +156,7 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
           }
         });
       };
+      
       console.log(`Processing line: ${line}, as ${currentPlayer}`);
 
       processLine(line, currentPlayer);
