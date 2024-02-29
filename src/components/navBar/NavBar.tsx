@@ -86,7 +86,7 @@ export default function NavBar() {
           </Drawer>
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            MatchupTracker v1.0 BETA
+            CounterPlay.gg v1.0 BETA
           </Typography>
 
           <div>{!user ? <LoginButton /> : <LogoutButton />}</div>
