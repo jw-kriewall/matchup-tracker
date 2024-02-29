@@ -18,7 +18,7 @@ function Copyright(props: any) {
 		>
 			{"Copyright © "}
 			<Link color="inherit" href="https://mui.com/">
-				Matchup Tracker
+				Counterplay.gg
 			</Link>{" "}
 			{new Date().getFullYear()}
 			{"."}

@@ -1,4 +1,4 @@
-# Pokemon TCG Matchup Tracker
+# Pokemon TCG Matchup Tracker - CounterPlay.gg
 
 This project is intended to help trainers keep track of their matchups and display their data to gain valuable insight into how their decks perform against each other.
 
@@ -46,8 +46,5 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 To learn React, check out the [React documentation](https://reactjs.org/).
 
 
-Start application: npm start
+Start application: npm run start-local
 
-
----- KNOWN BUGS ----
-Winning Deck in MatchupForm doesn't update if deck1 or 2 are changed.

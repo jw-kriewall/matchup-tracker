@@ -83,10 +83,11 @@ export const allDecksConstant: DeckDisplay[] = [
     ],
   },
   {
-    value: "Arceus",
-    label: "Arceus",
+    value: "Arceus / Giratina",
+    label: "Arceus / Giratina",
     sprites: [
       "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/493.png",
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/487.png"
     ],
   },
   {
@@ -101,6 +102,14 @@ export const allDecksConstant: DeckDisplay[] = [
     label: "Turbo Miraidon",
     sprites: [
       "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1008.png",
+    ],
+  },
+  {
+    value: "Lugia / Archeops",
+    label: "Lugia / Archeops",
+    sprites: [
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/249.png",
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/567.png"
     ],
   },
   {
