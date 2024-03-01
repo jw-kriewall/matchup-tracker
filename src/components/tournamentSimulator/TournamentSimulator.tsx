@@ -4,7 +4,6 @@ import "./TournamentSimulator.css";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import {
-	LinearProgress,
 	Table,
 	TableBody,
 	TableCell,
@@ -58,10 +57,15 @@ interface TournamentSimulatorInput {
 
 function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 	// const [data, setData] = useState<TableData>({});
+	const minPlayers = 0;
+	const maxPlayers = 500;
+	const minRounds = 1;
+	const maxRounds = 20;
+
 	const dispatch = useAppDispatch();
 	const tableData = useSelector(selectTableData);
 	const [deckCounts, setDeckCounts] = useState<{ [deck: string]: number }>({});
-	const [numberOfRounds, setNumberOfRounds] = useState<number>(0);
+	const [numberOfRounds, setNumberOfRounds] = useState<number>(minRounds);
 	const [results, setResults] = useState<string>("");
 	const [isActualData, setIsActualData] = useState(true);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -69,7 +73,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 	const [matchupPercentages, setMatchupPercentages] = useState<{
 		[deck: string]: { [opponentDeck: string]: number };
 	}>({});
-
+	
 	useEffect(() => {
 		if (!user) return;
 
@@ -141,7 +145,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 				setResults(formattedResults);
 				setModalOpen(true);
 			} catch (error) {
-				console.error("Simulation error:", error);
+				console.error("Simulation error: ", error);
 			} finally {
 				setIsLoading(false);
 			}
@@ -534,16 +538,21 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 								InputProps={{
 									style: { minWidth: "4rem" },
 									inputProps: {
-										max: 10000,
-										min: 0,
+										max: maxPlayers,
+										min: minPlayers,
 									},
 								}}
 								inputMode="numeric"
 								size="small"
 								value={deckCounts[deck] || 0}
-								onChange={(e) =>
-									updateDeckCount(deck, parseInt(e.target.value))
-								}
+								onChange={(e) => {
+									var value = parseInt(e.target.value, 10);
+									
+									if (value > maxPlayers) value = maxPlayers;
+									if (value < minPlayers) value = minPlayers;
+									
+									updateDeckCount(deck, value)
+								}}
 								InputLabelProps={{
 									shrink: true,
 								}}
@@ -554,7 +563,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 			</div>
 			<Divider className="divider" />
 			<div className="round-input">
-				Number of Rounds:
+				Rounds (max: 20):
 				<TextField
 					id="outlined-number"
 					type="number"
@@ -568,7 +577,15 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 					inputMode="numeric"
 					size="small"
 					value={numberOfRounds}
-					onChange={(e) => setNumberOfRounds(parseInt(e.target.value))}
+					onChange={(e) => 
+						{
+							var value = parseInt(e.target.value, 10);
+							
+							if (value > maxRounds) value = maxRounds;
+							if (value < minRounds) value = minRounds;
+
+							setNumberOfRounds(value)}
+						}
 					InputLabelProps={{
 						shrink: true,
 					}}

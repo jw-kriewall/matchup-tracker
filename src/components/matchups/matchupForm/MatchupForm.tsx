@@ -18,6 +18,7 @@ import { useCookies } from "react-cookie";
 import DeckInputDropdown from "../../shared/deckInputDropdown";
 import SnackbarWarning from "../../snackbarNotifications/SnackbarWarning";
 import { current, unwrapResult } from "@reduxjs/toolkit";
+import { archetypeCards } from "../../../constants/achetypeCards";
 
 interface matchupFormProps {
 	userDeckDisplays: DeckDisplay[];
@@ -81,7 +82,7 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
     let bestMatches: string[] = [];
     let highestMatchCount = 0;
 
-    for (const [deckName, signatureCards] of Object.entries(deckSignatures)) {
+    for (const [deckName, signatureCards] of Object.entries(archetypeCards)) {
         const matchCount = signatureCards.reduce((count, card) => cards.has(card) ? count + 1 : count, 0);
 
         if (matchCount > highestMatchCount) {
