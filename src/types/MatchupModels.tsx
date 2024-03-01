@@ -23,5 +23,6 @@ export type DeckDisplay = {
 	value: string,
 	label: string,
 	format?: string,
+	cards: string[],
 	sprites: string[],
 }

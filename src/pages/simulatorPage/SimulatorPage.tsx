@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import NavBar from "../../components/navBar/NavBar";
-import { allDecksConstant } from "../../constants/allDecks";
+import { ALL_DECKS_CONSTANT } from "../../constants/allDecks";
 import TournamentSimulator from "../../components/tournamentSimulator/TournamentSimulator";
 import { useCookies } from "react-cookie";
 import "./SimulatorPage.css";
 
 export default function SimulatorPage() {
-  const initialDecks = allDecksConstant.map((deck) => deck.value);
+  const initialDecks = ALL_DECKS_CONSTANT.map((deck) => deck.value);
   // const [selectedDecks, setSelectedDecks] = useState<string[]>(initialDecks);
   const [userCookies] = useCookies(["user"]);
   const user = userCookies["user"]?.payload;
