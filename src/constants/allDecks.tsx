@@ -4,6 +4,23 @@ import { DeckDisplay } from "../types/MatchupModels";
 
 // @TODO: This data should be stored in Backend. Need CRUD endpoints ultimately.
 export const ALL_DECKS_CONSTANT: DeckDisplay[] = [
+  {
+    value: "Ancient Box",
+    label: "Ancient Box",
+    format: "F-on",
+    cards: [
+      "Koraidon",
+      "Flutter Mane",
+      "Radiant Greninja",
+      "Professor Sada's Vitality",
+      "Earthen Vessel",
+      "Explorer's Guidance"
+    ],
+    sprites: [
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1007.png",
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1005.png",
+    ]
+  },
 	{
 		value: "Arceus / Giratina",
 		label: "Arceus / Giratina",
@@ -18,6 +35,39 @@ export const ALL_DECKS_CONSTANT: DeckDisplay[] = [
 		sprites: [
 			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/493.png",
 			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/487.png",
+		],
+	},
+  {
+		value: "Arceus / Vulpix",
+		label: "Arceus / Vulpix",
+		format: "F-on",
+		cards: [
+      "Arceus", 
+      "Vulpix", 
+      "Bidoof", 
+      "Water Energy", 
+      "Double Turbo"
+    ],
+		sprites: [
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/493.png",
+			"https://img.pokemondb.net/sprites/sun-moon/normal/vulpix-alolan.png",
+		],
+	},
+  {
+		value: "Charizard / Bibarel",
+		label: "Charizard / Bibarel",
+		format: "F-on",
+		cards: [
+			"Charmander",
+			"Charizard",
+			"Rare Candy",
+      "Bidoof",
+			"Bibarel",
+			"Arven",
+		],
+		sprites: [
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png",
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/400.png",
 		],
 	},
 	{
@@ -57,6 +107,23 @@ export const ALL_DECKS_CONSTANT: DeckDisplay[] = [
 			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/998.png",
 		],
 	},
+  {
+		value: "Future Box Hands",
+		label: "Future Box Hands",
+		format: "F-on",
+		cards: [
+			"Iron Hands",
+      "Miraidon",
+      "Iron Crown ex",
+      "Techno Radar",
+      "Reboot Pod",
+      "Heavy Baton"
+		],
+		sprites: [
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/992.png",
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1023.png"
+		],
+	},
 	{
 		value: "Gholdengo",
 		label: "Gholdengo",
@@ -89,6 +156,21 @@ export const ALL_DECKS_CONSTANT: DeckDisplay[] = [
 		sprites: [
 			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/487.png",
 			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/764.png",
+		],
+	},
+  {
+		value: "Great Tusk Mill",
+		label: "Great Tusk Mill",
+		format: "F-on",
+		cards: [
+			"Great Tusk",
+      "Explorer's Guidance",
+      "Double Turbo",
+      "Bravery Charm",
+      "Counter Catcher"
+		],
+		sprites: [
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/984.png",
 		],
 	},
 	{
