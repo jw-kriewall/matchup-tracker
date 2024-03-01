@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
-import { allDecksConstant } from "../../../constants/allDecks";
+import { ALL_DECKS_CONSTANT } from "../../../constants/allDecks";
 import Button from "@mui/material/Button";
 import AccordionMatchup from "../accordionMatchup/AccordionMatchup";
 import { DeckDisplay, Matchup } from "../../../types/MatchupModels";
@@ -17,8 +17,7 @@ import { useAppDispatch } from "../../../hooks/hooks";
 import { useCookies } from "react-cookie";
 import DeckInputDropdown from "../../shared/deckInputDropdown";
 import SnackbarWarning from "../../snackbarNotifications/SnackbarWarning";
-import { current, unwrapResult } from "@reduxjs/toolkit";
-import { archetypeCards } from "../../../constants/achetypeCards";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 interface matchupFormProps {
 	userDeckDisplays: DeckDisplay[];
@@ -70,26 +69,27 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 	const handleSetStartingPlayer = (playerName: string) => {
 		setStartingPlayer(playerName);
 	};
-	const deckSignatures = {
-		"Charizard / Pidgeot": ["Charmander", "Charizard", "Pidgeot", "Pidgey"],
-		"Lugia": ["Lugia", "Archeops", "Mincinno"],
-		"Snorlax Stall": ["Penny", "Snorlax"],
-    "Roaring Moon": ["Galarian Moltres", "Dark Patch", "Roaring Moon"]
-		// Add more decks and their signatures here
-	}; 
+	// const deckSignatures = {
+	// 	"Charizard / Pidgeot": ["Charmander", "Charizard", "Pidgeot", "Pidgey"],
+	// 	"Lugia": ["Lugia", "Archeops", "Mincinno"],
+	// 	"Snorlax Stall": ["Penny", "Snorlax"],
+  //   "Roaring Moon": ["Galarian Moltres", "Dark Patch", "Roaring Moon"]
+	// 	// Add more decks and their signatures here
+	// }; 
 
-  const deduceDeck = (cards: Set<string>) => {
+  const deduceDeck = (cards: Set<string>): string => {
     let bestMatches: string[] = [];
     let highestMatchCount = 0;
+    
 
-    for (const [deckName, signatureCards] of Object.entries(archetypeCards)) {
-        const matchCount = signatureCards.reduce((count, card) => cards.has(card) ? count + 1 : count, 0);
+    for (const deck of ALL_DECKS_CONSTANT) {
+        const matchCount = deck.cards.reduce((count, card) => cards.has(card) ? count + 1 : count, 0);
 
         if (matchCount > highestMatchCount) {
             highestMatchCount = matchCount;
-            bestMatches = [deckName]; // Reset with current best match
+            bestMatches = [deck.label]; // Reset with current best match
         } else if (matchCount === highestMatchCount && matchCount !== 0) {
-            bestMatches.push(deckName); // Add to ties if match count is equal to the highest
+            bestMatches.push(deck.label); // Add to ties if match count is equal to the highest
         }
     }
 
@@ -113,14 +113,13 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
     let currentPlayer = "";
   
     const allCardNames = new Set<string>();
-    Object.values(deckSignatures).forEach(cards => {
-      cards.forEach(card => allCardNames.add(card));
+    ALL_DECKS_CONSTANT.forEach(deck => {
+      deck.cards.forEach(card => allCardNames.add(card));
     });
   
     lines.forEach((line) => {
       // if (line.includes("- ")) return; // Skip lines with card effects
       if (line.includes("   ")) return; // Skip lines with card effects
-      
 
       if (line.includes("for the opening coin flip") || line.includes("won the coin toss")) {
           const parts = line.split(" ");
@@ -353,14 +352,14 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 				<DeckInputDropdown
 					id="outlined-deck-one"
 					label="Player One Deck"
-					decks={allDecksConstant.concat(userDeckDisplays)}
+					decks={ALL_DECKS_CONSTANT.concat(userDeckDisplays)}
           value={playerOneDeckName}
 					onChange={(e) => handlePlayerOneDeckChange(e)}
 				/>
 				<DeckInputDropdown
 					id="outlined-deck-two"
 					label="Player Two Deck"
-					decks={allDecksConstant.concat(userDeckDisplays)}
+					decks={ALL_DECKS_CONSTANT.concat(userDeckDisplays)}
           value={playerTwoDeckName}
 					onChange={(e) => handlePlayerTwoDeckChange(e)}
 				/>

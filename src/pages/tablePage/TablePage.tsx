@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import DataTable from "../../components/dataTable/DataTable";
 import DeckFilter from "../../components/deckFilter/DeckFilter";
 import NavBar from "../../components/navBar/NavBar";
-import { allDecksConstant } from "../../constants/allDecks";
+import { ALL_DECKS_CONSTANT } from "../../constants/allDecks";
 import CountMatchups from "../../components/matchups/countMatchups/CountMatchups";
 import { useCookies } from "react-cookie";
 import "./TablePage.css";
 
 export default function TablePage() {
-  const initialDecks = allDecksConstant.map((deck) => deck.value);
+  const initialDecks = ALL_DECKS_CONSTANT.map((deck) => deck.value);
   const [selectedDecks, setSelectedDecks] = useState<string[]>(initialDecks);
   const [userCookies] = useCookies(["user"]);
   const user = userCookies["user"]?.payload;
