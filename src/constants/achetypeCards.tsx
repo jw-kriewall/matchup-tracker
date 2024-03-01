@@ -1,4 +1,4 @@
-export const deckSignatures = {
+export const archetypeCards = {
     // Decks MUST match their peer in the allDecks.tsx file
     // Left side is title, right side is list of cards
     "Arceus / Giratina": ["Arceus", "Giratina", "Bidoof", "Grass Energy", "Double Turbo"],
