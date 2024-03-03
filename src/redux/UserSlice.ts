@@ -41,7 +41,7 @@ const userAuthSlice = createSlice({
 				state.userLoading = true;
 			})
 			.addCase(getUserRole.fulfilled, (state, action) => {
-				console.log(action.payload);
+				// console.log(action.payload);
 				state.userLoading = false;
 				if (state.user) {
 					// state.user.role = action.payload;

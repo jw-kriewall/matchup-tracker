@@ -24,8 +24,8 @@ function DataTable({ selectedDecks, user}: DataTableProps) {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			console.log(tableDataState.data)
-			console.log(matchupDataState.matchups)
+			// console.log(tableDataState.data)
+			// console.log(matchupDataState.matchups)
 			if (user) {
 				try {
 					const response = await dispatch(getMatchupRecordsByDeck({ user }));
@@ -36,9 +36,6 @@ function DataTable({ selectedDecks, user}: DataTableProps) {
 					console.error("Error fetching data for decks", error);
 				}
 			}
-			// else {
-			// 	setTableData(tableDataState.data);
-			// }
 		};
 		fetchData();
 	}, [dispatch, user]);

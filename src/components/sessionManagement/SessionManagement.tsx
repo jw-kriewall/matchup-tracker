@@ -45,7 +45,7 @@ const SessionManagement: any = ({ children }: any) => {
         ) {
           setShowSnackbarInfo(true);
           setInfoShown(true);
-          console.log("info Shown");
+          console.log("Info Shown");
         }
 
         if (

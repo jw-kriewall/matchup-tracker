@@ -69,148 +69,160 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 	const handleSetStartingPlayer = (playerName: string) => {
 		setStartingPlayer(playerName);
 	};
-	// const deckSignatures = {
-	// 	"Charizard / Pidgeot": ["Charmander", "Charizard", "Pidgeot", "Pidgey"],
-	// 	"Lugia": ["Lugia", "Archeops", "Mincinno"],
-	// 	"Snorlax Stall": ["Penny", "Snorlax"],
-  //   "Roaring Moon": ["Galarian Moltres", "Dark Patch", "Roaring Moon"]
-	// 	// Add more decks and their signatures here
-	// }; 
 
-  const deduceDeck = (cards: Set<string>): string => {
-    let bestMatches: string[] = [];
-    let highestMatchCount = 0;
-    
+	const deduceDeck = (cards: Set<string>): string => {
+		let bestMatches: string[] = [];
+		let highestMatchCount = 0;
 
-    for (const deck of ALL_DECKS_CONSTANT) {
-        const matchCount = deck.cards.reduce((count, card) => cards.has(card) ? count + 1 : count, 0);
+		for (const deck of ALL_DECKS_CONSTANT) {
+			const matchCount = deck.cards.reduce(
+				(count, card) => (cards.has(card) ? count + 1 : count),
+				0
+			);
 
-        if (matchCount > highestMatchCount) {
-            highestMatchCount = matchCount;
-            bestMatches = [deck.label]; // Reset with current best match
-        } else if (matchCount === highestMatchCount && matchCount !== 0) {
-            bestMatches.push(deck.label); // Add to ties if match count is equal to the highest
-        }
-    }
+			if (matchCount > highestMatchCount) {
+				highestMatchCount = matchCount;
+				bestMatches = [deck.label]; // Reset with current best match
+			} else if (matchCount === highestMatchCount && matchCount !== 0) {
+				bestMatches.push(deck.label); // Add to ties if match count is equal to the highest
+			}
+		}
+		// Handle the case where there may be multiple best matches
+		if (bestMatches.length >= 1) {
+			return bestMatches[0]; // Return the single best match
+		}
+		return "Unknown"; // Default if no match is found
+	};
 
-    // Handle the case where there may be multiple best matches
-    if (bestMatches.length >= 1) {
-      return bestMatches[0]; // Return the single best match
-    }
-    return "Unknown"; // Default if no match is found
-};
+	const parseGameLog = (log: string) => {
+		const lines = log.split("\n");
+		let playerOneName = "",
+			playerTwoName = "",
+			startingPlayer = "",
+			winningDeck = "Unknown";
+		let playerOneDeck = "Unknown",
+			playerTwoDeck = "Unknown";
+		const playerOneCards = new Set<string>();
+		const playerTwoCards = new Set<string>();
+		let currentPlayer = "";
 
-  const parseGameLog = (log: string) => {
-    const lines = log.split("\n");
-    let playerOneName = "",
-        playerTwoName = "",
-        startingPlayer = "",
-        winningDeck = "Unknown";
-    let playerOneDeck = "Unknown",
-        playerTwoDeck = "Unknown";
-    const playerOneCards = new Set<string>();
-    const playerTwoCards = new Set<string>();
-    let currentPlayer = "";
-  
-    const allCardNames = new Set<string>();
-    ALL_DECKS_CONSTANT.forEach(deck => {
-      deck.cards.forEach(card => allCardNames.add(card));
-    });
-  
-    lines.forEach((line) => {
-      // if (line.includes("- ")) return; // Skip lines with card effects
-      if (line.includes("   ")) return; // Skip lines with card effects
+		const allCardNames = new Set<string>();
+		ALL_DECKS_CONSTANT.forEach((deck) => {
+			deck.cards.forEach((card) => allCardNames.add(card));
+		});
 
-      if (line.includes("for the opening coin flip") || line.includes("won the coin toss")) {
-          const parts = line.split(" ");
-          const playerName = parts[0];
-          if (!playerOneName) {
-              playerOneName = playerName;
-          } else if (!playerTwoName && playerName !== playerOneName) {
-              playerTwoName = playerName;
-          }
-      }
-      
-      else if (line.includes("Turn #")) {
-        const turnInfo = line.match(/Turn # \d+ - (.+)'s Turn/);
-        
-        if (turnInfo) {
-          const playerName = turnInfo[1]; // Directly capture the player's name
-          // If we've not yet identified playerTwoName, do so here based on whose turn it is
-          if (!playerTwoName && playerName !== playerOneName) {
-              playerTwoName = playerName;
-          }
-          // Set currentPlayer based on playerName
-          if (!startingPlayer) {
-            startingPlayer = currentPlayer;
-          }
-          currentPlayer = playerName;
-          console.log("Who is current player? " + currentPlayer);
-      }
-    }
+		lines.forEach((line) => {
+			// if (line.includes("- ")) return; // Skip lines with card effects
+			if (line.includes("   ")) return; // Skip lines with card effects
 
-      const processLine = (line: string, currentPlayer: string) => {
-        allCardNames.forEach(cardName => {
-          if (line.includes(cardName)) {
-            // If current player is equal to playerOne, skip lines that include playerTwo. A stronger algo could be created.
-            if (currentPlayer === playerOneName && !line.includes(playerTwoName)) {
-              playerOneCards.add(cardName);
-              console.log("Player One Cards:", Array.from(playerOneCards));
-            } else if (currentPlayer === playerTwoName && !line.includes(playerOneName)) {
-              playerTwoCards.add(cardName);
-              console.log("Player Two Cards:", Array.from(playerTwoCards));
+			if (
+				line.includes("for the opening coin flip") ||
+				line.includes("won the coin toss")
+			) {
+				const parts = line.split(" ");
+				const playerName = parts[0];
+				if (!playerOneName) {
+					playerOneName = playerName;
+				} else if (!playerTwoName && playerName !== playerOneName) {
+					playerTwoName = playerName;
+				}
+			} else if (line.includes("Turn #")) {
+				const turnInfo = line.match(/Turn # \d+ - (.+)'s Turn/);
 
-            }
-          }
-        });
-      };
-      console.log(`Processing line: ${line}, as ${currentPlayer}`);
-      processLine(line, currentPlayer);
-    });
-  
-    // Deduce decks after processing all cards
-    playerOneDeck = deduceDeck(playerOneCards);
-    playerTwoDeck = deduceDeck(playerTwoCards);
-  
-    // Adjust winningDeck based on deduced decks
-    const winningLine = lines.find(line => line.includes("wins."));
-    if (winningLine) {
-        const winnerName = winningLine.split(" ")[0];
-        winningDeck = winnerName === playerOneName ? playerOneDeck : playerTwoDeck;
-    }
+				if (turnInfo) {
+					const playerName = turnInfo[1]; // Directly capture the player's name
+					// If we've not yet identified playerTwoName, do so here based on whose turn it is
+					if (!playerTwoName && playerName !== playerOneName) {
+						playerTwoName = playerName;
+					}
+					// Set currentPlayer based on playerName
+					if (!startingPlayer) {
+						startingPlayer = currentPlayer;
+					}
+					currentPlayer = playerName;
+					// console.log("Who is current player? " + currentPlayer);
+				}
+			}
 
-    return {
-      playerOneName,
-      playerTwoName,
-      startingPlayer,
-      winningDeck,
-      playerOneDeck,
-      playerTwoDeck,
-    };
-  };
+			const processLine = (line: string, currentPlayer: string) => {
+				allCardNames.forEach((cardName) => {
+					if (line.includes(cardName)) {
+						// If current player is equal to playerOne, skip lines that include playerTwo. A stronger algo could be created.
+						if (
+							currentPlayer === playerOneName &&
+							!line.includes(playerTwoName)
+						) {
+							playerOneCards.add(cardName);
+							// console.log("Player One Cards:", Array.from(playerOneCards));
+						} else if (
+							currentPlayer === playerTwoName &&
+							!line.includes(playerOneName)
+						) {
+							playerTwoCards.add(cardName);
+							// console.log("Player Two Cards:", Array.from(playerTwoCards));
+						}
+					}
+				});
+			};
+			// console.log(`Processing line: ${line}, as ${currentPlayer}`);
+			processLine(line, currentPlayer);
+		});
+
+		// Deduce decks after processing all cards
+		playerOneDeck = deduceDeck(playerOneCards);
+		playerTwoDeck = deduceDeck(playerTwoCards);
+
+		// Adjust winningDeck based on deduced decks
+		const winningLine = lines.find((line) => line.includes("wins."));
+		if (winningLine) {
+			const winnerName = winningLine.split(" ")[0];
+			winningDeck =
+				winnerName === playerOneName ? playerOneDeck : playerTwoDeck;
+		}
+
+		return {
+			playerOneName,
+			playerTwoName,
+			startingPlayer,
+			winningDeck,
+			playerOneDeck,
+			playerTwoDeck,
+		};
+	};
 
 	const handleGameLogChange = (e: any) => {
 		const gameLog = e.target.value;
-		const { playerOneName, playerTwoName, startingPlayer, winningDeck, playerOneDeck, playerTwoDeck } =
-			parseGameLog(gameLog);
-
 		setNotes(gameLog);
-		setPlayerOneName(playerOneName);
-		setPlayerTwoName(playerTwoName);
-		setStartingPlayer(startingPlayer);
-    setPlayerOneDeckName(playerOneDeck);
-    setPlayerTwoDeckName(playerTwoDeck);
-    updateWinningDeckOptions(playerOneDeck, playerTwoDeck);
-		setWinningDeck(winningDeck);
+
+		const firstLine = gameLog.split("\n")[0];
+		if (firstLine.startsWith("Setup")) {
+			const parsedData = parseGameLog(gameLog);
+
+			// Update your component's state based on the parsed data
+			setPlayerOneName(parsedData.playerOneName);
+			setPlayerTwoName(parsedData.playerTwoName);
+			setStartingPlayer(parsedData.startingPlayer);
+			setPlayerOneDeckName(parsedData.playerOneDeck);
+			setPlayerTwoDeckName(parsedData.playerTwoDeck);
+			updateWinningDeckOptions(
+				parsedData.playerOneDeck,
+				parsedData.playerTwoDeck
+			);
+			setWinningDeck(parsedData.winningDeck);
+		}
 	};
 
-  const updateWinningDeckOptions = (playerOneDeckName: string, playerTwoDeckName: string) => {
-    const newOptions = [playerOneDeckName, playerTwoDeckName];
-    if (playerOneDeckName !== playerTwoDeckName) { // Add "Tie" option if decks are different
-        newOptions.push("Tie");
-    }
-    setWinningDeckOptionsArray(newOptions);
-};
+	const updateWinningDeckOptions = (
+		playerOneDeckName: string,
+		playerTwoDeckName: string
+	) => {
+		const newOptions = [playerOneDeckName, playerTwoDeckName];
+		if (playerOneDeckName !== playerTwoDeckName) {
+			// Add "Tie" option if decks are different
+			newOptions.push("Tie");
+		}
+		setWinningDeckOptionsArray(newOptions);
+	};
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
@@ -254,7 +266,7 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 			},
 			notes,
 		};
-		console.log(matchup);
+		// console.log(matchup);
 
 		try {
 			const actionResult = await dispatch(addNewMatchup({ user, matchup }));
@@ -353,14 +365,14 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 					id="outlined-deck-one"
 					label="Player One Deck"
 					decks={ALL_DECKS_CONSTANT.concat(userDeckDisplays)}
-          value={playerOneDeckName}
+					value={playerOneDeckName}
 					onChange={(e) => handlePlayerOneDeckChange(e)}
 				/>
 				<DeckInputDropdown
 					id="outlined-deck-two"
 					label="Player Two Deck"
 					decks={ALL_DECKS_CONSTANT.concat(userDeckDisplays)}
-          value={playerTwoDeckName}
+					value={playerTwoDeckName}
 					onChange={(e) => handlePlayerTwoDeckChange(e)}
 				/>
 			</div>
@@ -370,7 +382,7 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 					id="winning-deck"
 					select
 					label="Winning Deck"
-          value={winningDeck}
+					value={winningDeck}
 					defaultValue=""
 					onChange={(e) => setWinningDeck(e.target.value)}
 				>
