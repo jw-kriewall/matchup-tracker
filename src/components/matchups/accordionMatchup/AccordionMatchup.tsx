@@ -111,7 +111,7 @@ export default function ControlledAccordions() {
 
   const handleDeleteMatchup = (matchup: Matchup) => async () => {
     if (user) {
-      console.log(matchup);
+      // console.log(matchup);
       setLoading(true);
       try {
         await dispatch(deleteSingleMatchup({ user, matchup })).unwrap();

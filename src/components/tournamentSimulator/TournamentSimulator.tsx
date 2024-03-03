@@ -126,7 +126,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 
 	const handleSimulation = () => {
 		setIsLoading(true);
-		console.log(isLoading);
+		// console.log(isLoading);
 		setTimeout(async () => {
 			try {
 				const calculatedMatchupPercentages =
@@ -284,9 +284,9 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 			playerForBye.record.wins++; // Increment wins for the player who receives a bye
 			playerForBye.receivedBye = true;
 			matchedPlayers.add(playerForBye.id);
-			console.log(
-				`Player ${playerForBye.id} with deck ${playerForBye.deckName} receives a bye`
-			);
+			// console.log(
+			// 	`Player ${playerForBye.id} with deck ${playerForBye.deckName} receives a bye`
+			// );
 		}
 	};
 
@@ -298,7 +298,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 		let players = createPlayers(deckCounts);
 
 		for (let round = 1; round <= numberOfRounds; round++) {
-			console.log(`Round ${round} starts`);
+			// console.log(`Round ${round} starts`);
 
 			shuffleArray(players);
 
@@ -372,12 +372,12 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 				}
 			}
 
-			console.log(`Round ${round} results:`);
-			players.forEach((player) =>
-				console.log(
-					`Player ${player.id} (${player.deckName}): ${player.record.wins}-${player.record.losses}`
-				)
-			);
+			// console.log(`Round ${round} results:`);
+			// players.forEach((player) =>
+			// 	console.log(
+			// 		`Player ${player.id} (${player.deckName}): ${player.record.wins}-${player.record.losses}`
+			// 	)
+			// );
 		}
 
 		// Aggregate results
@@ -391,12 +391,12 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 		});
 
 		// Log final results
-		console.log("Final tournament results:");
-		for (const deckName in aggregatedResults) {
-			console.log(
-				`${deckName}: ${aggregatedResults[deckName].wins}-${aggregatedResults[deckName].losses}`
-			);
-		}
+		// console.log("Final tournament results:");
+		// for (const deckName in aggregatedResults) {
+		// 	console.log(
+		// 		`${deckName}: ${aggregatedResults[deckName].wins}-${aggregatedResults[deckName].losses}`
+		// 	);
+		// }
 
 		return aggregatedResults;
 	};
@@ -416,9 +416,9 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 		let winPercentagePlayer1 =
 			matchupPercentages[player1.deckName]?.[player2.deckName] ?? 50.0;
 
-		console.log(
-			`Win Percentage for ${player1.deckName} against ${player2.deckName}: ${winPercentagePlayer1}`
-		);
+		// console.log(
+		// 	`Win Percentage for ${player1.deckName} against ${player2.deckName}: ${winPercentagePlayer1}`
+		// );
 
 		// Simulate match based on win percentages
 		let randomRoll = Math.random();
@@ -426,16 +426,16 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 			// Player 1 wins
 			player1.record.wins++;
 			player2.record.losses++;
-			console.log(
-				`Player ${player1.id} (${player1.deckName}) wins against Player ${player2.id} (${player2.deckName})`
-			);
+			// console.log(
+			// 	`Player ${player1.id} (${player1.deckName}) wins against Player ${player2.id} (${player2.deckName})`
+			// );
 		} else {
 			// Player 2 wins
 			player1.record.losses++;
 			player2.record.wins++;
-			console.log(
-				`Player ${player2.id} (${player2.deckName}) wins against Player ${player1.id} (${player1.deckName})`
-			);
+			// console.log(
+			// 	`Player ${player2.id} (${player2.deckName}) wins against Player ${player1.id} (${player1.deckName})`
+			// );
 		}
 	};
 
