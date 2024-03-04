@@ -1,0 +1,42 @@
+.faq-container {
+    margin: 40px;
+}
+
+.faq-container h1 {
+    margin-bottom: 8px; /* Reduce the bottom margin of the h1 */
+}
+
+.faq-container > p {
+    margin-top: 0; /* Remove the top margin of the first paragraph directly under .faq-container */
+}
+
+.faq-question, .faq-answer {
+    margin-bottom: 8px; /* Adjust as needed */
+}
+
+.faq-question {
+    line-height: 1.1;
+}
+
+.faq-answer {
+    line-height: 1.6; /* Typically between 1.5 and 2 is good for readability */
+}
+
+
+
+.faq-header {
+    display: flex;
+    align-items: center;
+    gap: 16px; /* Adjust the value as needed */
+    
+}
+
+.twitter-link {
+    /* margin-left: 10px; Adjust the space between the H1 and the Twitter icon */
+    color: #1DA1F2; /* Twitter's brand color, adjust as needed */
+    font-size: 24px; /* Adjust the size of the icon */
+}
+
+.twitter-link:hover {
+    color: #0d95e8; /* Darker Twitter color for hover effect */
+}

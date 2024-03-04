@@ -4,6 +4,7 @@ import { ALL_DECKS_CONSTANT } from "../../constants/allDecks";
 import TournamentSimulator from "../../components/tournamentSimulator/TournamentSimulator";
 import { useCookies } from "react-cookie";
 import "./SimulatorPage.css";
+import PublicFaq from "../../components/publicFaq/PublicFaq";
 
 export default function SimulatorPage() {
   const initialDecks = ALL_DECKS_CONSTANT.map((deck) => deck.value);
@@ -17,9 +18,7 @@ export default function SimulatorPage() {
         <div className="navigation">
           <NavBar />
         </div>
-
-        {/* TODO: Create a fun log in component */}
-        <div>Please log in to view content.</div>
+        <PublicFaq/>
       </div>
     );
   }
