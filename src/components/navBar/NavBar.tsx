@@ -15,6 +15,9 @@ import LoginButton from "../login/LoginButton";
 import LogoutButton from "../login/LogoutButton";
 import { useCookies } from "react-cookie";
 import { CredentialResponse } from "@react-oauth/google";
+import XIcon from "@mui/icons-material/X";
+import { handleTwitterClick } from "../shared/navigateToX";
+import { ListItemIcon } from "@mui/material";
 
 export default function NavBar() {
   const [userCookies] = useCookies(["user"]);
@@ -40,30 +43,43 @@ export default function NavBar() {
 
   const list = () => (
     <Box
-      sx={{ width: 250 }}
-      role="presentation"
-      onClick={toggleDrawer(false)}
-      onKeyDown={toggleDrawer(false)}
-    >
-      <List>
-        <ListItem disablePadding>
-          <ListItemButton onClick={() => handleNavigation("/")}>
-            <ListItemText primary="Home" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton onClick={() => handleNavigation("/data")}>
-            <ListItemText primary="Dashboard" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton onClick={() => handleNavigation("/simulator")}>
-            <ListItemText primary="Simulator" />
-          </ListItemButton>
-        </ListItem>
-        {/* Add more ListItems here for additional pages */}
-      </List>
-    </Box>
+  sx={{ width: 250, display: 'flex', flexDirection: 'column', height: '100%' }}
+  role="presentation"
+  onClick={toggleDrawer(false)}
+  onKeyDown={toggleDrawer(false)}
+>
+  <Box sx={{ overflow: 'auto' }}>
+    <List>
+      {/* Your ListItems */}
+      <ListItem disablePadding>
+        <ListItemButton onClick={() => handleNavigation("/")}>
+          <ListItemText primary="Input" />
+        </ListItemButton>
+      </ListItem>
+      <ListItem disablePadding>
+        <ListItemButton onClick={() => handleNavigation("/data")}>
+          <ListItemText primary="Dashboard" />
+        </ListItemButton>
+      </ListItem>
+      <ListItem disablePadding>
+        <ListItemButton onClick={() => handleNavigation("/simulator")}>
+          <ListItemText primary="Simulator" />
+        </ListItemButton>
+      </ListItem>
+      {/* Add more ListItems here for additional pages */}
+    </List>
+  </Box>
+  <Box sx={{ flexGrow: 1 }}></Box> {/* Spacer */}
+  <List>
+    <ListItem disablePadding>
+      <ListItemButton onClick={handleTwitterClick}>
+        <ListItemIcon>
+          <XIcon />counterplay.gg
+        </ListItemIcon>
+      </ListItemButton>
+    </ListItem>
+  </List>
+</Box>
   );
 
   return (
@@ -86,7 +102,7 @@ export default function NavBar() {
           </Drawer>
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            CounterPlay.gg v1.0 BETA
+            counterplay.gg BETA
           </Typography>
 
           <div>{!user ? <LoginButton /> : <LogoutButton />}</div>

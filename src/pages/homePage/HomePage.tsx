@@ -6,6 +6,7 @@ import { useCookies } from "react-cookie";
 import { DeckDisplay } from "../../types/MatchupModels";
 import { getUserDeckDisplay } from "../../apiCalls/users/getUserDeckDisplay";
 import { useAppDispatch } from "../../hooks/hooks";
+import PublicFaq from "../../components/publicFaq/PublicFaq";
 
 export default function HomePage() {
   const [userCookies] = useCookies(["user"]);
@@ -31,13 +32,11 @@ export default function HomePage() {
 
   if (!user) {
     return (
-      <div className="App">
+      <div >
         <div className="navigation">
           <NavBar />
         </div>
-
-        {/* TODO: Create a fun log in component */}
-        <div>Please log in to view content.</div>
+        <PublicFaq/>
       </div>
     );
   }
