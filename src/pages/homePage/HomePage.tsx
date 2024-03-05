@@ -1,16 +1,17 @@
 import React, { useEffect } from "react";
 import MatchupForm from "../../components/matchups/matchupForm/MatchupForm";
+import PublicFaq from "../../components/publicFaq/PublicFaq";
 import NavBar from "../../components/navBar/NavBar";
-import "./HomePage.css";
 import { useCookies } from "react-cookie";
 import { DeckDisplay } from "../../types/MatchupModels";
 import { getUserDeckDisplay } from "../../apiCalls/users/getUserDeckDisplay";
 import { useAppDispatch } from "../../hooks/hooks";
-import PublicFaq from "../../components/publicFaq/PublicFaq";
+import { CredentialResponse } from "@react-oauth/google";
+import "./HomePage.css";
 
 export default function HomePage() {
   const [userCookies] = useCookies(["user"]);
-  const user = userCookies["user"]?.payload;
+  const user: CredentialResponse = userCookies["user"]?.payload;
 
   const [userDeckDisplays, setUserDeckDisplays] = React.useState<DeckDisplay[]>(
     []

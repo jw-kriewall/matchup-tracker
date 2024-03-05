@@ -12,12 +12,12 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { useNavigate } from "react-router-dom";
 import LoginButton from "../login/LoginButton";
-import LogoutButton from "../login/LogoutButton";
 import { useCookies } from "react-cookie";
 import { CredentialResponse } from "@react-oauth/google";
-import XIcon from "@mui/icons-material/X";
 import { handleTwitterClick } from "../shared/navigateToX";
 import { ListItemIcon } from "@mui/material";
+import XIcon from "@mui/icons-material/X";
+import { Profile } from "../profile/Profile";
 
 export default function NavBar() {
   const [userCookies] = useCookies(["user"]);
@@ -105,7 +105,7 @@ export default function NavBar() {
             counterplay.gg BETA
           </Typography>
 
-          <div>{!user ? <LoginButton /> : <LogoutButton />}</div>
+          <div>{!user ? <LoginButton /> : <Profile />}</div>
         </Toolbar>
       </AppBar>
     </Box>
