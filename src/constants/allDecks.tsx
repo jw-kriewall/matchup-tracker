@@ -164,13 +164,48 @@ export const ALL_DECKS_CONSTANT: DeckDisplay[] = [
 		format: "F-on",
 		cards: [
 			"Great Tusk",
-      "Explorer's Guidance",
-      "Double Turbo",
-      "Bravery Charm",
-      "Counter Catcher"
+      		"Explorer's Guidance",
+      		"Double Turbo",
+      		"Bravery Charm",
+      		"Counter Catcher"
 		],
 		sprites: [
 			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/984.png",
+		],
+	},
+	{
+		value: "Lost Zone Box",
+		label: "Lost Zone Box",
+		format: "F-on",
+		cards: [
+			"Comfey",
+			"Mirage Gate",
+			"Sableye",
+			"Cramorant",
+			"Roaring Moon",
+			"Iron Hands"
+		],
+		sprites: [
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/764.png",
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1005.png",
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/992.png",
+		],
+	},
+	{
+		value: "Lost Zone Charizard",
+		label: "Lost Zone Charizard",
+		format: "F-on",
+		cards: [
+			"Comfey",
+			"Mirage Gate",
+			"Sableye",
+			"Cramorant",
+			"Charizard"
+		],
+		sprites: [
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/764.png",
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/302.png",
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/006.png",
 		],
 	},
 	{
