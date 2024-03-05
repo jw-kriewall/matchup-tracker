@@ -17,7 +17,7 @@ import { CredentialResponse } from "@react-oauth/google";
 import { handleTwitterClick } from "../shared/navigateToX";
 import { ListItemIcon } from "@mui/material";
 import XIcon from "@mui/icons-material/X";
-import { Profile } from "../profile/Profile";
+import { ProfileDropdown } from "../profileDropdown/ProfileDropdown";
 
 export default function NavBar() {
   const [userCookies] = useCookies(["user"]);
@@ -105,7 +105,7 @@ export default function NavBar() {
             counterplay.gg BETA
           </Typography>
 
-          <div>{!user ? <LoginButton /> : <Profile />}</div>
+          <div>{!user ? <LoginButton /> : <ProfileDropdown />}</div>
         </Toolbar>
       </AppBar>
     </Box>

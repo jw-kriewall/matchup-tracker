@@ -7,7 +7,7 @@ import { DecodedJwtToken } from "../../types/DecodedJwtToken";
 import React from "react";
 import { ChangeFormatButton } from "../changeFormat/ChangeFormatButton";
 
-export function Profile() {
+export function ProfileDropdown() {
 	const [userCookies] = useCookies(["user"]);
 	const user: CredentialResponse = userCookies["user"]?.payload;
 	let userPicture = "";
