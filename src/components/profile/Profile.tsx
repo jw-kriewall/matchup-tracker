@@ -1,11 +1,11 @@
 import { Avatar, Box, IconButton, Menu, MenuItem, Tooltip, Typography } from "@mui/material";
 import { CredentialResponse } from "@react-oauth/google";
 import { useCookies } from "react-cookie";
-import XIcon from "@mui/icons-material/X";
 import LogoutButton from "../login/LogoutButton";
 import jwt_decode from "jwt-decode";
 import { DecodedJwtToken } from "../../types/DecodedJwtToken";
 import React from "react";
+import { ChangeFormatButton } from "../changeFormat/ChangeFormatButton";
 
 export function Profile() {
 	const [userCookies] = useCookies(["user"]);
@@ -24,7 +24,7 @@ export function Profile() {
 	};
 
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-    const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+    // const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
@@ -35,15 +35,10 @@ export function Profile() {
       };
 
 	return (
-		// <>
-		// 	<IconButton onClick={handleClick}>
-        //         <Avatar alt="User Pic" src={userPicture}/>
-		// 	</IconButton>
-		// </>
         <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            <Tooltip title="Profile settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src={userPicture} />
+                <Avatar alt="Profile Pic" src={userPicture} />
               </IconButton>
             </Tooltip>
             <Menu
@@ -62,16 +57,16 @@ export function Profile() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-              <LogoutButton />
+              
+              <MenuItem>
+                <ChangeFormatButton />
+              </MenuItem>
+
+              <MenuItem>
+                <LogoutButton />
+              </MenuItem>
+
             </Menu>
           </Box>
 	);
 }
-
-
-{/* <LogoutButton /> */}

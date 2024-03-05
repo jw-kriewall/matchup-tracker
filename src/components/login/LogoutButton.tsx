@@ -8,6 +8,7 @@ export default function LogoutButton() {
   const dispatch = useAppDispatch();
   const [, removeCookie] = useCookies(['userRole']);
   const [, removeUserCookie] = useCookies(['user']);
+  
   const handleLogout = () => {
     removeUserCookie('user', { path: '/' });
     removeCookie('userRole', { path: '/' });
