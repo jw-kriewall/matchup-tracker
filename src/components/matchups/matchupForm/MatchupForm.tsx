@@ -361,22 +361,34 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 			<div>
 				{/* @TODO: Fix SnackbarNotification to show after every successful submit */}
 				{/* @TODO: Pass in the allDecksConstant as a combo of constants and user specific decks */}
-				<DeckInputDropdown
-					id="outlined-deck-one"
-					label="Player One Deck"
-					decks={ALL_DECKS_CONSTANT.concat(userDeckDisplays)}
-					value={playerOneDeckName}
-					onChange={(e) => handlePlayerOneDeckChange(e)}
-				/>
-				<DeckInputDropdown
-					id="outlined-deck-two"
-					label="Player Two Deck"
-					decks={ALL_DECKS_CONSTANT.concat(userDeckDisplays)}
-					value={playerTwoDeckName}
-					onChange={(e) => handlePlayerTwoDeckChange(e)}
-				/>
+				<Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
+					<Box
+						sx={{
+							position: "relative",
+							display: "inline-flex",
+							width: "auto",
+							alignItems: "center",
+						}}
+					></Box>
+					<DeckInputDropdown
+						id="outlined-deck-one"
+						label="Player One Deck"
+						decks={ALL_DECKS_CONSTANT.concat(userDeckDisplays)}
+						value={playerOneDeckName}
+						onChange={(e) => handlePlayerOneDeckChange(e)}
+					/>
+					<DeckInputDropdown
+						id="outlined-deck-two"
+						label="Player Two Deck"
+						decks={ALL_DECKS_CONSTANT.concat(userDeckDisplays)}
+						value={playerTwoDeckName}
+						onChange={(e) => handlePlayerTwoDeckChange(e)}
+					/>
+					<IconButton>
+						<LooksOneIcon />
+					</IconButton>
+				</Box>
 			</div>
-
 			<div>
 				<TextField
 					id="winning-deck"
