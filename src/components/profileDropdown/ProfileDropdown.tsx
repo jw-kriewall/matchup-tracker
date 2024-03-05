@@ -75,7 +75,7 @@ export function ProfileDropdown() {
 				onClose={handleCloseUserMenu}
 			>
 				<List
-					sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+					sx={{ width: "100%", maxWidth: 360, minWidth: 200, bgcolor: "background.paper" }}
 					component="nav"
 					aria-labelledby="nested-list-subheader"
 				>
@@ -86,7 +86,11 @@ export function ProfileDropdown() {
 					<Collapse in={open} timeout="auto" unmountOnExit>
 						<List component="div" disablePadding>
 							<ListItemButton sx={{ pl: 4 }}>
-								<ListItemText primary="Starred" />
+								<ListItemText primary="Standard" />
+							</ListItemButton>
+
+              <ListItemButton sx={{ pl: 4 }}>
+								<ListItemText primary="GLC" />
 							</ListItemButton>
 						</List>
 					</Collapse>
