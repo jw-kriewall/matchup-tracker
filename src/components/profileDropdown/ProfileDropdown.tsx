@@ -9,7 +9,6 @@ import {
 	Menu,
 	MenuItem,
 	Tooltip,
-	Typography,
 } from "@mui/material";
 import { CredentialResponse } from "@react-oauth/google";
 import { useCookies } from "react-cookie";
@@ -17,12 +16,15 @@ import LogoutButton from "../login/LogoutButton";
 import jwt_decode from "jwt-decode";
 import { DecodedJwtToken } from "../../types/DecodedJwtToken";
 import React from "react";
-import { ChangeFormatButton } from "../changeFormat/ChangeFormatButton";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
 export function ProfileDropdown() {
 	const [userCookies] = useCookies(["user"]);
 	const user: CredentialResponse = userCookies["user"]?.payload;
+  const [open, setOpen] = React.useState(false);
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+    null
+  );
 	let userPicture = "";
 
 	if (user && user.credential) {
@@ -32,15 +34,9 @@ export function ProfileDropdown() {
 		userPicture = decodedToken.picture;
 	}
 
-	const [open, setOpen] = React.useState(false);
-
 	const handleClick = () => {
 		setOpen(!open);
 	};
-
-	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-		null
-	);
 
 	const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElUser(event.currentTarget);
@@ -50,6 +46,19 @@ export function ProfileDropdown() {
 		setAnchorElUser(null);
 		setOpen(false);
 	};
+
+  const handleFormatOnClick = (format: string) => {
+    // when this button is clicked, what should happen?
+
+    // API call to fetch data based on user email and format.
+    // Each matchup should have a format that can be searched by
+    // Send format + email to backend to fetch new data.
+    // Make sure feed refreshes
+    // Format could be shown on screen?
+    // Format needs to be made a global variable so that proper dropdown menu can be adjusted.
+    
+    console.log(format);
+  }
 
 	return (
 		<Box sx={{ flexGrow: 0 }}>
@@ -80,16 +89,17 @@ export function ProfileDropdown() {
 					aria-labelledby="nested-list-subheader"
 				>
 					<ListItemButton onClick={handleClick}>
-						<ListItemText primary="Inbox" />
+						<ListItemText primary="Format" />
 						{open ? <ExpandLess /> : <ExpandMore />}
 					</ListItemButton>
+
 					<Collapse in={open} timeout="auto" unmountOnExit>
 						<List component="div" disablePadding>
-							<ListItemButton sx={{ pl: 4 }}>
+							<ListItemButton sx={{ pl: 4 }} onClick={() => handleFormatOnClick("F-on")}>
 								<ListItemText primary="Standard" />
 							</ListItemButton>
 
-              <ListItemButton sx={{ pl: 4 }}>
+              <ListItemButton sx={{ pl: 4 }} onClick={() => handleFormatOnClick("GLC")}>
 								<ListItemText primary="GLC" />
 							</ListItemButton>
 						</List>
