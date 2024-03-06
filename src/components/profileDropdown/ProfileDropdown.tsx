@@ -17,6 +17,8 @@ import jwt_decode from "jwt-decode";
 import { DecodedJwtToken } from "../../types/DecodedJwtToken";
 import React from "react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { useAppDispatch } from "../../hooks/hooks";
+import { getMatchups } from "../../apiCalls/matchups/getMatchups";
 
 export function ProfileDropdown() {
 	const [userCookies] = useCookies(["user"]);
@@ -25,7 +27,9 @@ export function ProfileDropdown() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+  const dispatch = useAppDispatch();
 	let userPicture = "";
+  const [cookies, setCookie] = useCookies(["userRole", "user", "format"]);
 
 	if (user && user.credential) {
 		let decodedToken: DecodedJwtToken | null = null;
@@ -50,14 +54,17 @@ export function ProfileDropdown() {
   const handleFormatOnClick = (format: string) => {
     // when this button is clicked, what should happen?
 
-    // API call to fetch data based on user email and format.
-    // Each matchup should have a format that can be searched by
-    // Send format + email to backend to fetch new data.
+    // CHECK API call to fetch data based on user email and format.
+    // CHECK Each matchup should have a format that can be searched by
+    // CHECK Send format + email to backend to fetch new data.
     // Make sure feed refreshes
     // Format could be shown on screen?
     // Format needs to be made a global variable so that proper dropdown menu can be adjusted.
-    
-    console.log(format);
+    // Current data needs to be updated with proper Format
+
+    setCookie("format", format, { path: "/", maxAge: 3600 * 24 * 30 });
+    dispatch(getMatchups({ user: cookies.user.payload, format: format }));
+    // setOpen(false);
   }
 
 	return (
@@ -95,7 +102,7 @@ export function ProfileDropdown() {
 
 					<Collapse in={open} timeout="auto" unmountOnExit>
 						<List component="div" disablePadding>
-							<ListItemButton sx={{ pl: 4 }} onClick={() => handleFormatOnClick("F-on")}>
+							<ListItemButton sx={{ pl: 4 }} onClick={() => handleFormatOnClick("BST-TEF")}>
 								<ListItemText primary="Standard" />
 							</ListItemButton>
 

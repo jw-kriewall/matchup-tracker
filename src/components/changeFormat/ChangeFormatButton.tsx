@@ -4,31 +4,31 @@ import React from "react";
 
 export function ChangeFormatButton() {
 
-  const [open, setOpen] = React.useState(true);
+  // const [open, setOpen] = React.useState(true);
 
-  const handleClick = () => {
-    setOpen(!open);
-  };
+  // const handleClick = () => {
+  //   setOpen(!open);
+  // };
     
-    return (
-      <List
-      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-      component="nav"
-      aria-labelledby="nested-list-subheader"
-    >
+  //   return (
+  //     <List
+  //     sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+  //     component="nav"
+  //     aria-labelledby="nested-list-subheader"
+  //   >
       
-      <ListItemButton onClick={handleClick}>
+  //     <ListItemButton onClick={handleClick}>
         
-        <ListItemText primary="Inbox" />
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemText primary="Starred" />
-          </ListItemButton>
-        </List>
-      </Collapse>
-    </List>
-    );
+  //       <ListItemText primary="Inbox" />
+  //       {open ? <ExpandLess /> : <ExpandMore />}
+  //     </ListItemButton>
+  //     <Collapse in={open} timeout="auto" unmountOnExit>
+  //       <List component="div" disablePadding>
+  //         <ListItemButton sx={{ pl: 4 }}>
+  //           <ListItemText primary="Starred" />
+  //         </ListItemButton>
+  //       </List>
+  //     </Collapse>
+  //   </List>
+  //   );
 }
