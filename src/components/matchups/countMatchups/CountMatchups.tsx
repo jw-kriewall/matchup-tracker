@@ -29,7 +29,6 @@ export default function CountMatchups({ selectedDecks, user }: CountComponentPro
 
   useEffect(() => {
     const countMatchups = () => {
-      console.log("Inside countmatchups method")
       let matchupCount = matchups.filter(matchup =>
         selectedDecks.includes(matchup.playerOneDeck.name) &&
         selectedDecks.includes(matchup.playerTwoDeck.name)

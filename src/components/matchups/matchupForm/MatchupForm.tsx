@@ -42,7 +42,7 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 		React.useState<string>("");
 	const [snackbarKey, setSnackbarKey] = React.useState<number>(0);
 
-	const [cookies] = useCookies(["userRole"]);
+	const [cookies] = useCookies(["userRole", "format"]);
 	const [userCookies] = useCookies(["user"]);
 
 	const userRole = cookies["userRole"]?.payload;
@@ -257,7 +257,7 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 			},
 			startingPlayer,
 			winningDeck,
-			format,
+			format: cookies.format,
 			createdOn: new Date(),
 			createdBy: {
 				username: username,
