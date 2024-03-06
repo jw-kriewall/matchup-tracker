@@ -18,9 +18,15 @@ import { useCookies } from "react-cookie";
 import DeckInputDropdown from "../../shared/deckInputDropdown";
 import SnackbarWarning from "../../snackbarNotifications/SnackbarWarning";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { GLC_DECKS_CONSTANT } from "../../../constants/glcDecks";
+import { getDecksForFormat } from "../../shared/getDecksForFormat";
 
 interface matchupFormProps {
 	userDeckDisplays: DeckDisplay[];
+}
+
+interface DeckMapping {
+	[format: string]: DeckDisplay[];
 }
 
 export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
@@ -51,6 +57,8 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 	const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<
 		string[]
 	>([]);
+	  
+	const decks: DeckDisplay[] = getDecksForFormat(cookies.format);
 
 	const dispatch = useAppDispatch();
 
@@ -364,14 +372,14 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 				<DeckInputDropdown
 					id="outlined-deck-one"
 					label="Player One Deck"
-					decks={ALL_DECKS_CONSTANT.concat(userDeckDisplays)}
+					decks={decks.concat(userDeckDisplays)}
 					value={playerOneDeckName}
 					onChange={(e) => handlePlayerOneDeckChange(e)}
 				/>
 				<DeckInputDropdown
 					id="outlined-deck-two"
 					label="Player Two Deck"
-					decks={ALL_DECKS_CONSTANT.concat(userDeckDisplays)}
+					decks={decks.concat(userDeckDisplays)}
 					value={playerTwoDeckName}
 					onChange={(e) => handlePlayerTwoDeckChange(e)}
 				/>
