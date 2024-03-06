@@ -12,10 +12,11 @@ import { selectMatchups } from "../../redux/MatchupFeedSlice";
 
 interface DataTableProps {
 	selectedDecks: string[];
-	user: CredentialResponse
+	user: CredentialResponse;
+	format: string;
 }
 
-function DataTable({ selectedDecks, user}: DataTableProps) {
+function DataTable({ selectedDecks, user, format }: DataTableProps) {
 	const dispatch = useAppDispatch();
 	const tableDataState = useSelector(selectTableData);
 	const matchupDataState = useSelector(selectMatchups);
@@ -28,7 +29,7 @@ function DataTable({ selectedDecks, user}: DataTableProps) {
 			// console.log(matchupDataState.matchups)
 			if (user) {
 				try {
-					const response = await dispatch(getMatchupRecordsByDeck({ user }));
+					const response = await dispatch(getMatchupRecordsByDeck({ user, format }));
 					if (response) {
 						setTableData(response.payload);
 					}
@@ -38,7 +39,7 @@ function DataTable({ selectedDecks, user}: DataTableProps) {
 			}
 		};
 		fetchData();
-	}, [dispatch, user]);
+	}, [dispatch, user, format]);
 
 	return (
 		<>

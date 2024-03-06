@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DataTable from "../../components/dataTable/DataTable";
 import DeckFilter from "../../components/deckFilter/DeckFilter";
 import NavBar from "../../components/navBar/NavBar";
@@ -7,12 +7,22 @@ import CountMatchups from "../../components/matchups/countMatchups/CountMatchups
 import { useCookies } from "react-cookie";
 import "./TablePage.css";
 import PublicFaq from "../../components/publicFaq/PublicFaq";
+import { DeckDisplay } from "../../types/MatchupModels";
+import { getDecksForFormat } from "../../components/shared/getDecksForFormat";
 
 export default function TablePage() {
-  const initialDecks = ALL_DECKS_CONSTANT.map((deck) => deck.value);
-  const [selectedDecks, setSelectedDecks] = useState<string[]>(initialDecks);
+  const [cookies] = useCookies(["format"]);
+  const allDecks: DeckDisplay[] = getDecksForFormat(cookies.format);
+  // const allDecks = decks.map((deck) => deck.value);
+  const [selectedDecks, setSelectedDecks] = useState<string[]>([]);
   const [userCookies] = useCookies(["user"]);
   const user = userCookies["user"]?.payload;
+
+  useEffect(() => {
+    const decks: DeckDisplay[] = getDecksForFormat(cookies.format);
+    const initialDecks = decks.map((deck) => deck.value);
+    setSelectedDecks(initialDecks);
+  }, [cookies.format]);
 
   if (!user) {
     return (
@@ -40,12 +50,12 @@ export default function TablePage() {
             <DeckFilter
               selectedDecks={selectedDecks}
               onSelectedDecksChange={setSelectedDecks}
-              initialDecks={initialDecks}
+              allDecks={allDecks.map(deck => deck.value)}
             />
           </div>
         </div>
         <div className="data-table">
-          <DataTable selectedDecks={selectedDecks} user={user} />
+          <DataTable selectedDecks={selectedDecks} user={user} format={cookies.format}/>
         </div>
       </div>
     </div>

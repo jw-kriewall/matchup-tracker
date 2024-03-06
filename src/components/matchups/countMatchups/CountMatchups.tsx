@@ -25,7 +25,7 @@ export default function CountMatchups({ selectedDecks, user }: CountComponentPro
     if (matchups.length === 0) {
       dispatch(getMatchups({ user: user, format: cookies.format }));
     }
-  }, [dispatch, user, matchups.length]);
+  }, [dispatch, user, cookies.format, matchups.length]);
 
   useEffect(() => {
     const countMatchups = () => {
