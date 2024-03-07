@@ -7,10 +7,16 @@ const version = process.env.REACT_APP_API_VERSION;
 
 export const getMatchups = createAsyncThunk(
 	"matchups/get",
-	async (user: CredentialResponse | undefined) => {
+	async ({
+		user,
+		format,
+	}: {
+		user: CredentialResponse | undefined;
+		format: string;
+	}) => {
 		try {
 			const response = await axios({
-				url: `${apiUrl}/api/${version}/matchups`,
+				url: `${apiUrl}/api/${version}/matchups/${format}`,
 				method: "GET",
 				headers: {
 					"Access-Control-Allow-Origin": "*",

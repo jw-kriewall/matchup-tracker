@@ -89,6 +89,7 @@ export default function ControlledAccordions() {
   );
   const [userCookies] = useCookies(["user"]);
   const user = userCookies["user"]?.payload;
+  const [cookies] = useCookies(["format"]);
 
   const [loading, setLoading] = React.useState<boolean>(false);
   const [isInitialized, setInitialized] = React.useState<boolean>(false);
@@ -115,7 +116,7 @@ export default function ControlledAccordions() {
       setLoading(true);
       try {
         await dispatch(deleteSingleMatchup({ user, matchup })).unwrap();
-        dispatch(getMatchups(user));
+        dispatch(getMatchups({ user: user, format: cookies.format }));
       } catch (error) {
         console.error("Failed to delete matchup:", error);
       } finally {
@@ -134,7 +135,7 @@ export default function ControlledAccordions() {
 
   const getMatchupsIfAuthorized = () => {
     if (user && matchups.length === 0) {
-      dispatch(getMatchups(user))
+      dispatch(getMatchups({ user: user, format: cookies.format }))
         .unwrap()
         .then(handleInit)
         .catch((error: any) => {
@@ -208,7 +209,7 @@ export default function ControlledAccordions() {
                           {matchups.length - (page * rowsPerPage + index)}
                         </TableCell>
                         <TableCell align="center">
-                          {matchup.playerOneDeck.name} VS{" "}
+                          {matchup.playerOneDeck.name} <b>VS</b>{" "}
                           {matchup.playerTwoDeck.name}
                         </TableCell>
                         <TableCell align="center">

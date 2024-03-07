@@ -46,8 +46,8 @@ const DeckInputDropdown = ({
                   src={sprite}
                   alt={option.label}
                   style={{
-                    width: "36px",
-                    height: "36px",
+                    width: "22px",
+                    height: "22px",
                     marginLeft: "2px",
                   }}
                 />

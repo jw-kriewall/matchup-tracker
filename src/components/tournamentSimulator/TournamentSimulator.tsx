@@ -24,6 +24,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 interface simulatorProps {
 	user: CredentialResponse;
 	filteredDecks: string[];
+	format: string;
 }
 
 interface DeckPerformance {
@@ -55,7 +56,7 @@ interface TournamentSimulatorInput {
 
 // @TODO: Suggested number of rounds based on total players
 
-function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
+function TournamentSimulator({ user, filteredDecks, format }: simulatorProps) {
 	// const [data, setData] = useState<TableData>({});
 	const minPlayers = 0;
 	const maxPlayers = 500;
@@ -79,7 +80,7 @@ function TournamentSimulator({ user, filteredDecks }: simulatorProps) {
 
 		const fetchData = async () => {
 			try {
-				await dispatch(getMatchupRecordsByDeck({ user }));
+				await dispatch(getMatchupRecordsByDeck({ user, format }));
 			} catch (error) {
 				console.error("Error fetching data for decks", error);
 			}

@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import NavBar from "../../components/navBar/NavBar";
-import { ALL_DECKS_CONSTANT } from "../../constants/allDecks";
 import TournamentSimulator from "../../components/tournamentSimulator/TournamentSimulator";
 import { useCookies } from "react-cookie";
 import "./SimulatorPage.css";
 import PublicFaq from "../../components/publicFaq/PublicFaq";
+import { getDecksForFormat } from "../../components/shared/getDecksForFormat";
 
 export default function SimulatorPage() {
-  const initialDecks = ALL_DECKS_CONSTANT.map((deck) => deck.value);
+  const [cookies] = useCookies(["format"]);
+  const initialDecks = getDecksForFormat(cookies.format).map((deck) => deck.value);
   // const [selectedDecks, setSelectedDecks] = useState<string[]>(initialDecks);
   const [userCookies] = useCookies(["user"]);
   const user = userCookies["user"]?.payload;
@@ -31,7 +32,7 @@ export default function SimulatorPage() {
 
       <div className="bento-box-sim">
         <div className="data-table-sim">
-          <TournamentSimulator user={user} filteredDecks={initialDecks} />
+          <TournamentSimulator user={user} filteredDecks={initialDecks} format={cookies.format} />
         </div>
       </div>
     </div>

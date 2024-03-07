@@ -7,10 +7,10 @@ const version = process.env.REACT_APP_API_VERSION;
 
 export const getMatchupRecordsByDeck = createAsyncThunk(
   "tableData/getAllRecords",
-  async ({ user }: { user: CredentialResponse | undefined }) => {
+  async ({ user, format }: { user: CredentialResponse | undefined, format: string }) => {
     try {
       const response = await axios({
-        url: `${apiUrl}/api/${version}/matchups/records`,
+        url: `${apiUrl}/api/${version}/matchups/records/${format}`,
         method: "GET",
         headers: {
           "Access-Control-Allow-Origin": "*",

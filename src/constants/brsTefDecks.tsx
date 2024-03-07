@@ -3,11 +3,11 @@ import { DeckDisplay } from "../types/MatchupModels";
 //https://pokeapi.co/
 
 // @TODO: This data should be stored in Backend. Need CRUD endpoints ultimately.
-export const ALL_DECKS_CONSTANT: DeckDisplay[] = [
+export const BRS_TEF_DECKS_CONSTANT: DeckDisplay[] = [
   {
     value: "Ancient Box",
     label: "Ancient Box",
-    format: "F-on",
+    format: "BRS-TEF",
     cards: [
       "Koraidon",
       "Flutter Mane",
@@ -24,7 +24,7 @@ export const ALL_DECKS_CONSTANT: DeckDisplay[] = [
 	{
 		value: "Arceus / Giratina",
 		label: "Arceus / Giratina",
-		format: "F-on",
+		format: "BRS-TEF",
 		cards: [
       "Arceus", 
       "Giratina", 
@@ -40,7 +40,7 @@ export const ALL_DECKS_CONSTANT: DeckDisplay[] = [
   {
 		value: "Arceus / Vulpix",
 		label: "Arceus / Vulpix",
-		format: "F-on",
+		format: "BRS-TEF",
 		cards: [
       "Arceus", 
       "Vulpix", 
@@ -56,7 +56,7 @@ export const ALL_DECKS_CONSTANT: DeckDisplay[] = [
   {
 		value: "Charizard / Bibarel",
 		label: "Charizard / Bibarel",
-		format: "F-on",
+		format: "BRS-TEF",
 		cards: [
 			"Charmander",
 			"Charizard",
@@ -73,7 +73,7 @@ export const ALL_DECKS_CONSTANT: DeckDisplay[] = [
 	{
 		value: "Charizard / Pidgeot",
 		label: "Charizard / Pidgeot",
-		format: "F-on",
+		format: "BRS-TEF",
 		cards: [
 			"Charmander",
 			"Charizard",
@@ -91,7 +91,7 @@ export const ALL_DECKS_CONSTANT: DeckDisplay[] = [
 	{
 		value: "Chien Pao",
 		label: "Chein Pao",
-		format: "F-on",
+		format: "BRS-TEF",
 		cards: [
 			"Chien Pao",
 			"Frigibax",
@@ -107,10 +107,25 @@ export const ALL_DECKS_CONSTANT: DeckDisplay[] = [
 			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/998.png",
 		],
 	},
-  {
+	{
+		value: "Dialga VStar",
+		label: "Dialga VStar",
+		format: "BRS-TEF",
+		cards: [
+			"Dialga",
+			"Metang",
+			"Beldum",
+			"Metal Energy"
+		],
+		sprites: [
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/483.png",
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/375.png",
+		],
+	},
+  	{
 		value: "Future Box Hands",
 		label: "Future Box Hands",
-		format: "F-on",
+		format: "BRS-TEF",
 		cards: [
 			"Iron Hands",
       "Miraidon",
@@ -127,7 +142,7 @@ export const ALL_DECKS_CONSTANT: DeckDisplay[] = [
 	{
 		value: "Gholdengo",
 		label: "Gholdengo",
-		format: "F-on",
+		format: "BRS-TEF",
 		cards: [
 			"Gholdengo",
 			"Radiant Greninja",
@@ -143,7 +158,7 @@ export const ALL_DECKS_CONSTANT: DeckDisplay[] = [
 	{
 		value: "Giratina VStar",
 		label: "Giratina VStar",
-		format: "F-on",
+		format: "BRS-TEF",
 		cards: [
 			"Jet Energy",
 			"Giratina V",
@@ -161,7 +176,7 @@ export const ALL_DECKS_CONSTANT: DeckDisplay[] = [
   {
 		value: "Great Tusk Mill",
 		label: "Great Tusk Mill",
-		format: "F-on",
+		format: "BRS-TEF",
 		cards: [
 			"Great Tusk",
       		"Explorer's Guidance",
@@ -176,7 +191,7 @@ export const ALL_DECKS_CONSTANT: DeckDisplay[] = [
 	{
 		value: "Lost Zone Box",
 		label: "Lost Zone Box",
-		format: "F-on",
+		format: "BRS-TEF",
 		cards: [
 			"Comfey",
 			"Mirage Gate",
@@ -194,7 +209,7 @@ export const ALL_DECKS_CONSTANT: DeckDisplay[] = [
 	{
 		value: "Lost Zone Charizard",
 		label: "Lost Zone Charizard",
-		format: "F-on",
+		format: "BRS-TEF",
 		cards: [
 			"Comfey",
 			"Mirage Gate",
@@ -211,7 +226,7 @@ export const ALL_DECKS_CONSTANT: DeckDisplay[] = [
 	{
 		value: "Lugia / Archeops",
 		label: "Lugia / Archeops",
-		format: "F-on",
+		format: "BRS-TEF",
 		cards: [
 			"Lugia",
 			"Archeops",
@@ -228,7 +243,7 @@ export const ALL_DECKS_CONSTANT: DeckDisplay[] = [
 	{
 		value: "Roaring Moon",
 		label: "Roaring Moon",
-		format: "F-on",
+		format: "BRS-TEF",
 		cards: ["Roaring Moon", "Dark Patch", "Sada's Vitality", "Squawkabilly"],
 		sprites: [
 			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1005.png",
@@ -237,7 +252,7 @@ export const ALL_DECKS_CONSTANT: DeckDisplay[] = [
 	{
 		value: "Snorlax Stall",
 		label: "Snorlax Stall",
-		format: "F-on",
+		format: "BRS-TEF",
 		cards: [
 			"Penny",
 			"Snorlax",

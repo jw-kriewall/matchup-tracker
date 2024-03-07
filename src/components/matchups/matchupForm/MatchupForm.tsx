@@ -2,7 +2,6 @@ import React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
-import { ALL_DECKS_CONSTANT } from "../../../constants/allDecks";
 import Button from "@mui/material/Button";
 import AccordionMatchup from "../accordionMatchup/AccordionMatchup";
 import { DeckDisplay, Matchup } from "../../../types/MatchupModels";
@@ -18,6 +17,7 @@ import { useCookies } from "react-cookie";
 import DeckInputDropdown from "../../shared/deckInputDropdown";
 import SnackbarWarning from "../../snackbarNotifications/SnackbarWarning";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { getDecksForFormat } from "../../shared/getDecksForFormat";
 
 interface matchupFormProps {
 	userDeckDisplays: DeckDisplay[];
@@ -42,7 +42,7 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 		React.useState<string>("");
 	const [snackbarKey, setSnackbarKey] = React.useState<number>(0);
 
-	const [cookies] = useCookies(["userRole"]);
+	const [cookies] = useCookies(["userRole", "format"]);
 	const [userCookies] = useCookies(["user"]);
 
 	const userRole = cookies["userRole"]?.payload;
@@ -51,6 +51,8 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 	const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<
 		string[]
 	>([]);
+	  
+	const decks: DeckDisplay[] = getDecksForFormat(cookies.format);
 
 	const dispatch = useAppDispatch();
 
@@ -74,7 +76,7 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 		let bestMatches: string[] = [];
 		let highestMatchCount = 0;
 
-		for (const deck of ALL_DECKS_CONSTANT) {
+		for (const deck of decks) {
 			const matchCount = deck.cards.reduce(
 				(count, card) => (cards.has(card) ? count + 1 : count),
 				0
@@ -107,7 +109,7 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 		let currentPlayer = "";
 
 		const allCardNames = new Set<string>();
-		ALL_DECKS_CONSTANT.forEach((deck) => {
+		decks.forEach((deck) => {
 			deck.cards.forEach((card) => allCardNames.add(card));
 		});
 
@@ -257,7 +259,7 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 			},
 			startingPlayer,
 			winningDeck,
-			format,
+			format: cookies.format,
 			createdOn: new Date(),
 			createdBy: {
 				username: username,
@@ -364,14 +366,14 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 				<DeckInputDropdown
 					id="outlined-deck-one"
 					label="Player One Deck"
-					decks={ALL_DECKS_CONSTANT.concat(userDeckDisplays)}
+					decks={decks.concat(userDeckDisplays)}
 					value={playerOneDeckName}
 					onChange={(e) => handlePlayerOneDeckChange(e)}
 				/>
 				<DeckInputDropdown
 					id="outlined-deck-two"
 					label="Player Two Deck"
-					decks={ALL_DECKS_CONSTANT.concat(userDeckDisplays)}
+					decks={decks.concat(userDeckDisplays)}
 					value={playerTwoDeckName}
 					onChange={(e) => handlePlayerTwoDeckChange(e)}
 				/>

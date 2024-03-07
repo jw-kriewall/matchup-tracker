@@ -9,7 +9,7 @@ import Chip from "@mui/material/Chip";
 
 interface DeckFilterProps {
   selectedDecks: string[];
-  initialDecks: string[];
+  allDecks: string[];
   onSelectedDecksChange: (selectedDecks: string[]) => void;
 }
 
@@ -24,13 +24,15 @@ const MenuProps = {
 
 function DeckFilter({
   selectedDecks,
-  initialDecks,
+  allDecks,
   onSelectedDecksChange,
 }: DeckFilterProps) {
   const handleDeckChange = (event: SelectChangeEvent<string[]>) => {
     const value = event.target.value as string[];
     onSelectedDecksChange(value);
   };
+
+  const dynamicDecks = [...selectedDecks];
 
   return (
     <FormControl fullWidth>
@@ -65,7 +67,7 @@ function DeckFilter({
           </Box>
         )}
       >
-        {initialDecks.map((name: string) => (
+        {allDecks.map((name: string) => (
           <MenuItem
             key={name}
             value={name}
