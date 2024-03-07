@@ -86,7 +86,7 @@ function TournamentSimulator({ user, filteredDecks, format }: simulatorProps) {
 			}
 		};
 		fetchData();
-	}, [user, dispatch]);
+	}, [user, dispatch, format]);
 
 	useEffect(() => {
 		if (Object.keys(tableData.data).length > 0) {
