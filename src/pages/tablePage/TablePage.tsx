@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import DataTable from "../../components/dataTable/DataTable";
 import DeckFilter from "../../components/deckFilter/DeckFilter";
 import NavBar from "../../components/navBar/NavBar";
-import { ALL_DECKS_CONSTANT } from "../../constants/allDecks";
 import CountMatchups from "../../components/matchups/countMatchups/CountMatchups";
 import { useCookies } from "react-cookie";
 import "./TablePage.css";

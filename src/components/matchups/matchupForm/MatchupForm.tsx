@@ -2,7 +2,6 @@ import React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
-import { ALL_DECKS_CONSTANT } from "../../../constants/allDecks";
 import Button from "@mui/material/Button";
 import AccordionMatchup from "../accordionMatchup/AccordionMatchup";
 import { DeckDisplay, Matchup } from "../../../types/MatchupModels";
@@ -18,15 +17,10 @@ import { useCookies } from "react-cookie";
 import DeckInputDropdown from "../../shared/deckInputDropdown";
 import SnackbarWarning from "../../snackbarNotifications/SnackbarWarning";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { GLC_DECKS_CONSTANT } from "../../../constants/glcDecks";
 import { getDecksForFormat } from "../../shared/getDecksForFormat";
 
 interface matchupFormProps {
 	userDeckDisplays: DeckDisplay[];
-}
-
-interface DeckMapping {
-	[format: string]: DeckDisplay[];
 }
 
 export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
@@ -82,7 +76,7 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 		let bestMatches: string[] = [];
 		let highestMatchCount = 0;
 
-		for (const deck of ALL_DECKS_CONSTANT) {
+		for (const deck of decks) {
 			const matchCount = deck.cards.reduce(
 				(count, card) => (cards.has(card) ? count + 1 : count),
 				0
@@ -115,7 +109,7 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 		let currentPlayer = "";
 
 		const allCardNames = new Set<string>();
-		ALL_DECKS_CONSTANT.forEach((deck) => {
+		decks.forEach((deck) => {
 			deck.cards.forEach((card) => allCardNames.add(card));
 		});
 
@@ -372,14 +366,16 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 				<DeckInputDropdown
 					id="outlined-deck-one"
 					label="Player One Deck"
-					decks={decks.concat(userDeckDisplays)}
+					decks={decks}
+					// decks={decks.concat(userDeckDisplays)}
 					value={playerOneDeckName}
 					onChange={(e) => handlePlayerOneDeckChange(e)}
 				/>
 				<DeckInputDropdown
 					id="outlined-deck-two"
 					label="Player Two Deck"
-					decks={decks.concat(userDeckDisplays)}
+					decks={decks}
+					// decks={decks.concat(userDeckDisplays)}
 					value={playerTwoDeckName}
 					onChange={(e) => handlePlayerTwoDeckChange(e)}
 				/>

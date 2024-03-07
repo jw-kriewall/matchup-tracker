@@ -3,7 +3,7 @@ import { DeckDisplay } from "../types/MatchupModels";
 //https://pokeapi.co/
 
 // @TODO: This data should be stored in Backend. Need CRUD endpoints ultimately.
-export const ALL_DECKS_CONSTANT: DeckDisplay[] = [
+export const BRS_TEF_DECKS_CONSTANT: DeckDisplay[] = [
   {
     value: "Ancient Box",
     label: "Ancient Box",
