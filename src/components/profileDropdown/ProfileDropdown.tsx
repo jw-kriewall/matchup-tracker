@@ -102,8 +102,8 @@ export function ProfileDropdown() {
 
 					<Collapse in={open} timeout="auto" unmountOnExit>
 						<List component="div" disablePadding>
-							<ListItemButton sx={{ pl: 4 }} onClick={() => handleFormatOnClick("BST-TEF")}>
-								<ListItemText primary="Standard" />
+							<ListItemButton sx={{ pl: 4 }} onClick={() => handleFormatOnClick("BRS-TEF")}>
+								<ListItemText primary="BRS-TEF (Standard)" />
 							</ListItemButton>
 
               <ListItemButton sx={{ pl: 4 }} onClick={() => handleFormatOnClick("GLC")}>

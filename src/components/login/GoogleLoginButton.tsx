@@ -28,7 +28,7 @@ export default function GoogleLoginButton({ closeModal }: any) {
       setCookie("user", userJSON, { path: "/", maxAge: 3600 });
 
       if(!cookies.format) {
-        setCookie("format", "BST-TEF", { path: "/", maxAge: 3600 * 24 * 30 }); // Max Age: 30 days
+        setCookie("format", "BRS-TEF", { path: "/", maxAge: 3600 * 24 * 30 }); // Max Age: 30 days
       }
 
       dispatch(getMatchups({ user: res, format: cookies.format }));
