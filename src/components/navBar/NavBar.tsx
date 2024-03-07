@@ -17,7 +17,6 @@ import { CredentialResponse } from "@react-oauth/google";
 import { handleTwitterClick } from "../shared/navigateToX";
 import { Chip, ListItemIcon } from "@mui/material";
 import XIcon from "@mui/icons-material/X";
-import Badge from '@mui/material/Badge';
 import { ProfileDropdown } from "../profileDropdown/ProfileDropdown";
 
 export default function NavBar() {
@@ -34,7 +33,6 @@ export default function NavBar() {
     ) {
       return;
     }
-
     setDrawerOpen(open);
   };
 
