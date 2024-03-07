@@ -23,14 +23,14 @@ import { getMatchups } from "../../apiCalls/matchups/getMatchups";
 export function ProfileDropdown() {
 	const [userCookies] = useCookies(["user"]);
 	const user: CredentialResponse = userCookies["user"]?.payload;
-  const [open, setOpen] = React.useState(false);
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
-  const dispatch = useAppDispatch();
+  	const [open, setOpen] = React.useState(false);
+  	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+		null
+  	);
 	let userPicture = "";
-  const [cookies, setCookie] = useCookies(["userRole", "user", "format"]);
-
+  	const [cookies, setCookie] = useCookies(["userRole", "user", "format"]);
+  	const dispatch = useAppDispatch();
+	  
 	if (user && user.credential) {
 		let decodedToken: DecodedJwtToken | null = null;
 		decodedToken = jwt_decode<DecodedJwtToken>(user.credential);
@@ -52,16 +52,6 @@ export function ProfileDropdown() {
 	};
 
   const handleFormatOnClick = (format: string) => {
-    // when this button is clicked, what should happen?
-
-    // CHECK API call to fetch data based on user email and format.
-    // CHECK Each matchup should have a format that can be searched by
-    // CHECK Send format + email to backend to fetch new data.
-    // Make sure feed refreshes
-    // Format could be shown on screen?
-    // Format needs to be made a global variable so that proper dropdown menu can be adjusted.
-    // Current data needs to be updated with proper Format
-
     setCookie("format", format, { path: "/", maxAge: 3600 * 24 * 30 });
     dispatch(getMatchups({ user: cookies.user.payload, format: format }));
     // setOpen(false);
@@ -102,20 +92,18 @@ export function ProfileDropdown() {
 
 					<Collapse in={open} timeout="auto" unmountOnExit>
 						<List component="div" disablePadding>
-							<ListItemButton sx={{ pl: 4 }} onClick={() => handleFormatOnClick("BRS-TEF")}>
+							<ListItemButton selected={cookies.format === "BRS-TEF"} sx={{ pl: 4 }} onClick={() => handleFormatOnClick("BRS-TEF")}>
 								<ListItemText primary="BRS-TEF (Standard)" />
 							</ListItemButton>
 
-              <ListItemButton sx={{ pl: 4 }} onClick={() => handleFormatOnClick("GLC")}>
+              				<ListItemButton selected={cookies.format === "GLC"} sx={{ pl: 4 }} onClick={() => handleFormatOnClick("GLC")}>
 								<ListItemText primary="GLC" />
 							</ListItemButton>
 						</List>
 					</Collapse>
 				</List>
 
-				<MenuItem>
-					<LogoutButton />
-				</MenuItem>
+				<LogoutButton />
 			</Menu>
 		</Box>
 	);

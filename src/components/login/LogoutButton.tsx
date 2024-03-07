@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@mui/material";
+import { Button, MenuItem } from "@mui/material";
 import { logoutAction } from "../../actions/userActions";
 import { useAppDispatch } from "../../hooks/hooks";
 import { useCookies } from 'react-cookie';
@@ -18,8 +18,8 @@ export default function LogoutButton() {
   };
 
   return (
-    <Button color="inherit" onClick={() => handleLogout()}>
+    <MenuItem color="inherit" onClick={() => handleLogout()}>
       Logout
-    </Button>
+    </MenuItem>
   );
 }
