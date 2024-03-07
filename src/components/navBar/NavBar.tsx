@@ -15,14 +15,16 @@ import LoginButton from "../login/LoginButton";
 import { useCookies } from "react-cookie";
 import { CredentialResponse } from "@react-oauth/google";
 import { handleTwitterClick } from "../shared/navigateToX";
-import { ListItemIcon } from "@mui/material";
+import { Chip, ListItemIcon } from "@mui/material";
 import XIcon from "@mui/icons-material/X";
+import Badge from '@mui/material/Badge';
 import { ProfileDropdown } from "../profileDropdown/ProfileDropdown";
 
 export default function NavBar() {
   const [userCookies] = useCookies(["user"]);
   const user: CredentialResponse = userCookies["user"]?.payload;
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [cookies] = useCookies(["format"]);
   const navigate = useNavigate();
 
   const toggleDrawer = (open: any) => (event: any) => {
@@ -85,27 +87,37 @@ export default function NavBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 4 }}
-            onClick={toggleDrawer(true)}
-          >
-            <MenuIcon />
-          </IconButton>
-
-          <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
-            {list()}
-          </Drawer>
-
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <Toolbar style={{ justifyContent: 'center', display: 'flex' }}>
+          <Box sx={{ position: 'absolute', left: 16 }}>
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              sx={{ mr: 2 }}
+              onClick={toggleDrawer(true)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
+              {list()}
+            </Drawer>
+          </Box>
+  
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
             counterplay.gg BETA
           </Typography>
-
-          <div>{!user ? <LoginButton /> : <ProfileDropdown />}</div>
+  
+          <Box sx={{ position: 'absolute', right: 16 }}>
+            {!user ? (
+              <LoginButton />
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Chip label={cookies.format} color="info" sx={{ display: { xs: 'none', sm: 'flex' } }}/>
+                <ProfileDropdown />
+              </div>
+            )}
+          </Box>
         </Toolbar>
       </AppBar>
     </Box>
