@@ -107,7 +107,22 @@ export const BRS_TEF_DECKS_CONSTANT: DeckDisplay[] = [
 			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/998.png",
 		],
 	},
-  {
+	{
+		value: "Dialga VStar",
+		label: "Dialga VStar",
+		format: "BRS-TEF",
+		cards: [
+			"Dialga",
+			"Metang",
+			"Beldum",
+			"Metal Energy"
+		],
+		sprites: [
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/483.png",
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/375.png",
+		],
+	},
+  	{
 		value: "Future Box Hands",
 		label: "Future Box Hands",
 		format: "BRS-TEF",
