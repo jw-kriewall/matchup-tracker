@@ -67,7 +67,7 @@ function TournamentSimulator({ user, filteredDecks, format }: simulatorProps) {
 	const tableData = useSelector(selectTableData);
 	const [deckCounts, setDeckCounts] = useState<{ [deck: string]: number }>({});
 	const [numberOfRounds, setNumberOfRounds] = useState<number>(minRounds);
-	const [results, setResults] = useState<string>("");
+	const [results, setResults] = useState<string[]>([]);
 	const [isActualData, setIsActualData] = useState(true);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [modalOpen, setModalOpen] = useState(false);
@@ -230,15 +230,12 @@ function TournamentSimulator({ user, filteredDecks, format }: simulatorProps) {
 
 	function formatSimulationResults(simulationResults: {
 		[deck: string]: DeckPerformance;
-	}): string {
-		// @TODO: format this as a String[]
+	}): string[] {
 		return Object.entries(simulationResults)
 			.sort((a, b) => b[1].wins - a[1].wins)
-			.map(
-				([deck, performance]) =>
-					`${deck}: ${performance.wins} Wins, ${performance.losses} Losses`
-			)
-			.join("\n");
+			.map(([deck, performance]) =>
+				`${deck}: ${performance.wins} W | ${performance.losses} L`
+			);
 	}
 
 	function parseMatchupRecord(record: string): number {
