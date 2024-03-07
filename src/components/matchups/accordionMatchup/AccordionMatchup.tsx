@@ -209,7 +209,7 @@ export default function ControlledAccordions() {
                           {matchups.length - (page * rowsPerPage + index)}
                         </TableCell>
                         <TableCell align="center">
-                          {matchup.playerOneDeck.name} VS{" "}
+                          {matchup.playerOneDeck.name} <b>VS</b>{" "}
                           {matchup.playerTwoDeck.name}
                         </TableCell>
                         <TableCell align="center">

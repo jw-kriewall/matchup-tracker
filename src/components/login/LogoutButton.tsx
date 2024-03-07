@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, MenuItem } from "@mui/material";
+import { MenuItem } from "@mui/material";
 import { logoutAction } from "../../actions/userActions";
 import { useAppDispatch } from "../../hooks/hooks";
 import { useCookies } from 'react-cookie';
