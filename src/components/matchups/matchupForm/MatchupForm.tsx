@@ -361,8 +361,6 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 			</div>
 
 			<div>
-				{/* @TODO: Fix SnackbarNotification to show after every successful submit */}
-				{/* @TODO: Pass in the allDecksConstant as a combo of constants and user specific decks */}
 				<DeckInputDropdown
 					id="outlined-deck-one"
 					label="Player One Deck"

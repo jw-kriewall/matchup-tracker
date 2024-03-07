@@ -220,7 +220,7 @@ export const BRS_TEF_DECKS_CONSTANT: DeckDisplay[] = [
 		sprites: [
 			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/764.png",
 			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/302.png",
-			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/006.png",
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png",
 		],
 	},
 	{
