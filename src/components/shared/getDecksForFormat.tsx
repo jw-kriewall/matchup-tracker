@@ -11,6 +11,5 @@ export const getDecksForFormat = (format?: string | undefined): DeckDisplay[] =>
 
       'default': BRS_TEF_DECKS_CONSTANT
     };
-  
     return formatDecksMapping[validFormat];
   };
