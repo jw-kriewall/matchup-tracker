@@ -238,10 +238,19 @@ export default function ControlledAccordions() {
 													>
 														<Box margin={1}>
 															<Typography>
-																<b>Starting Player:</b> {matchup.startingPlayer} with {matchup.startingPlayer ===
-																matchup.playerOneName
-																	? matchup.playerOneDeck.name
-																	: matchup.playerTwoDeck.name}
+																<strong>Starting Player:</strong>{" "}
+																{matchup.startingPlayer ? (
+																	<>
+																		{matchup.startingPlayer}
+                                    {" "}with{" "}
+																		{matchup.startingPlayer ===
+																		matchup.playerOneName
+																			? matchup.playerOneDeck.name
+																			: matchup.playerTwoDeck.name}
+																	</>
+																) : (
+																	"Not Specified"
+																)}
 															</Typography>
 															<Typography>
 																<b>Notes:</b> {matchup.notes}
