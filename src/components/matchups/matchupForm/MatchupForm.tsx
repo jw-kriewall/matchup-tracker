@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
@@ -34,7 +34,6 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 		React.useState<string>("blank");
 	const [startingPlayer, setStartingPlayer] = React.useState<string>("");
 	const [winningDeck, setWinningDeck] = React.useState<string>("");
-	const [format, setFormat] = React.useState<string>("");
 	const [notes, setNotes] = React.useState<string>("");
 	const [snackbarSuccessMessage, setSnackbarSuccessMessage] =
 		React.useState<string>("");
@@ -55,6 +54,13 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 	const decks: DeckDisplay[] = getDecksForFormat(cookies.format);
 
 	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		if (playerOneName === '' && playerTwoName === '') {
+			console.log("Inside useEffect for players")
+		  setStartingPlayer("");
+		}
+	  }, [playerOneName, playerTwoName]);
 
 	const handlePlayerOneDeckChange = (e: any) => {
 		e.preventDefault();

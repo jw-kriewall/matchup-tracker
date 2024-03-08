@@ -10,7 +10,6 @@ import { deleteSingleMatchup } from "../../../apiCalls/matchups/deleteMatchup";
 import { useCookies } from "react-cookie";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
-	Badge,
 	Collapse,
 	Paper,
 	Table,
@@ -28,6 +27,8 @@ import IconButton from "@mui/material/IconButton";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import "./AccordionMatchup.css";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 //https://mui.com/base-ui/react-table-pagination/
 
 interface TablePaginationActionsProps {
@@ -209,10 +210,25 @@ export default function ControlledAccordions() {
 												<TableCell component="th" scope="row" align="left">
 													{matchups.length - (page * rowsPerPage + index)}
 												</TableCell>
-												<TableCell align="center">
+												{/* <TableCell align="center">
 													{matchup.playerOneDeck.name} <b>VS</b>{" "}
 													{matchup.playerTwoDeck.name}
+												</TableCell> */}
+												<TableCell align="center">
+													{matchup.startingPlayer === matchup.playerOneName && matchup.startingPlayer !== "" && (
+														<ArrowRightIcon
+															sx={{ verticalAlign: "middle", fontSize: "small" }}
+														/>
+													)}
+													{matchup.playerOneDeck.name} <b>VS</b>{" "}
+													{matchup.playerTwoDeck.name} 
+													{matchup.startingPlayer === matchup.playerTwoName && matchup.startingPlayer !== "" && (
+														<ArrowLeftIcon
+															sx={{ verticalAlign: "middle", fontSize: "small"}}
+														/>
+													)}
 												</TableCell>
+
 												<TableCell align="center">
 													{matchup.winningDeck}
 												</TableCell>
@@ -241,8 +257,7 @@ export default function ControlledAccordions() {
 																<strong>Starting Player:</strong>{" "}
 																{matchup.startingPlayer ? (
 																	<>
-																		{matchup.startingPlayer}
-                                    {" "}with{" "}
+																		{matchup.startingPlayer} with{" "}
 																		{matchup.startingPlayer ===
 																		matchup.playerOneName
 																			? matchup.playerOneDeck.name
