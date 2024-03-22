@@ -272,6 +272,22 @@ export const BRS_TEF_DECKS_CONSTANT: DeckDisplay[] = [
 		],
 	},
 	{
+		value: "Meowscarada",
+		label: "Meowscarada",
+		format: "BRS-TEF",
+		cards: [
+			"Meowscarada",
+			"Sprigatito",
+			"Floragato",
+			"Radiant Alakazam",
+			"Double Turbo",
+			"Rare Candy",
+		],
+		sprites: [
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/908.png",
+		],
+	},
+	{
 		value: "Roaring Moon",
 		label: "Roaring Moon",
 		format: "BRS-TEF",
