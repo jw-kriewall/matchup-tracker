@@ -90,10 +90,10 @@ export const BRS_TEF_DECKS_CONSTANT: DeckDisplay[] = [
 	},
 	{
 		value: "Chien Pao",
-		label: "Chein Pao",
+		label: "Chien Pao",
 		format: "BRS-TEF",
 		cards: [
-			"Chien Pao",
+			"Chien-Pao",
 			"Frigibax",
 			"Baxcalibur",
 			"Rare Candy",
@@ -122,6 +122,22 @@ export const BRS_TEF_DECKS_CONSTANT: DeckDisplay[] = [
 			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/375.png",
 		],
 	},
+	{
+		value: "Espathra / Xatu",
+		label: "Espathra / Xatu",
+		format: "BRS-TEF",
+		cards: [
+			"Espathra",
+			"Flittle",
+			"Natu",
+			"Xatu",
+			"Tulip",
+		],
+		sprites: [
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/956.png",
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/178.png",
+		],
+	},
   	{
 		value: "Future Box Hands",
 		label: "Future Box Hands",
@@ -137,6 +153,21 @@ export const BRS_TEF_DECKS_CONSTANT: DeckDisplay[] = [
 		sprites: [
 			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/992.png",
 			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1023.png"
+		],
+	},
+	{
+		value: "Gardevoir",
+		label: "Gardevoir",
+		format: "BRS-TEF",
+		cards: [
+			"Gardevoir",
+			"Kirlia",
+			"Ralts",
+			"Scream Tail",
+			"Buddy-Buddy Poffin",
+		],
+		sprites: [
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/282.png",
 		],
 	},
 	{

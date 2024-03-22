@@ -10,7 +10,7 @@ export default function GoogleLoginButton({ closeModal }: any) {
   const [cookies, setCookie] = useCookies(["userRole", "user", "format"]);
 
   const onSuccess = async (res: CredentialResponse) => {
-    console.log("Google login Successful! Current user: ", res);
+    // console.log("Google login Successful! Current user: ", res);
     try {
       const user = await dispatch(loginAction(res));
       const userJSON = JSON.stringify(user);
