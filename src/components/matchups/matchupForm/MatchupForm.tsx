@@ -57,7 +57,6 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 
 	useEffect(() => {
 		if (playerOneName === '' && playerTwoName === '') {
-			console.log("Inside useEffect for players")
 		  setStartingPlayer("");
 		}
 	  }, [playerOneName, playerTwoName]);

@@ -9,16 +9,8 @@ export default function GoogleLoginButton({ closeModal }: any) {
   const dispatch = useAppDispatch();
   const [cookies, setCookie] = useCookies(["userRole", "user", "format"]);
 
-
-  // const [userCookies] = useCookies(["user"]);
-  //const user = useCookies["user"]?.payload;
-
   const onSuccess = async (res: CredentialResponse) => {
-    console.log("Google login Successful! Current user: ", res);
-
-    //@TODO: remove localStorage user................
-    //localStorage.setItem("user", JSON.stringify(res));
-    
+    // console.log("Google login Successful! Current user: ", res);
     try {
       const user = await dispatch(loginAction(res));
       const userJSON = JSON.stringify(user);

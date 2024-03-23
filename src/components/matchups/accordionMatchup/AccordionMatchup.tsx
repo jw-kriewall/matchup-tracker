@@ -183,6 +183,7 @@ export default function ControlledAccordions() {
 						sx={{ maxHeight: 500, minHeight: 500 }}
 					>
 						<Table aria-label="collapsible table" stickyHeader>
+							
 							<TableHead>
 								<TableRow>
 									<TableCell />
@@ -196,8 +197,8 @@ export default function ControlledAccordions() {
 								{matchups
 									.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 									.map((matchup, index) => (
-										<>
-											<TableRow key={index}>
+										<React.Fragment key={index}>
+											<TableRow>
 												<TableCell>
 													<Button onClick={() => handleClick(index)}>
 														{open[index] ? (
@@ -210,10 +211,7 @@ export default function ControlledAccordions() {
 												<TableCell component="th" scope="row" align="left">
 													{matchups.length - (page * rowsPerPage + index)}
 												</TableCell>
-												{/* <TableCell align="center">
-													{matchup.playerOneDeck.name} <b>VS</b>{" "}
-													{matchup.playerTwoDeck.name}
-												</TableCell> */}
+												
 												<TableCell align="center">
 													{matchup.startingPlayer === matchup.playerOneName && matchup.startingPlayer !== "" && (
 														<ArrowRightIcon
@@ -274,7 +272,7 @@ export default function ControlledAccordions() {
 													</Collapse>
 												</TableCell>
 											</TableRow>
-										</>
+										</React.Fragment>
 									))}
 							</TableBody>
 						</Table>
