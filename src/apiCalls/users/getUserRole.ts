@@ -9,12 +9,11 @@ const version = process.env.REACT_APP_API_VERSION;
 
 export const getUserRole = createAsyncThunk(
 	"user/getRole",
-	async (user: CredentialResponse) => {
+	async (token: DecodedJwtToken) => {
 		try {
-			if (user.credential) {
-				const decodedToken: DecodedJwtToken = jwt_decode(user.credential);
-				const email = decodedToken.email;
-				const username = decodedToken.name;
+			if (token) {
+				const email = token.email;
+				const username = token.name;
 				const response = await axios.post(
 					`${apiUrl}/api/${version}/user/role`,
 					{ email: email, username: username },
@@ -23,7 +22,7 @@ export const getUserRole = createAsyncThunk(
 							"Content-Type": "application/json",
 							"Access-Control-Allow-Origin": "*",
 							"Access-Control-Allow-Methods": "POST",
-							Authorization: "Bearer " + user?.credential,
+							Authorization: "Bearer " + token,
 						},
 					}
 				);

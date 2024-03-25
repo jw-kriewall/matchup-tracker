@@ -18,6 +18,7 @@ import DeckInputDropdown from "../../shared/deckInputDropdown";
 import SnackbarWarning from "../../snackbarNotifications/SnackbarWarning";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { getDecksForFormat } from "../../shared/getDecksForFormat";
+import { GoogleDataJson } from "../../../types/GoogleDataJson";
 
 interface matchupFormProps {
 	userDeckDisplays: DeckDisplay[];
@@ -45,7 +46,7 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 	const [userCookies] = useCookies(["user"]);
 
 	const userRole = cookies["userRole"]?.payload;
-	const user: CredentialResponse = userCookies["user"]?.payload;
+	const user: GoogleDataJson = userCookies["user"]?.payload;
 
 	const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<
 		string[]
@@ -237,7 +238,7 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 		let username = "";
 		let email = "";
 
-		let token = user.credential;
+		let token = user.id_token;
 
 		if (token) {
 			try {

@@ -9,10 +9,11 @@ import "./DataTable.css";
 import { useSelector } from "react-redux";
 import { selectTableData } from "../../redux/TableDataSlice";
 import { selectMatchups } from "../../redux/MatchupFeedSlice";
+import { GoogleDataJson } from "../../types/GoogleDataJson";
 
 interface DataTableProps {
 	selectedDecks: string[];
-	user: CredentialResponse;
+	user: GoogleDataJson;
 	format: string;
 }
 

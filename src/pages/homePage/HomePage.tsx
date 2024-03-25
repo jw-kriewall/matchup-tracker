@@ -6,12 +6,12 @@ import { useCookies } from "react-cookie";
 import { DeckDisplay } from "../../types/MatchupModels";
 import { getUserDeckDisplay } from "../../apiCalls/users/getUserDeckDisplay";
 import { useAppDispatch } from "../../hooks/hooks";
-import { CredentialResponse } from "@react-oauth/google";
 import "./HomePage.css";
+import { GoogleDataJson } from "../../types/GoogleDataJson";
 
 export default function HomePage() {
   const [userCookies] = useCookies(["user"]);
-  const user: CredentialResponse = userCookies["user"]?.payload;
+  const user: GoogleDataJson = userCookies["user"]?.payload;
 
   const [userDeckDisplays, setUserDeckDisplays] = React.useState<DeckDisplay[]>(
     []

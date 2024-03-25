@@ -20,9 +20,10 @@ import ImportExportIcon from "@mui/icons-material/ImportExport";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import ResultsModal from "./ResultsModal";
 import CircularProgress from '@mui/material/CircularProgress';
+import { GoogleDataJson } from "../../types/GoogleDataJson";
 
 interface simulatorProps {
-	user: CredentialResponse;
+	user: GoogleDataJson;
 	filteredDecks: string[];
 	format: string;
 }

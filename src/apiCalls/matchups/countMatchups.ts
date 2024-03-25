@@ -1,6 +1,7 @@
 import { CredentialResponse } from "@react-oauth/google";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { GoogleDataJson } from "../../types/GoogleDataJson";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const version = process.env.REACT_APP_API_VERSION;
@@ -11,7 +12,7 @@ export const countMatchups = createAsyncThunk(
 		user,
 		deckNames,
 	}: {
-		user: CredentialResponse | undefined;
+		user: GoogleDataJson | undefined;
 		deckNames: string[];
 	}) => {
 		try {
@@ -21,7 +22,7 @@ export const countMatchups = createAsyncThunk(
 				headers: {
 					"Access-Control-Allow-Origin": "*",
 					"Access-Control-Allow-Methods": "GET",
-					Authorization: "Bearer " + user?.credential,
+					Authorization: "Bearer " + user?.id_token,
 				},
 				params: { deckNames },
 			});

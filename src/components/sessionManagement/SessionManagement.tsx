@@ -4,7 +4,6 @@ import SnackbarWarning from "../snackbarNotifications/SnackbarWarning";
 import { useAppDispatch } from "../../hooks/hooks";
 import { logoutAction } from "../../actions/userActions";
 import { useCookies } from "react-cookie";
-import jwt_decode from "jwt-decode";
 import { DecodedJwtToken } from "../../types/DecodedJwtToken";
 
 const SessionManagement: any = ({ children }: any) => {
@@ -19,7 +18,7 @@ const SessionManagement: any = ({ children }: any) => {
 
   if (user) {
     try {
-      const decodedToken: DecodedJwtToken = jwt_decode(user.credential);
+      const decodedToken: DecodedJwtToken = user;
       logoutTime = decodedToken.exp;
     } catch (error) {
       console.error("Failed to decode token:", error);

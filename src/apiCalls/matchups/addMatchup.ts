@@ -1,6 +1,7 @@
 import { CredentialResponse } from "@react-oauth/google";
 import { Matchup } from "../../types/MatchupModels";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { GoogleDataJson } from "../../types/GoogleDataJson";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const version = process.env.REACT_APP_API_VERSION;
@@ -11,7 +12,7 @@ export const addNewMatchup = createAsyncThunk(
 		user,
 		matchup,
 	}: {
-		user: CredentialResponse | undefined;
+		user: GoogleDataJson | undefined;
 		matchup: Matchup;
 	}) => {
 		try {
@@ -19,7 +20,7 @@ export const addNewMatchup = createAsyncThunk(
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: "Bearer " + user?.credential,
+					Authorization: "Bearer " + user?.id_token,
 				},
 				body: JSON.stringify(matchup),
 			});

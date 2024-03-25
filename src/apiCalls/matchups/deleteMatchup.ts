@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { Matchup } from "../../types/MatchupModels";
 import { CredentialResponse } from "@react-oauth/google";
+import { GoogleDataJson } from "../../types/GoogleDataJson";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const version = process.env.REACT_APP_API_VERSION;
@@ -12,7 +13,7 @@ export const deleteSingleMatchup = createAsyncThunk(
 		user,
 		matchup,
 	}: {
-		user: CredentialResponse | undefined;
+		user: GoogleDataJson | undefined;
 		matchup: Matchup;
 	}) => {
 		try {
@@ -22,7 +23,7 @@ export const deleteSingleMatchup = createAsyncThunk(
 				headers: {
 					"Access-Control-Allow-Origin": "*",
 					"Access-Control-Allow-Methods": "DELETE",
-					Authorization: "Bearer " + user?.credential,
+					Authorization: "Bearer " + user?.id_token,
 				},
 			});
 		} catch (error) {
