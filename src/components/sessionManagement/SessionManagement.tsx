@@ -34,9 +34,9 @@ const SessionManagement: any = ({ children }: any) => {
   useEffect(() => {
     if (logoutTime > 0 && user) {
       const checkTime = () => {
-        const currentTime = new Date().getTime() / 1000 + 3490;
-        const fiveMinutesBeforeLogout = currentTime - 20;
-        const twoMinutesBeforeLogout = logoutTime - 10;
+        const currentTime = new Date().getTime() / 1000;
+        const fiveMinutesBeforeLogout = currentTime - (5 * 60);
+        const twoMinutesBeforeLogout = logoutTime - (2 * 60);
 
         console.log("Logout Time " + logoutTime)
         console.log("currentTime " + currentTime)
