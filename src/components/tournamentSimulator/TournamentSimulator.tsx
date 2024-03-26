@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { CredentialResponse } from "@react-oauth/google";
 import "./TournamentSimulator.css";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";

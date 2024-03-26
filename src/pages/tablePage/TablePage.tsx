@@ -15,7 +15,7 @@ export default function TablePage() {
   // const allDecks = decks.map((deck) => deck.value);
   const [selectedDecks, setSelectedDecks] = useState<string[]>([]);
   const [userCookies] = useCookies(["user"]);
-  const user = userCookies["user"]?.payload;
+  const user = userCookies["user"];
 
   useEffect(() => {
     const decks: DeckDisplay[] = getDecksForFormat(cookies.format);

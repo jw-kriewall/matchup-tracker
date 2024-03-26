@@ -4,6 +4,7 @@ import userAuthReducer from '../redux/UserSlice';
 import { Matchup } from '../types/MatchupModels';
 import TableDataReducer from '../redux/TableDataSlice';
 import MatchupCountSlice from '../redux/MatchupCountSlice';
+// import AuthSlice from '../redux/AuthSlice';
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     matchupReducer: matchupFeedReducer,
     tableDataReducer: TableDataReducer,
     matchupCountSlice: MatchupCountSlice,
+    // AuthSlice: AuthSlice
   }
 });
 

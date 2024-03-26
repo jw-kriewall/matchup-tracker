@@ -11,7 +11,7 @@ export default function SimulatorPage() {
   const initialDecks = getDecksForFormat(cookies.format).map((deck) => deck.value);
   // const [selectedDecks, setSelectedDecks] = useState<string[]>(initialDecks);
   const [userCookies] = useCookies(["user"]);
-  const user = userCookies["user"]?.payload;
+  const user = userCookies["user"];
 
   if (!user) {
     return (

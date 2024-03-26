@@ -11,7 +11,7 @@ import { GoogleDataJson } from "../../types/GoogleDataJson";
 
 export default function HomePage() {
   const [userCookies] = useCookies(["user"]);
-  const user: GoogleDataJson = userCookies["user"]?.payload;
+  const user: GoogleDataJson = userCookies["user"];
 
   const [userDeckDisplays, setUserDeckDisplays] = React.useState<DeckDisplay[]>(
     []

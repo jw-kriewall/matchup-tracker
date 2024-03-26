@@ -90,7 +90,7 @@ export default function ControlledAccordions() {
 		(state) => state.matchupReducer.matchups
 	);
 	const [userCookies] = useCookies(["user"]);
-	const user = userCookies["user"]?.payload;
+	const user = userCookies["user"];
 	const [cookies] = useCookies(["format"]);
 
 	const [loading, setLoading] = React.useState<boolean>(false);

@@ -18,10 +18,11 @@ import React from "react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { useAppDispatch } from "../../hooks/hooks";
 import { getMatchups } from "../../apiCalls/matchups/getMatchups";
+import { GoogleDataJson } from "../../types/GoogleDataJson";
 
 export function ProfileDropdown() {
 	const [userCookies] = useCookies(["user"]);
-	const user: CredentialResponse = userCookies["user"]?.payload;
+	const user: GoogleDataJson = userCookies["user"];
   	const [open, setOpen] = React.useState(false);
   	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
 		null
@@ -30,11 +31,11 @@ export function ProfileDropdown() {
   	const [cookies, setCookie] = useCookies(["userRole", "user", "format"]);
   	const dispatch = useAppDispatch();
 	  
-	if (user && user.credential) {
-		let decodedToken: DecodedJwtToken | null = null;
-		decodedToken = jwt_decode<DecodedJwtToken>(user.credential);
-
-		userPicture = decodedToken.picture;
+	  if (user && user.id_token) {
+		  let decodedToken: DecodedJwtToken | null = null;
+		  decodedToken = jwt_decode<DecodedJwtToken>(user.id_token);
+		  
+		  userPicture = decodedToken.picture;
 	}
 
 	const handleClick = () => {

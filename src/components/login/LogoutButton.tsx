@@ -6,15 +6,14 @@ import { useCookies } from 'react-cookie';
 
 export default function LogoutButton() {
   const dispatch = useAppDispatch();
-  const [, removeCookie] = useCookies(['userRole']);
-  const [, removeUserCookie] = useCookies(['user']);
+  const [, , removeCookie] = useCookies(['user', 'userRole']);
   
   const handleLogout = () => {
-    removeUserCookie('user', { path: '/' });
+    removeCookie('user', { path: '/' });
     removeCookie('userRole', { path: '/' });
     dispatch(logoutAction());
-    // @TODO: should I be doing something different here?
-    window.location.reload();
+    // Optional: Consider using a more React-friendly navigation method if possible
+    window.location.reload(); // This reloads the page, which might be fine depending on your use case
   };
 
   return (

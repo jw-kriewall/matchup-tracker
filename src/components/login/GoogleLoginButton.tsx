@@ -12,6 +12,7 @@ import { useState } from "react";
 import { GoogleDataJson } from "../../types/GoogleDataJson";
 import { DecodedJwtToken } from "../../types/DecodedJwtToken";
 import jwt_decode from "jwt-decode";
+import { Button } from "@mui/material";
 
 export default function GoogleLoginButton({ closeModal }: any) {
 	// const dispatch = useAppDispatch();
@@ -54,8 +55,8 @@ export default function GoogleLoginButton({ closeModal }: any) {
 	//   />
 	// );
 
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const version = process.env.REACT_APP_API_VERSION;
+	const apiUrl = process.env.REACT_APP_API_URL;
+	const version = process.env.REACT_APP_API_VERSION;
 
 	const dispatch = useAppDispatch();
 	const [cookies, setCookie] = useCookies(["userRole", "user", "format"]);
@@ -63,28 +64,31 @@ export default function GoogleLoginButton({ closeModal }: any) {
 
 	const login = useGoogleLogin({
 		onSuccess: async (credentialResponse) => {
-      console.log(credentialResponse)
+			console.log(credentialResponse);
 			if (credentialResponse.code) {
 				try {
 					// Send the code to the server
-					const response = await fetch(`${apiUrl}/api/${version}/refresh-token`, {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify({ code: credentialResponse.code }),
-					});
+					const response = await fetch(
+						`${apiUrl}/api/${version}/code-for-tokens`,
+						{
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+							},
+							body: JSON.stringify({ code: credentialResponse.code }),
+						}
+					);
 					const data: GoogleDataJson = await response.json();
-          console.log("DATA: " + JSON.stringify(data));
+					console.log("DATA: " + JSON.stringify(data));
 
 					if (!response.ok) {
 						throw new Error("Failed to login");
 					}
 
-          const token: DecodedJwtToken = jwt_decode(data.id_token);
+					const token: DecodedJwtToken = jwt_decode(data.id_token);
 					// Assuming the server response includes user information, roles, etc.
-					const user = await dispatch(loginAction(data));
-					const userJSON = JSON.stringify(user);
+					const user = await dispatch(loginAction(token));
+					const userJSON = JSON.stringify(user.payload);
 					let role = await dispatch(getUserRole(token));
 
 					setCookie("userRole", role, { path: "/", maxAge: 3600 });
@@ -114,7 +118,7 @@ export default function GoogleLoginButton({ closeModal }: any) {
 
 	return (
 		<div>
-			<button onClick={() => login()}>Login with Google</button>
+			<Button onClick={() => login()}>Login with Google</Button>
 			{error && <p style={{ color: "red" }}>{error}</p>}
 		</div>
 	);

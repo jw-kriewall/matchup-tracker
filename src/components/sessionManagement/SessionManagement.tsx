@@ -4,6 +4,8 @@ import SnackbarWarning from "../snackbarNotifications/SnackbarWarning";
 import { useAppDispatch } from "../../hooks/hooks";
 import { logoutAction } from "../../actions/userActions";
 import { useCookies } from "react-cookie";
+import { refreshTokenAction } from "../../apiCalls/oauth2/refreshTokenAction";
+import jwt_decode from "jwt-decode";
 import { DecodedJwtToken } from "../../types/DecodedJwtToken";
 
 const SessionManagement: any = ({ children }: any) => {
@@ -11,33 +13,33 @@ const SessionManagement: any = ({ children }: any) => {
   const [showSnackbarWarning, setShowSnackbarWarning] = useState(false);
   const [infoShown, setInfoShown] = useState(false);
   const [warningShown, setWarningShown] = useState(false);
-  const [cookies] = useCookies(["user"]);
-
-  const user = cookies["user"]?.payload;
-  let logoutTime: number = 0;
-
-  if (user) {
-    try {
-      const decodedToken: DecodedJwtToken = user;
-      logoutTime = decodedToken.exp;
-    } catch (error) {
-      console.error("Failed to decode token:", error);
-    }
-  } else {
-    console.log("No user token found");
-  }
+  const [cookies, setCookie] = useCookies(["user"]);
+  const [logoutTime, setLogoutTime] = useState<number>(0);
+  const user = cookies["user"];
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (logoutTime !== undefined && user) {
-      const checkTime = () => {
-        const currentTime = new Date().getTime() / 1000;
-        const fiveMinutesBeforeLogout = logoutTime - 5 * 60;
-        const twoMinutesBeforeLogout = logoutTime - 2 * 60;
+    if (user) {
+      const userDecoded: DecodedJwtToken = (user);
+      try {
+        setLogoutTime(userDecoded.exp);
+      } catch (error) {
+        console.error("Failed to decode token or set logout time:", error);
+      }
+    }
+  }, [user]);
 
-        // console.log("Logout Time " + logoutTime)
-        // console.log("currentTime " + currentTime)
+
+  useEffect(() => {
+    if (logoutTime > 0 && user) {
+      const checkTime = () => {
+        const currentTime = new Date().getTime() / 1000 + 3490;
+        const fiveMinutesBeforeLogout = currentTime - 20;
+        const twoMinutesBeforeLogout = logoutTime - 10;
+
+        console.log("Logout Time " + logoutTime)
+        console.log("currentTime " + currentTime)
 
         if (
           currentTime >= fiveMinutesBeforeLogout &&
@@ -57,7 +59,22 @@ const SessionManagement: any = ({ children }: any) => {
           user &&
           infoShown &&
           !warningShown
-        ) {
+        ) 
+        {
+          dispatch(refreshTokenAction(user.refresh_token))
+          .unwrap()
+          .then((newData) => {
+            setCookie("user", newData.decodedToken, { path: "/" });
+            setWarningShown(false); // Hide warning once the token is refreshed
+            setLogoutTime(newData.decodedToken.exp);
+            // Optionally, update expiryTime in your state or cookies
+            // setCookie("user", { ...cookies.user, expiryTime: newData.expiryTime }, { path: "/" });
+          })
+          .catch(() => {
+            dispatch(logoutAction());
+            window.location.href = "/";
+          });
+          // refreshToken(user);
           setShowSnackbarWarning(true);
           setWarningShown(true);
           console.log("Warning Shown");

@@ -1,8 +1,8 @@
-import { CredentialResponse } from "@react-oauth/google";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { getUserRole } from "../apiCalls/users/getUserRole";
+import { GoogleDataJson } from "../types/GoogleDataJson";
 
-interface UserWithRole extends CredentialResponse {
+interface UserWithRole extends GoogleDataJson {
 	role: string;
 }
 

@@ -21,7 +21,7 @@ import { ProfileDropdown } from "../profileDropdown/ProfileDropdown";
 
 export default function NavBar() {
   const [userCookies] = useCookies(["user"]);
-  const user: CredentialResponse = userCookies["user"]?.payload;
+  const user: CredentialResponse = userCookies["user"];
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [cookies] = useCookies(["format"]);
   const navigate = useNavigate();

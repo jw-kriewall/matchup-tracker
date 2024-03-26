@@ -45,8 +45,8 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 	const [cookies] = useCookies(["userRole", "format"]);
 	const [userCookies] = useCookies(["user"]);
 
-	const userRole = cookies["userRole"]?.payload;
-	const user: GoogleDataJson = userCookies["user"]?.payload;
+	const userRole = cookies["userRole"];
+	const user: GoogleDataJson = userCookies["user"];
 
 	const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<
 		string[]
