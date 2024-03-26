@@ -83,11 +83,11 @@ export default function GoogleLoginButton({ closeModal }: any) {
 						throw new Error("Failed to login");
 					}
 
-					const token: DecodedJwtToken = jwt_decode(data.id_token);
+					// const token: DecodedJwtToken = jwt_decode(data.id_token);
 					// Assuming the server response includes user information, roles, etc.
-					const user = await dispatch(loginAction(data.id_token));
+					const user = await dispatch(loginAction(data));
 					const userJSON = JSON.stringify(user.payload);
-					let role = await dispatch(getUserRole(token));
+					let role = await dispatch(getUserRole(data));
 
 					setCookie("userRole", role, { path: "/", maxAge: 3600 });
 					setCookie("user", userJSON, { path: "/", maxAge: 3600 });
