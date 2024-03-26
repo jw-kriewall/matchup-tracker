@@ -17,6 +17,7 @@ import React from "react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { useAppDispatch } from "../../hooks/hooks";
 import { getMatchups } from "../../apiCalls/matchups/getMatchups";
+import { GoogleDataJson } from "../../types/GoogleDataJson";
 
 export function ProfileDropdown() {
 	const [open, setOpen] = React.useState(false);
@@ -28,8 +29,9 @@ export function ProfileDropdown() {
 	let userPicture = "";
 
 	if (cookies.user) {
-		const decodedToken: DecodedJwtToken = jwt_decode(cookies.user.id_token);
-		userPicture = decodedToken.picture;
+		const decodedGoogleToken: GoogleDataJson = cookies.user;
+		const decodedUserToken: DecodedJwtToken = jwt_decode(decodedGoogleToken.id_token);
+		userPicture = decodedUserToken.picture;
 	}
 
 	const handleClick = () => {

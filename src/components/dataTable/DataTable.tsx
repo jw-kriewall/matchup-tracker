@@ -18,8 +18,8 @@ interface DataTableProps {
 
 function DataTable({ selectedDecks, user, format }: DataTableProps) {
 	const dispatch = useAppDispatch();
-	const tableDataState = useSelector(selectTableData);
-	const matchupDataState = useSelector(selectMatchups);
+	// const tableDataState = useSelector(selectTableData);
+	// const matchupDataState = useSelector(selectMatchups);
 	const [tableData, setTableData] = useState<TableData>({});
 	const [hoveredCell, setHoveredCell] = useState<string | null>(null);
 

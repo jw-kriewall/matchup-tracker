@@ -1,8 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { GoogleDataJson } from "../../types/GoogleDataJson";
-import { DecodedJwtToken } from "../../types/DecodedJwtToken";
-import jwt_decode from "jwt-decode";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const version = process.env.REACT_APP_API_VERSION;
@@ -10,30 +8,26 @@ const version = process.env.REACT_APP_API_VERSION;
 // This action creator function dispatches actions based on the API call result
 export const refreshTokenAction = createAsyncThunk(
 	"user/refreshToken",
-	async (token: string, { rejectWithValue }) => {
+	async (token: GoogleDataJson, { rejectWithValue }) => {
+		
 		try {
-			// Using Axios for the POST request
-			const googleResponseToken: GoogleDataJson = await axios.post(
+			const response = await axios.post(
 				`${apiUrl}/api/${version}/refresh-token`,
 				{
-					refreshToken: token, // Assuming the backend expects a JSON with the JWT for refreshing
+					refreshToken: token.refresh_token,
+				},
+				{
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: "Bearer " + token.id_token,
+					},
 				}
 			);
 
-			// Assuming the backend response includes the new access and refresh tokens directly
-			// and that response structure matches GoogleDataJson (adjust accordingly)
+			const googleResponseToken: GoogleDataJson = response.data;
+
 			console.log("DATA refresh-2: ", googleResponseToken);
-
-			// Decode the new JWT to extract user data or other info if needed
-			
-
-			// Return the new tokens; adjust according to actual response structure
-			return {
-				accessToken: googleResponseToken.access_token, // Adjust based on actual response
-				refreshToken: googleResponseToken.refresh_token, // Adjust based on actual response
-				// Including decodedToken in the return value if you need to use it
-				googleResponseToken,
-			};
+			return googleResponseToken;
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
 				// Handling Axios errors specifically

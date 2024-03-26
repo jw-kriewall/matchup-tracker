@@ -1,107 +1,79 @@
 import React, { useEffect, useState } from "react";
-import SnackbarInfo from "../snackbarNotifications/SnackbarInfo";
-import SnackbarWarning from "../snackbarNotifications/SnackbarWarning";
 import { useAppDispatch } from "../../hooks/hooks";
-import { logoutAction } from "../../actions/userActions";
 import { useCookies } from "react-cookie";
 import { refreshTokenAction } from "../../apiCalls/oauth2/refreshTokenAction";
 import jwt_decode from "jwt-decode";
 import { DecodedJwtToken } from "../../types/DecodedJwtToken";
+import { GoogleDataJson } from "../../types/GoogleDataJson";
+import { logoutAction } from "../../actions/userActions";
 
 const SessionManagement: any = ({ children }: any) => {
-  const [showSnackbarInfo, setShowSnackbarInfo] = useState(false);
-  const [showSnackbarWarning, setShowSnackbarWarning] = useState(false);
-  const [infoShown, setInfoShown] = useState(false);
-  const [warningShown, setWarningShown] = useState(false);
-  const [cookies, setCookie] = useCookies(["user"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["user", "logoutTime", "refresh-token"]);
   const [logoutTime, setLogoutTime] = useState<number>(0);
-  const user = cookies["user"];
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (user) {
-      const userDecoded: DecodedJwtToken = (user);
+    if (cookies.user) {
+      const userFromCookie: GoogleDataJson = cookies.user;
+      const userTokenDecoded: DecodedJwtToken = jwt_decode(userFromCookie.id_token);
       try {
-        setLogoutTime(userDecoded.exp);
+        setLogoutTime(userTokenDecoded.exp);
+        setCookie("logoutTime", userTokenDecoded.exp, { path: "/" });
       } catch (error) {
-        console.error("Failed to decode token or set logout time:", error);
+        console.error("Failed to decode token or set logout time: ", error);
       }
     }
-  }, [user]);
+  }, [cookies.user, setCookie]);
+  
+  useEffect(() => {
+    const storedLogoutTime = cookies.logoutTime ? Number(cookies.logoutTime) : 0;
+    if (storedLogoutTime) {
+      setLogoutTime(storedLogoutTime);
+    }
+  }, [cookies.logoutTime]);
 
 
   useEffect(() => {
-    if (logoutTime > 0 && user) {
-      const checkTime = () => {
-        const currentTime = new Date().getTime() / 1000;
-        const fiveMinutesBeforeLogout = currentTime - (5 * 60);
-        const twoMinutesBeforeLogout = logoutTime - (2 * 60);
+    const interval = setInterval(() => {
+      const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+      console.log("Time Remaining: " + (logoutTime - currentTime))
 
-        console.log("Logout Time " + logoutTime)
-        console.log("currentTime " + currentTime)
+      if (logoutTime - currentTime <= 100 && cookies.user) {
+        let userFromCookie: GoogleDataJson = cookies.user;
 
-        if (
-          currentTime >= fiveMinutesBeforeLogout &&
-          currentTime < twoMinutesBeforeLogout &&
-          user &&
-          !infoShown &&
-          !warningShown
-        ) {
-          setShowSnackbarInfo(true);
-          setInfoShown(true);
-          console.log("Info Shown");
+        if (!userFromCookie || !userFromCookie.refresh_token) {
+          userFromCookie = {
+            ...userFromCookie,
+            refresh_token: cookies["refresh-token"],
+          };
         }
-
-        if (
-          currentTime >= twoMinutesBeforeLogout &&
-          currentTime < logoutTime &&
-          user &&
-          infoShown &&
-          !warningShown
-        ) 
-        {
-          dispatch(refreshTokenAction(user.refresh_token))
+        // debugger;
+        dispatch(refreshTokenAction(userFromCookie))
           .unwrap()
-          .then((res) => {
-            setCookie("user", res.googleResponseToken, { path: "/" });
-            setWarningShown(false); // Hide warning once the token is refreshed
-            const decodedToken: DecodedJwtToken = jwt_decode(res.googleResponseToken.id_token);
-            setLogoutTime(decodedToken.exp);
-            // Optionally, update expiryTime in your state or cookies
-            // setCookie("user", { ...cookies.user, expiryTime: newData.expiryTime }, { path: "/" });
+          .then((response: GoogleDataJson ) => {
+            const newDecodedToken: DecodedJwtToken = jwt_decode(response.id_token);
+            setLogoutTime(newDecodedToken.exp);
+            setCookie("user", response, { path: '/' });
           })
           .catch(() => {
             dispatch(logoutAction());
-            window.location.href = "/";
+            removeCookie("user");
+            window.location.href = '/';
           });
-          // refreshToken(user);
-          setShowSnackbarWarning(true);
-          setWarningShown(true);
-          console.log("Warning Shown");
-        }
-
-        if (currentTime >= logoutTime && infoShown && warningShown && user) {
-          //@TODO: Check this...
-          setInfoShown(false);
-          setWarningShown(false);
-          dispatch(logoutAction());
-          window.location.href = "/";
-        }
-      };
-      const interval = setInterval(checkTime, 1000);
-      return () => clearInterval(interval);
-    }
-  }, [logoutTime, infoShown, warningShown, dispatch, user]);
+      }
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [logoutTime, dispatch, setCookie, removeCookie]);
 
   return (
     <>
-      {showSnackbarInfo && user && (
+      {/* {showSnackbarInfo && cookies.user && (
         <SnackbarInfo message="Your session will automatically expire in 5 minutes." />
       )}
-      {showSnackbarWarning && user && (
+      {showSnackbarWarning && cookies.user && (
         <SnackbarWarning message="Your session will automatically expire in 2 minutes. Please log back in as progress will not be saved." />
-      )}
+      )} */}
       {children}
     </>
   );
