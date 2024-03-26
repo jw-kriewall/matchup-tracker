@@ -9,7 +9,6 @@ import jwt_decode from "jwt-decode";
 import { DecodedJwtToken } from "../../../types/DecodedJwtToken";
 import { addNewMatchup } from "../../../apiCalls/matchups/addMatchup";
 import { IconButton } from "@mui/material";
-import { CredentialResponse } from "@react-oauth/google";
 import LooksOneIcon from "@mui/icons-material/LooksOne";
 import SnackbarSuccess from "../../snackbarNotifications/SnackbarSuccess";
 import { useAppDispatch } from "../../../hooks/hooks";

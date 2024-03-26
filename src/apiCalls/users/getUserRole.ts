@@ -1,7 +1,5 @@
-import { CredentialResponse } from "@react-oauth/google";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import jwt_decode from "jwt-decode";
 import { DecodedJwtToken } from "../../types/DecodedJwtToken";
 
 const apiUrl = process.env.REACT_APP_API_URL;

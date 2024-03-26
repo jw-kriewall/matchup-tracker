@@ -12,7 +12,7 @@ export const deleteSingleMatchup = createAsyncThunk(
 		user,
 		matchup,
 	}: {
-		user: GoogleDataJson | undefined;
+		user: string | undefined;
 		matchup: Matchup;
 	}) => {
 		try {
@@ -22,7 +22,7 @@ export const deleteSingleMatchup = createAsyncThunk(
 				headers: {
 					"Access-Control-Allow-Origin": "*",
 					"Access-Control-Allow-Methods": "DELETE",
-					Authorization: "Bearer " + user?.id_token,
+					Authorization: "Bearer " + user,
 				},
 			});
 		} catch (error) {

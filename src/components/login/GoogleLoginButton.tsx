@@ -1,6 +1,4 @@
 import {
-	CredentialResponse,
-	GoogleLogin,
 	useGoogleLogin,
 } from "@react-oauth/google";
 import { useAppDispatch } from "../../hooks/hooks";
@@ -87,7 +85,7 @@ export default function GoogleLoginButton({ closeModal }: any) {
 
 					const token: DecodedJwtToken = jwt_decode(data.id_token);
 					// Assuming the server response includes user information, roles, etc.
-					const user = await dispatch(loginAction(token));
+					const user = await dispatch(loginAction(data.id_token));
 					const userJSON = JSON.stringify(user.payload);
 					let role = await dispatch(getUserRole(token));
 

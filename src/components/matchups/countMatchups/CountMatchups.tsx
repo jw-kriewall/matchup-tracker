@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { CredentialResponse } from '@react-oauth/google';
 import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
 import { Matchup } from '../../../types/MatchupModels';
 import { useSpring, animated } from 'react-spring';

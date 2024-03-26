@@ -4,12 +4,11 @@ import { TableData } from "../../types/TableTypes";
 import { getMatchupRecordsByDeck } from "../../apiCalls/dataTable/getIndividualMatchupRecordsByDeck";
 import { useAppDispatch } from "../../hooks/hooks";
 import { calculateWinPercentage, formatWinPercentage } from "./DataTableUtil";
-import { CredentialResponse } from "@react-oauth/google";
-import "./DataTable.css";
 import { useSelector } from "react-redux";
 import { selectTableData } from "../../redux/TableDataSlice";
 import { selectMatchups } from "../../redux/MatchupFeedSlice";
 import { GoogleDataJson } from "../../types/GoogleDataJson";
+import "./DataTable.css";
 
 interface DataTableProps {
 	selectedDecks: string[];

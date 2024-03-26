@@ -13,15 +13,15 @@ import ListItemText from "@mui/material/ListItemText";
 import { useNavigate } from "react-router-dom";
 import LoginButton from "../login/LoginButton";
 import { useCookies } from "react-cookie";
-import { CredentialResponse } from "@react-oauth/google";
 import { handleTwitterClick } from "../shared/navigateToX";
 import { Chip, ListItemIcon } from "@mui/material";
 import XIcon from "@mui/icons-material/X";
 import { ProfileDropdown } from "../profileDropdown/ProfileDropdown";
+import { GoogleDataJson } from "../../types/GoogleDataJson";
 
 export default function NavBar() {
   const [userCookies] = useCookies(["user"]);
-  const user: CredentialResponse = userCookies["user"];
+  const user: GoogleDataJson = userCookies["user"];
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [cookies] = useCookies(["format"]);
   const navigate = useNavigate();

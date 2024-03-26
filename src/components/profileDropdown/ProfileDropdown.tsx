@@ -9,7 +9,6 @@ import {
 	Menu,
 	Tooltip,
 } from "@mui/material";
-import { CredentialResponse } from "@react-oauth/google";
 import { useCookies } from "react-cookie";
 import LogoutButton from "../login/LogoutButton";
 import jwt_decode from "jwt-decode";

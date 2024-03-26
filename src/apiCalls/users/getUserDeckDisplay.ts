@@ -1,7 +1,6 @@
-import { CredentialResponse } from "@react-oauth/google";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import { GoogleDataJson } from "../../types/GoogleDataJson";
+import axios from "axios";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const version = process.env.REACT_APP_API_VERSION;

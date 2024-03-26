@@ -8,6 +8,7 @@ import "./TablePage.css";
 import PublicFaq from "../../components/publicFaq/PublicFaq";
 import { DeckDisplay } from "../../types/MatchupModels";
 import { getDecksForFormat } from "../../components/shared/getDecksForFormat";
+import { GoogleDataJson } from "../../types/GoogleDataJson";
 
 export default function TablePage() {
   const [cookies] = useCookies(["format"]);
@@ -15,7 +16,7 @@ export default function TablePage() {
   // const allDecks = decks.map((deck) => deck.value);
   const [selectedDecks, setSelectedDecks] = useState<string[]>([]);
   const [userCookies] = useCookies(["user"]);
-  const user = userCookies["user"];
+  const user: GoogleDataJson = userCookies["user"];
 
   useEffect(() => {
     const decks: DeckDisplay[] = getDecksForFormat(cookies.format);
