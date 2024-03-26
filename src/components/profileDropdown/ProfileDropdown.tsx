@@ -17,24 +17,19 @@ import React from "react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { useAppDispatch } from "../../hooks/hooks";
 import { getMatchups } from "../../apiCalls/matchups/getMatchups";
-import { GoogleDataJson } from "../../types/GoogleDataJson";
 
 export function ProfileDropdown() {
-	const [userCookies] = useCookies(["user"]);
-	const user: GoogleDataJson = userCookies["user"];
-  	const [open, setOpen] = React.useState(false);
-  	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+	const [open, setOpen] = React.useState(false);
+	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
 		null
-  	);
+	);
+	const [cookies, setCookie] = useCookies(["userRole", "user", "format"]);
+	const dispatch = useAppDispatch();
 	let userPicture = "";
-  	const [cookies, setCookie] = useCookies(["userRole", "user", "format"]);
-  	const dispatch = useAppDispatch();
-	  
-	  if (user && user.id_token) {
-		  let decodedToken: DecodedJwtToken | null = null;
-		  decodedToken = jwt_decode<DecodedJwtToken>(user.id_token);
-		  
-		  userPicture = decodedToken.picture;
+
+	if (cookies.user) {
+		const decodedToken: DecodedJwtToken = jwt_decode(cookies.user.id_token);
+		userPicture = decodedToken.picture;
 	}
 
 	const handleClick = () => {
@@ -50,11 +45,11 @@ export function ProfileDropdown() {
 		setOpen(false);
 	};
 
-  const handleFormatOnClick = (format: string) => {
-    setCookie("format", format, { path: "/", maxAge: 3600 * 24 * 30 });
-    dispatch(getMatchups({ user: cookies.user.payload, format: format }));
-    // setOpen(false);
-  }
+	const handleFormatOnClick = (format: string) => {
+		setCookie("format", format, { path: "/", maxAge: 3600 * 24 * 30 });
+		dispatch(getMatchups({ user: cookies.user, format: format }));
+		// setOpen(false);
+	};
 
 	return (
 		<Box sx={{ flexGrow: 0 }}>
@@ -80,7 +75,12 @@ export function ProfileDropdown() {
 				onClose={handleCloseUserMenu}
 			>
 				<List
-					sx={{ width: "100%", maxWidth: 360, minWidth: 200, bgcolor: "background.paper" }}
+					sx={{
+						width: "100%",
+						maxWidth: 360,
+						minWidth: 200,
+						bgcolor: "background.paper",
+					}}
 					component="nav"
 					aria-labelledby="nested-list-subheader"
 				>
@@ -91,11 +91,19 @@ export function ProfileDropdown() {
 
 					<Collapse in={open} timeout="auto" unmountOnExit>
 						<List component="div" disablePadding>
-							<ListItemButton selected={cookies.format === "BRS-TEF"} sx={{ pl: 4 }} onClick={() => handleFormatOnClick("BRS-TEF")}>
+							<ListItemButton
+								selected={cookies.format === "BRS-TEF"}
+								sx={{ pl: 4 }}
+								onClick={() => handleFormatOnClick("BRS-TEF")}
+							>
 								<ListItemText primary="BRS-TEF (Standard)" />
 							</ListItemButton>
 
-              				<ListItemButton selected={cookies.format === "GLC"} sx={{ pl: 4 }} onClick={() => handleFormatOnClick("GLC")}>
+							<ListItemButton
+								selected={cookies.format === "GLC"}
+								sx={{ pl: 4 }}
+								onClick={() => handleFormatOnClick("GLC")}
+							>
 								<ListItemText primary="GLC" />
 							</ListItemButton>
 						</List>

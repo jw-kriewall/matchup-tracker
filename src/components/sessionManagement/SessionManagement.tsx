@@ -63,10 +63,11 @@ const SessionManagement: any = ({ children }: any) => {
         {
           dispatch(refreshTokenAction(user.refresh_token))
           .unwrap()
-          .then((newData) => {
-            setCookie("user", newData.decodedToken, { path: "/" });
+          .then((res) => {
+            setCookie("user", res.googleResponseToken, { path: "/" });
             setWarningShown(false); // Hide warning once the token is refreshed
-            setLogoutTime(newData.decodedToken.exp);
+            const decodedToken: DecodedJwtToken = jwt_decode(res.googleResponseToken.id_token);
+            setLogoutTime(decodedToken.exp);
             // Optionally, update expiryTime in your state or cookies
             // setCookie("user", { ...cookies.user, expiryTime: newData.expiryTime }, { path: "/" });
           })

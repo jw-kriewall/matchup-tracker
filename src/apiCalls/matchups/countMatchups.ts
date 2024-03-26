@@ -11,7 +11,7 @@ export const countMatchups = createAsyncThunk(
 		user,
 		deckNames,
 	}: {
-		user: string | undefined;
+		user: GoogleDataJson | undefined;
 		deckNames: string[];
 	}) => {
 		try {
@@ -21,7 +21,7 @@ export const countMatchups = createAsyncThunk(
 				headers: {
 					"Access-Control-Allow-Origin": "*",
 					"Access-Control-Allow-Methods": "GET",
-					Authorization: "Bearer " + user,
+					Authorization: "Bearer " + user?.id_token,
 				},
 				params: { deckNames },
 			});

@@ -13,7 +13,7 @@ export const refreshTokenAction = createAsyncThunk(
 	async (token: string, { rejectWithValue }) => {
 		try {
 			// Using Axios for the POST request
-			const response: GoogleDataJson = await axios.post(
+			const googleResponseToken: GoogleDataJson = await axios.post(
 				`${apiUrl}/api/${version}/refresh-token`,
 				{
 					refreshToken: token, // Assuming the backend expects a JSON with the JWT for refreshing
@@ -22,17 +22,17 @@ export const refreshTokenAction = createAsyncThunk(
 
 			// Assuming the backend response includes the new access and refresh tokens directly
 			// and that response structure matches GoogleDataJson (adjust accordingly)
-			console.log("DATA refresh-2: ", response);
+			console.log("DATA refresh-2: ", googleResponseToken);
 
 			// Decode the new JWT to extract user data or other info if needed
-			const decodedToken: DecodedJwtToken = jwt_decode(response.id_token);
+			
 
 			// Return the new tokens; adjust according to actual response structure
 			return {
-				accessToken: response.access_token, // Adjust based on actual response
-				refreshToken: response.refresh_token, // Adjust based on actual response
+				accessToken: googleResponseToken.access_token, // Adjust based on actual response
+				refreshToken: googleResponseToken.refresh_token, // Adjust based on actual response
 				// Including decodedToken in the return value if you need to use it
-				decodedToken,
+				googleResponseToken,
 			};
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
