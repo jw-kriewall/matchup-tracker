@@ -267,12 +267,9 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 			},
 			notes,
 		};
-		// console.log(matchup);
 
 		try {
-			debugger;
-			const actionResult = await dispatch(addNewMatchup({ userToken: cookies.user, matchup }));
-			const result = unwrapResult(actionResult);
+			await dispatch(addNewMatchup({ userToken: cookies.user, matchup }));
 			setNotes("");
 			setSnackbarSuccessMessage("Matchup successfully added!");
 			setSnackbarKey((prevKey) => prevKey + 1);

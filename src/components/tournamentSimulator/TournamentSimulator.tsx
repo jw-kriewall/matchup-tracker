@@ -65,9 +65,7 @@ function TournamentSimulator({ userToken, filteredDecks, format }: simulatorProp
 
 	const dispatch = useAppDispatch();
 	const tableData = useSelector(selectTableData);
-	const [deckCounts, setDeckCounts] = useState<{ [deck: string]: number }>(
-		filteredDecks.reduce((acc, deck) => ({ ...acc, [deck]: 0 }), {})
-	  );
+	const [deckCounts, setDeckCounts] = useState<{ [deck: string]: number }>({});
 	const [numberOfRounds, setNumberOfRounds] = useState<number>(minRounds);
 	const [results, setResults] = useState<string[]>([]);
 	const [isActualData, setIsActualData] = useState(true);
@@ -493,7 +491,7 @@ function TournamentSimulator({ userToken, filteredDecks, format }: simulatorProp
 													},
 												}}
 												size="small"
-												value={matchupPercentages[deck]?.[opponentDeck]}
+												value={matchupPercentages[deck]?.[opponentDeck] || '50.0'}
 												onChange={(e) =>
 													updateMatchupPercentage(
 														deck,
@@ -576,7 +574,7 @@ function TournamentSimulator({ userToken, filteredDecks, format }: simulatorProp
 					}}
 					inputMode="numeric"
 					size="small"
-					value={numberOfRounds}
+					value={numberOfRounds || 0}
 					onChange={(e) => 
 						{
 							var value = parseInt(e.target.value, 10);
