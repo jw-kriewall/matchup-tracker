@@ -11,9 +11,10 @@ export const addNewMatchup = createAsyncThunk(
 		userToken,
 		matchup,
 	}: {
-		userToken: string | undefined;
+		userToken: string;
 		matchup: Matchup;
 	}) => {
+		debugger;
 		try {
 			const response = await fetch(`${apiUrl}/api/${version}/matchups/add`, {
 				method: "POST",

@@ -65,7 +65,9 @@ function TournamentSimulator({ userToken, filteredDecks, format }: simulatorProp
 
 	const dispatch = useAppDispatch();
 	const tableData = useSelector(selectTableData);
-	const [deckCounts, setDeckCounts] = useState<{ [deck: string]: number }>({});
+	const [deckCounts, setDeckCounts] = useState<{ [deck: string]: number }>(
+		filteredDecks.reduce((acc, deck) => ({ ...acc, [deck]: 0 }), {})
+	  );
 	const [numberOfRounds, setNumberOfRounds] = useState<number>(minRounds);
 	const [results, setResults] = useState<string[]>([]);
 	const [isActualData, setIsActualData] = useState(true);

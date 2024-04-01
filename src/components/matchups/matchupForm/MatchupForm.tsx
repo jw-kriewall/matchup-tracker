@@ -41,11 +41,7 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 		React.useState<string>("");
 	const [snackbarKey, setSnackbarKey] = React.useState<number>(0);
 
-	const [cookies] = useCookies(["userRole", "format"]);
-	const [userCookies] = useCookies(["user"]);
-
-	const userRole = cookies["userRole"];
-	const userToken: string = userCookies["user"];
+	const [cookies] = useCookies(["userRole", "user", "format"]);
 
 	const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<
 		string[]
@@ -237,9 +233,9 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 		let username = "";
 		let email = "";
 
-		if (userToken) {
+		if (cookies.user) {
 			try {
-				const decodedToken: DecodedJwtToken = jwt_decode(userToken);
+				const decodedToken: DecodedJwtToken = jwt_decode(cookies.user);
 				email = decodedToken.email;
 				username = decodedToken.name;
 			} catch (error) {
@@ -266,7 +262,7 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 			createdOn: new Date(),
 			createdBy: {
 				username: username,
-				role: userRole,
+				role: cookies.userRole,
 				email: email,
 			},
 			notes,
@@ -274,7 +270,8 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 		// console.log(matchup);
 
 		try {
-			const actionResult = await dispatch(addNewMatchup({ userToken, matchup }));
+			debugger;
+			const actionResult = await dispatch(addNewMatchup({ userToken: cookies.user, matchup }));
 			const result = unwrapResult(actionResult);
 			setNotes("");
 			setSnackbarSuccessMessage("Matchup successfully added!");
