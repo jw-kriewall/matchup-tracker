@@ -9,10 +9,10 @@ const version = process.env.REACT_APP_API_VERSION;
 export const deleteSingleMatchup = createAsyncThunk(
 	"matchups/delete",
 	async ({
-		user,
+		userToken,
 		matchup,
 	}: {
-		user: GoogleDataJson | undefined;
+		userToken: string | undefined;
 		matchup: Matchup;
 	}) => {
 		try {
@@ -22,7 +22,7 @@ export const deleteSingleMatchup = createAsyncThunk(
 				headers: {
 					"Access-Control-Allow-Origin": "*",
 					"Access-Control-Allow-Methods": "DELETE",
-					Authorization: "Bearer " + user?.id_token,
+					Authorization: "Bearer " + userToken,
 				},
 			});
 		} catch (error) {

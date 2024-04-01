@@ -9,12 +9,13 @@ const version = process.env.REACT_APP_API_VERSION;
 
 export const getUserRole = createAsyncThunk(
 	"user/getRole",
-	async (token: GoogleDataJson) => {
+	async (token: string) => {
 		try {
 			if (token) {
-				const decodedToken: DecodedJwtToken = jwt_decode(token.id_token); 
+				const decodedToken: DecodedJwtToken = jwt_decode(token); 
 				const email = decodedToken.email;
 				const username = decodedToken.name;
+				
 				const response = await axios.post(
 					`${apiUrl}/api/${version}/user/role`,
 					{ email: email, username: username },
@@ -23,7 +24,7 @@ export const getUserRole = createAsyncThunk(
 							"Content-Type": "application/json",
 							"Access-Control-Allow-Origin": "*",
 							"Access-Control-Allow-Methods": "POST",
-							Authorization: "Bearer " + token.id_token,
+							Authorization: "Bearer " + token,
 						},
 					}
 				);

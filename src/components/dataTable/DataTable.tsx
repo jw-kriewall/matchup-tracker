@@ -12,11 +12,11 @@ import "./DataTable.css";
 
 interface DataTableProps {
 	selectedDecks: string[];
-	user: GoogleDataJson;
+	userToken: string;
 	format: string;
 }
 
-function DataTable({ selectedDecks, user, format }: DataTableProps) {
+function DataTable({ selectedDecks, userToken, format }: DataTableProps) {
 	const dispatch = useAppDispatch();
 	// const tableDataState = useSelector(selectTableData);
 	// const matchupDataState = useSelector(selectMatchups);
@@ -27,9 +27,9 @@ function DataTable({ selectedDecks, user, format }: DataTableProps) {
 		const fetchData = async () => {
 			// console.log(tableDataState.data)
 			// console.log(matchupDataState.matchups)
-			if (user) {
+			if (userToken) {
 				try {
-					const response = await dispatch(getMatchupRecordsByDeck({ user, format }));
+					const response = await dispatch(getMatchupRecordsByDeck({ userToken, format }));
 					if (response) {
 						setTableData(response.payload);
 					}
@@ -39,7 +39,7 @@ function DataTable({ selectedDecks, user, format }: DataTableProps) {
 			}
 		};
 		fetchData();
-	}, [dispatch, user, format]);
+	}, [dispatch, userToken, format]);
 
 	return (
 		<>

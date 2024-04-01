@@ -8,10 +8,10 @@ const version = process.env.REACT_APP_API_VERSION;
 export const addNewMatchup = createAsyncThunk(
 	"matchups/Add",
 	async ({
-		user,
+		userToken,
 		matchup,
 	}: {
-		user: GoogleDataJson | undefined;
+		userToken: string | undefined;
 		matchup: Matchup;
 	}) => {
 		try {
@@ -19,7 +19,7 @@ export const addNewMatchup = createAsyncThunk(
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: "Bearer " + user?.id_token,
+					Authorization: "Bearer " + userToken,
 				},
 				body: JSON.stringify(matchup),
 			});

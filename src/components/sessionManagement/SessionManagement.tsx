@@ -15,8 +15,8 @@ const SessionManagement: any = ({ children }: any) => {
 
   useEffect(() => {
     if (cookies.user) {
-      const userFromCookie: GoogleDataJson = cookies.user;
-      const userTokenDecoded: DecodedJwtToken = jwt_decode(userFromCookie.id_token);
+      const userFromCookie: string = cookies.user;
+      const userTokenDecoded: DecodedJwtToken = jwt_decode(userFromCookie);
       try {
         setLogoutTime(userTokenDecoded.exp);
         setCookie("logoutTime", userTokenDecoded.exp, { path: "/" });
@@ -39,22 +39,16 @@ const SessionManagement: any = ({ children }: any) => {
       const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
       console.log("Time Remaining: " + (logoutTime - currentTime))
 
-      if (logoutTime - currentTime <= 100 && cookies.user) {
-        let userFromCookie: GoogleDataJson = cookies.user;
+      if (logoutTime - currentTime <= 3530 && cookies.user) {
+        const userTokenFromCookie: string = cookies.user;
+        const refreshToken: string = cookies["refresh-token"];
 
-        if (!userFromCookie || !userFromCookie.refresh_token) {
-          userFromCookie = {
-            ...userFromCookie,
-            refresh_token: cookies["refresh-token"],
-          };
-        }
-        // debugger;
-        dispatch(refreshTokenAction(userFromCookie))
+        dispatch(refreshTokenAction({userToken: userTokenFromCookie, refreshToken: refreshToken}))
           .unwrap()
           .then((response: GoogleDataJson ) => {
             const newDecodedToken: DecodedJwtToken = jwt_decode(response.id_token);
             setLogoutTime(newDecodedToken.exp);
-            setCookie("user", response, { path: '/' });
+            setCookie("user", response.id_token, { path: '/' });
           })
           .catch(() => {
             dispatch(logoutAction());

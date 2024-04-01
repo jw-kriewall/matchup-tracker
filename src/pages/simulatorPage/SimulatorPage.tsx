@@ -11,9 +11,9 @@ export default function SimulatorPage() {
   const initialDecks = getDecksForFormat(cookies.format).map((deck) => deck.value);
   // const [selectedDecks, setSelectedDecks] = useState<string[]>(initialDecks);
   const [userCookies] = useCookies(["user"]);
-  const user = userCookies["user"];
+  const userToken = userCookies["user"];
 
-  if (!user) {
+  if (!userToken) {
     return (
       <div>
         <div className="navigation">
@@ -32,7 +32,7 @@ export default function SimulatorPage() {
 
       <div className="bento-box-sim">
         <div className="data-table-sim">
-          <TournamentSimulator user={user} filteredDecks={initialDecks} format={cookies.format} />
+          <TournamentSimulator userToken={userToken} filteredDecks={initialDecks} format={cookies.format} />
         </div>
       </div>
     </div>

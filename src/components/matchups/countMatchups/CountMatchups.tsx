@@ -9,7 +9,7 @@ import { GoogleDataJson } from '../../../types/GoogleDataJson';
 
 interface CountComponentProps {
   selectedDecks: string[],
-  user: GoogleDataJson,
+  user: string,
 }
 
 export default function CountMatchups({ selectedDecks, user }: CountComponentProps) {
@@ -23,7 +23,7 @@ export default function CountMatchups({ selectedDecks, user }: CountComponentPro
   //@TODO: Does this need to make a call every time the component is navigated to? Can getMatchups simply be set and persist on refresh?
   useEffect(() => {
     if (matchups.length === 0) {
-      dispatch(getMatchups({ user: user, format: cookies.format }));
+      dispatch(getMatchups({ userToken: user, format: cookies.format }));
     }
   }, [dispatch, user, cookies.format, matchups.length]);
 

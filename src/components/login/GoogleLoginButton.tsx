@@ -33,6 +33,7 @@ export default function GoogleLoginButton({ closeModal }: any) {
 							headers: {
 								"Content-Type": "application/json",
 							},
+							// credentials: 'include',
 							body: JSON.stringify({ code: credentialResponse.code }),
 						}
 					);
@@ -45,9 +46,9 @@ export default function GoogleLoginButton({ closeModal }: any) {
 
 					// const token: DecodedJwtToken = jwt_decode(data.id_token);
 					// Assuming the server response includes user information, roles, etc.
-					const user = await dispatch(loginAction(data));
+					const user = await dispatch(loginAction(data.id_token));
 					const userJSON = JSON.stringify(user.payload);
-					let role = await dispatch(getUserRole(data));
+					let role = await dispatch(getUserRole(data.id_token));
 
 					setCookie("userRole", role, { path: "/", maxAge: 3600 });
 					setCookie("user", userJSON, { path: "/", maxAge: 3600 });
@@ -60,7 +61,7 @@ export default function GoogleLoginButton({ closeModal }: any) {
 						}); // Max Age: 30 days
 					}
 
-					dispatch(getMatchups({ user: data, format: cookies.format }));
+					dispatch(getMatchups({ userToken: data.id_token, format: cookies.format }));
 					closeModal();
 				} catch (error) {
 					console.error("Login Error", error);

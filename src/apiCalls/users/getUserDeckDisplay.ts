@@ -7,7 +7,7 @@ const version = process.env.REACT_APP_API_VERSION;
 
 export const getUserDeckDisplay = createAsyncThunk(
 	"userDeckDisplay/get",
-	async (user: GoogleDataJson | undefined) => {
+	async (userToken: string | undefined) => {
 		try {
 			const response = await axios({
 				url: `${apiUrl}/api/${version}/user/deckdisplays`,
@@ -15,7 +15,7 @@ export const getUserDeckDisplay = createAsyncThunk(
 				headers: {
 					"Access-Control-Allow-Origin": "*",
 					"Access-Control-Allow-Methods": "GET",
-					Authorization: "Bearer " + user?.id_token,
+					Authorization: "Bearer " + userToken,
 				},
 			});
 			const data = await response.data;

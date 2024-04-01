@@ -21,7 +21,7 @@ import { GoogleDataJson } from "../../types/GoogleDataJson";
 
 export default function NavBar() {
   const [userCookies] = useCookies(["user"]);
-  const user: GoogleDataJson = userCookies["user"];
+  const user: string = userCookies["user"];
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [cookies] = useCookies(["format"]);
   const navigate = useNavigate();

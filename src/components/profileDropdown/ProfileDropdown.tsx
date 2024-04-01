@@ -29,8 +29,8 @@ export function ProfileDropdown() {
 	let userPicture = "";
 
 	if (cookies.user) {
-		const decodedGoogleToken: GoogleDataJson = cookies.user;
-		const decodedUserToken: DecodedJwtToken = jwt_decode(decodedGoogleToken.id_token);
+		const jwtToken: string = cookies.user;
+		const decodedUserToken: DecodedJwtToken = jwt_decode(jwtToken);
 		userPicture = decodedUserToken.picture;
 	}
 
@@ -49,7 +49,7 @@ export function ProfileDropdown() {
 
 	const handleFormatOnClick = (format: string) => {
 		setCookie("format", format, { path: "/", maxAge: 3600 * 24 * 30 });
-		dispatch(getMatchups({ user: cookies.user, format: format }));
+		dispatch(getMatchups({ userToken: cookies.user, format: format }));
 		// setOpen(false);
 	};
 

@@ -8,10 +8,10 @@ const version = process.env.REACT_APP_API_VERSION;
 export const countMatchups = createAsyncThunk(
 	"matchups/count",
 	async ({
-		user,
+		userToken,
 		deckNames,
 	}: {
-		user: GoogleDataJson | undefined;
+		userToken: string | undefined;
 		deckNames: string[];
 	}) => {
 		try {
@@ -21,7 +21,7 @@ export const countMatchups = createAsyncThunk(
 				headers: {
 					"Access-Control-Allow-Origin": "*",
 					"Access-Control-Allow-Methods": "GET",
-					Authorization: "Bearer " + user?.id_token,
+					Authorization: "Bearer " + userToken,
 				},
 				params: { deckNames },
 			});

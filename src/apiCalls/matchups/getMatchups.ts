@@ -8,10 +8,10 @@ const version = process.env.REACT_APP_API_VERSION;
 export const getMatchups = createAsyncThunk(
 	"matchups/get",
 	async ({
-		user,
+		userToken,
 		format,
 	}: {
-		user: GoogleDataJson | undefined;
+		userToken: string | undefined;
 		format: string;
 	}) => {
 		try {
@@ -21,7 +21,7 @@ export const getMatchups = createAsyncThunk(
 				headers: {
 					"Access-Control-Allow-Origin": "*",
 					"Access-Control-Allow-Methods": "GET",
-					Authorization: "Bearer " + user?.id_token,
+					Authorization: "Bearer " + userToken,
 				},
 			});
 			const data = await response.data;
