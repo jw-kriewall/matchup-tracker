@@ -1,20 +1,21 @@
-import { CredentialResponse } from "@react-oauth/google";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import jwt_decode from "jwt-decode";
 import { DecodedJwtToken } from "../../types/DecodedJwtToken";
+import { GoogleDataJson } from "../../types/GoogleDataJson";
+import jwt_decode from "jwt-decode";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const version = process.env.REACT_APP_API_VERSION;
 
 export const getUserRole = createAsyncThunk(
 	"user/getRole",
-	async (user: CredentialResponse) => {
+	async (token: string) => {
 		try {
-			if (user.credential) {
-				const decodedToken: DecodedJwtToken = jwt_decode(user.credential);
+			if (token) {
+				const decodedToken: DecodedJwtToken = jwt_decode(token); 
 				const email = decodedToken.email;
 				const username = decodedToken.name;
+				
 				const response = await axios.post(
 					`${apiUrl}/api/${version}/user/role`,
 					{ email: email, username: username },
@@ -23,7 +24,7 @@ export const getUserRole = createAsyncThunk(
 							"Content-Type": "application/json",
 							"Access-Control-Allow-Origin": "*",
 							"Access-Control-Allow-Methods": "POST",
-							Authorization: "Bearer " + user?.credential,
+							Authorization: "Bearer " + token,
 						},
 					}
 				);

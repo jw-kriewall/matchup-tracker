@@ -8,6 +8,7 @@ import "./TablePage.css";
 import PublicFaq from "../../components/publicFaq/PublicFaq";
 import { DeckDisplay } from "../../types/MatchupModels";
 import { getDecksForFormat } from "../../components/shared/getDecksForFormat";
+import { GoogleDataJson } from "../../types/GoogleDataJson";
 
 export default function TablePage() {
   const [cookies] = useCookies(["format"]);
@@ -15,7 +16,7 @@ export default function TablePage() {
   // const allDecks = decks.map((deck) => deck.value);
   const [selectedDecks, setSelectedDecks] = useState<string[]>([]);
   const [userCookies] = useCookies(["user"]);
-  const user = userCookies["user"]?.payload;
+  const userToken: string = userCookies["user"];
 
   useEffect(() => {
     const decks: DeckDisplay[] = getDecksForFormat(cookies.format);
@@ -23,7 +24,7 @@ export default function TablePage() {
     setSelectedDecks(initialDecks);
   }, [cookies.format]);
 
-  if (!user) {
+  if (!userToken) {
     return (
       <div>
         <div className="navigation">
@@ -43,7 +44,7 @@ export default function TablePage() {
       <div className="bento-box">
         <div className="left-column">
           <div className="matchup-count">
-            <CountMatchups selectedDecks={selectedDecks} user={user} />
+            <CountMatchups selectedDecks={selectedDecks} user={userToken} />
           </div>
           <div className="deck-filter">
             <DeckFilter
@@ -54,7 +55,7 @@ export default function TablePage() {
           </div>
         </div>
         <div className="data-table">
-          <DataTable selectedDecks={selectedDecks} user={user} format={cookies.format}/>
+          <DataTable selectedDecks={selectedDecks} userToken={userToken} format={cookies.format}/>
         </div>
       </div>
     </div>

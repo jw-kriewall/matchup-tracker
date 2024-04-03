@@ -4,22 +4,22 @@ import { TableData } from "../../types/TableTypes";
 import { getMatchupRecordsByDeck } from "../../apiCalls/dataTable/getIndividualMatchupRecordsByDeck";
 import { useAppDispatch } from "../../hooks/hooks";
 import { calculateWinPercentage, formatWinPercentage } from "./DataTableUtil";
-import { CredentialResponse } from "@react-oauth/google";
-import "./DataTable.css";
 import { useSelector } from "react-redux";
 import { selectTableData } from "../../redux/TableDataSlice";
 import { selectMatchups } from "../../redux/MatchupFeedSlice";
+import { GoogleDataJson } from "../../types/GoogleDataJson";
+import "./DataTable.css";
 
 interface DataTableProps {
 	selectedDecks: string[];
-	user: CredentialResponse;
+	userToken: string;
 	format: string;
 }
 
-function DataTable({ selectedDecks, user, format }: DataTableProps) {
+function DataTable({ selectedDecks, userToken, format }: DataTableProps) {
 	const dispatch = useAppDispatch();
-	const tableDataState = useSelector(selectTableData);
-	const matchupDataState = useSelector(selectMatchups);
+	// const tableDataState = useSelector(selectTableData);
+	// const matchupDataState = useSelector(selectMatchups);
 	const [tableData, setTableData] = useState<TableData>({});
 	const [hoveredCell, setHoveredCell] = useState<string | null>(null);
 
@@ -27,9 +27,9 @@ function DataTable({ selectedDecks, user, format }: DataTableProps) {
 		const fetchData = async () => {
 			// console.log(tableDataState.data)
 			// console.log(matchupDataState.matchups)
-			if (user) {
+			if (userToken) {
 				try {
-					const response = await dispatch(getMatchupRecordsByDeck({ user, format }));
+					const response = await dispatch(getMatchupRecordsByDeck({ userToken, format }));
 					if (response) {
 						setTableData(response.payload);
 					}
@@ -39,7 +39,7 @@ function DataTable({ selectedDecks, user, format }: DataTableProps) {
 			}
 		};
 		fetchData();
-	}, [dispatch, user, format]);
+	}, [dispatch, userToken, format]);
 
 	return (
 		<>

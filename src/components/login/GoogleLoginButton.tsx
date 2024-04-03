@@ -1,48 +1,79 @@
-import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import {
+	useGoogleLogin,
+} from "@react-oauth/google";
 import { useAppDispatch } from "../../hooks/hooks";
 import { loginAction } from "../../actions/userActions";
 import { getUserRole } from "../../apiCalls/users/getUserRole";
 import { getMatchups } from "../../apiCalls/matchups/getMatchups";
 import { useCookies } from "react-cookie";
+import { useState } from "react";
+import { GoogleDataJson } from "../../types/GoogleDataJson";
+import { Button } from "@mui/material";
 
 export default function GoogleLoginButton({ closeModal }: any) {
-  const dispatch = useAppDispatch();
-  const [cookies, setCookie] = useCookies(["userRole", "user", "format"]);
+	const apiUrl = process.env.REACT_APP_API_URL;
+	const version = process.env.REACT_APP_API_VERSION;
 
-  const onSuccess = async (res: CredentialResponse) => {
-    // console.log("Google login Successful! Current user: ", res);
-    try {
-      const user = await dispatch(loginAction(res));
-      const userJSON = JSON.stringify(user);
+	const dispatch = useAppDispatch();
+	const [cookies, setCookie] = useCookies(["userRole", "user", "format", "refresh-token"]);
+	const [error, setError] = useState<String>("");
 
-      let role = await dispatch(getUserRole(res));
-      setCookie("userRole", role, { path: "/", maxAge: 3600 });
-      setCookie("user", userJSON, { path: "/", maxAge: 3600 });
+	const login = useGoogleLogin({
+		onSuccess: async (credentialResponse) => {
+			if (credentialResponse.code) {
+				try {
+					// Send the code to the server
+					const response = await fetch(
+						`${apiUrl}/api/${version}/code-for-tokens`,
+						{
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+							},
+							// credentials: 'include',
+							body: JSON.stringify({ code: credentialResponse.code }),
+						}
+					);
+					const data: GoogleDataJson = await response.json();
 
-      if(!cookies.format) {
-        setCookie("format", "BRS-TEF", { path: "/", maxAge: 3600 * 24 * 30 }); // Max Age: 30 days
-      }
+					if (!response.ok) {
+						throw new Error("Failed to login");
+					}
 
-      dispatch(getMatchups({ user: res, format: cookies.format }));
-      closeModal();
-    } catch (error) {
-      console.error("Error in login process: ", error);
-    }
-  };
+					const user = await dispatch(loginAction(data.id_token));
+					const userJSON = JSON.stringify(user.payload);
+					let role = await dispatch(getUserRole(data.id_token));
 
-  const onError = (error: any) => {
-    console.error("Login Failed: ", error);
-  };
+					setCookie("userRole", role, { path: "/", maxAge: 3600 });
+					setCookie("user", userJSON, { path: "/", maxAge: 3600 });
+					setCookie("refresh-token", data.refresh_token, { path: "/", maxAge: 3600 * 24 * 30 });
 
-  return (
-    <GoogleLogin
-      // clientId={clientId}
-      // buttonText="Login"
-      // useOneTap={true}
-      onSuccess={onSuccess}
-      onError={() => onError}
-      // cookiePolicy={'single_host_origin'}
-      // isSignedIn={true}
-    />
-  );
+					if (!cookies.format) {
+						setCookie("format", "BRS-TEF", {
+							path: "/",
+							maxAge: 3600 * 24 * 30,
+						}); // Max Age: 30 days
+					}
+
+					dispatch(getMatchups({ userToken: data.id_token, format: cookies.format }));
+					closeModal();
+				} catch (error) {
+					console.error("Login Error", error);
+					setError("Login failed. Please try again.");
+				}
+			}
+		},
+		onError: () => {
+			console.log("Login Failed");
+			setError("Login failed. Please try again!");
+		},
+		flow: "auth-code",
+	});
+
+	return (
+		<div>
+			<Button variant="outlined" onClick={() => login()}>Login with Google</Button>
+			{error && <p style={{ color: "red" }}>{error}</p>}
+		</div>
+	);
 }

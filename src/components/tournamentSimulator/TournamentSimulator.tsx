@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { CredentialResponse } from "@react-oauth/google";
 import "./TournamentSimulator.css";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
@@ -20,9 +19,10 @@ import ImportExportIcon from "@mui/icons-material/ImportExport";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import ResultsModal from "./ResultsModal";
 import CircularProgress from '@mui/material/CircularProgress';
+import { GoogleDataJson } from "../../types/GoogleDataJson";
 
 interface simulatorProps {
-	user: CredentialResponse;
+	userToken: string;
 	filteredDecks: string[];
 	format: string;
 }
@@ -56,7 +56,7 @@ interface TournamentSimulatorInput {
 
 // @TODO: Suggested number of rounds based on total players
 
-function TournamentSimulator({ user, filteredDecks, format }: simulatorProps) {
+function TournamentSimulator({ userToken, filteredDecks, format }: simulatorProps) {
 	// const [data, setData] = useState<TableData>({});
 	const minPlayers = 0;
 	const maxPlayers = 500;
@@ -76,17 +76,17 @@ function TournamentSimulator({ user, filteredDecks, format }: simulatorProps) {
 	}>({});
 	
 	useEffect(() => {
-		if (!user) return;
+		if (!userToken) return;
 
 		const fetchData = async () => {
 			try {
-				await dispatch(getMatchupRecordsByDeck({ user, format }));
+				await dispatch(getMatchupRecordsByDeck({ userToken, format }));
 			} catch (error) {
 				console.error("Error fetching data for decks", error);
 			}
 		};
 		fetchData();
-	}, [user, dispatch, format]);
+	}, [userToken, dispatch, format]);
 
 	useEffect(() => {
 		if (Object.keys(tableData.data).length > 0) {
@@ -491,7 +491,7 @@ function TournamentSimulator({ user, filteredDecks, format }: simulatorProps) {
 													},
 												}}
 												size="small"
-												value={matchupPercentages[deck]?.[opponentDeck]}
+												value={matchupPercentages[deck]?.[opponentDeck] || '50.0'}
 												onChange={(e) =>
 													updateMatchupPercentage(
 														deck,
@@ -574,7 +574,7 @@ function TournamentSimulator({ user, filteredDecks, format }: simulatorProps) {
 					}}
 					inputMode="numeric"
 					size="small"
-					value={numberOfRounds}
+					value={numberOfRounds || 0}
 					onChange={(e) => 
 						{
 							var value = parseInt(e.target.value, 10);

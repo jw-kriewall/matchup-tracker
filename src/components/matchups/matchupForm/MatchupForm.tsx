@@ -9,7 +9,6 @@ import jwt_decode from "jwt-decode";
 import { DecodedJwtToken } from "../../../types/DecodedJwtToken";
 import { addNewMatchup } from "../../../apiCalls/matchups/addMatchup";
 import { IconButton } from "@mui/material";
-import { CredentialResponse } from "@react-oauth/google";
 import LooksOneIcon from "@mui/icons-material/LooksOne";
 import SnackbarSuccess from "../../snackbarNotifications/SnackbarSuccess";
 import { useAppDispatch } from "../../../hooks/hooks";
@@ -18,6 +17,7 @@ import DeckInputDropdown from "../../shared/deckInputDropdown";
 import SnackbarWarning from "../../snackbarNotifications/SnackbarWarning";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { getDecksForFormat } from "../../shared/getDecksForFormat";
+import { GoogleDataJson } from "../../../types/GoogleDataJson";
 
 interface matchupFormProps {
 	userDeckDisplays: DeckDisplay[];
@@ -41,11 +41,7 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 		React.useState<string>("");
 	const [snackbarKey, setSnackbarKey] = React.useState<number>(0);
 
-	const [cookies] = useCookies(["userRole", "format"]);
-	const [userCookies] = useCookies(["user"]);
-
-	const userRole = cookies["userRole"]?.payload;
-	const user: CredentialResponse = userCookies["user"]?.payload;
+	const [cookies] = useCookies(["userRole", "user", "format"]);
 
 	const [winningDeckOptionsArray, setWinningDeckOptionsArray] = React.useState<
 		string[]
@@ -237,11 +233,9 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 		let username = "";
 		let email = "";
 
-		let token = user.credential;
-
-		if (token) {
+		if (cookies.user) {
 			try {
-				const decodedToken: DecodedJwtToken = jwt_decode(token);
+				const decodedToken: DecodedJwtToken = jwt_decode(cookies.user);
 				email = decodedToken.email;
 				username = decodedToken.name;
 			} catch (error) {
@@ -268,16 +262,14 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 			createdOn: new Date(),
 			createdBy: {
 				username: username,
-				role: userRole,
+				role: cookies.userRole,
 				email: email,
 			},
 			notes,
 		};
-		// console.log(matchup);
 
 		try {
-			const actionResult = await dispatch(addNewMatchup({ user, matchup }));
-			const result = unwrapResult(actionResult);
+			await dispatch(addNewMatchup({ userToken: cookies.user, matchup }));
 			setNotes("");
 			setSnackbarSuccessMessage("Matchup successfully added!");
 			setSnackbarKey((prevKey) => prevKey + 1);

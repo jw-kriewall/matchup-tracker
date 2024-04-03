@@ -6,12 +6,12 @@ import { useCookies } from "react-cookie";
 import { DeckDisplay } from "../../types/MatchupModels";
 import { getUserDeckDisplay } from "../../apiCalls/users/getUserDeckDisplay";
 import { useAppDispatch } from "../../hooks/hooks";
-import { CredentialResponse } from "@react-oauth/google";
 import "./HomePage.css";
+import { GoogleDataJson } from "../../types/GoogleDataJson";
 
 export default function HomePage() {
   const [userCookies] = useCookies(["user"]);
-  const user: CredentialResponse = userCookies["user"]?.payload;
+  const userToken: string = userCookies["user"];
 
   const [userDeckDisplays, setUserDeckDisplays] = React.useState<DeckDisplay[]>(
     []
@@ -21,17 +21,17 @@ export default function HomePage() {
 
   useEffect(() => {
     // @TODO: persist this if possible. Currently calling the api everytime the home page is hit.
-    if (user && userDeckDisplays.length === 0) {
-      dispatch(getUserDeckDisplay(user))
+    if (userToken && userDeckDisplays.length === 0) {
+      dispatch(getUserDeckDisplay(userToken))
         .unwrap() // Unwrap is used to extract the payload from the fulfilled action
         .then((deckDisplays) => setUserDeckDisplays(deckDisplays))
         .catch((error) =>
           console.error("Failed to fetch user deck displays:", error)
         );
     }
-  }, [user, dispatch, userDeckDisplays.length]);
+  }, [userToken, dispatch, userDeckDisplays.length]);
 
-  if (!user) {
+  if (!userToken) {
     return (
       <div >
         <div className="navigation">

@@ -1,5 +1,5 @@
-import { CredentialResponse } from "@react-oauth/google";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { GoogleDataJson } from "../../types/GoogleDataJson";
 import axios from "axios";
 
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -8,10 +8,10 @@ const version = process.env.REACT_APP_API_VERSION;
 export const getMatchups = createAsyncThunk(
 	"matchups/get",
 	async ({
-		user,
+		userToken,
 		format,
 	}: {
-		user: CredentialResponse | undefined;
+		userToken: string | undefined;
 		format: string;
 	}) => {
 		try {
@@ -21,7 +21,7 @@ export const getMatchups = createAsyncThunk(
 				headers: {
 					"Access-Control-Allow-Origin": "*",
 					"Access-Control-Allow-Methods": "GET",
-					Authorization: "Bearer " + user?.credential,
+					Authorization: "Bearer " + userToken,
 				},
 			});
 			const data = await response.data;

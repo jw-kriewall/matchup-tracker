@@ -9,7 +9,6 @@ import {
 	Menu,
 	Tooltip,
 } from "@mui/material";
-import { CredentialResponse } from "@react-oauth/google";
 import { useCookies } from "react-cookie";
 import LogoutButton from "../login/LogoutButton";
 import jwt_decode from "jwt-decode";
@@ -18,23 +17,21 @@ import React from "react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { useAppDispatch } from "../../hooks/hooks";
 import { getMatchups } from "../../apiCalls/matchups/getMatchups";
+import { GoogleDataJson } from "../../types/GoogleDataJson";
 
 export function ProfileDropdown() {
-	const [userCookies] = useCookies(["user"]);
-	const user: CredentialResponse = userCookies["user"]?.payload;
-  	const [open, setOpen] = React.useState(false);
-  	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+	const [open, setOpen] = React.useState(false);
+	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
 		null
-  	);
+	);
+	const [cookies, setCookie] = useCookies(["userRole", "user", "format"]);
+	const dispatch = useAppDispatch();
 	let userPicture = "";
-  	const [cookies, setCookie] = useCookies(["userRole", "user", "format"]);
-  	const dispatch = useAppDispatch();
-	  
-	if (user && user.credential) {
-		let decodedToken: DecodedJwtToken | null = null;
-		decodedToken = jwt_decode<DecodedJwtToken>(user.credential);
 
-		userPicture = decodedToken.picture;
+	if (cookies.user) {
+		const jwtToken: string = cookies.user;
+		const decodedUserToken: DecodedJwtToken = jwt_decode(jwtToken);
+		userPicture = decodedUserToken.picture;
 	}
 
 	const handleClick = () => {
@@ -50,11 +47,11 @@ export function ProfileDropdown() {
 		setOpen(false);
 	};
 
-  const handleFormatOnClick = (format: string) => {
-    setCookie("format", format, { path: "/", maxAge: 3600 * 24 * 30 });
-    dispatch(getMatchups({ user: cookies.user.payload, format: format }));
-    // setOpen(false);
-  }
+	const handleFormatOnClick = (format: string) => {
+		setCookie("format", format, { path: "/", maxAge: 3600 * 24 * 30 });
+		dispatch(getMatchups({ userToken: cookies.user, format: format }));
+		// setOpen(false);
+	};
 
 	return (
 		<Box sx={{ flexGrow: 0 }}>
@@ -80,7 +77,12 @@ export function ProfileDropdown() {
 				onClose={handleCloseUserMenu}
 			>
 				<List
-					sx={{ width: "100%", maxWidth: 360, minWidth: 200, bgcolor: "background.paper" }}
+					sx={{
+						width: "100%",
+						maxWidth: 360,
+						minWidth: 200,
+						bgcolor: "background.paper",
+					}}
 					component="nav"
 					aria-labelledby="nested-list-subheader"
 				>
@@ -91,11 +93,19 @@ export function ProfileDropdown() {
 
 					<Collapse in={open} timeout="auto" unmountOnExit>
 						<List component="div" disablePadding>
-							<ListItemButton selected={cookies.format === "BRS-TEF"} sx={{ pl: 4 }} onClick={() => handleFormatOnClick("BRS-TEF")}>
+							<ListItemButton
+								selected={cookies.format === "BRS-TEF"}
+								sx={{ pl: 4 }}
+								onClick={() => handleFormatOnClick("BRS-TEF")}
+							>
 								<ListItemText primary="BRS-TEF (Standard)" />
 							</ListItemButton>
 
-              				<ListItemButton selected={cookies.format === "GLC"} sx={{ pl: 4 }} onClick={() => handleFormatOnClick("GLC")}>
+							<ListItemButton
+								selected={cookies.format === "GLC"}
+								sx={{ pl: 4 }}
+								onClick={() => handleFormatOnClick("GLC")}
+							>
 								<ListItemText primary="GLC" />
 							</ListItemButton>
 						</List>
