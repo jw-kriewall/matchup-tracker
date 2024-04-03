@@ -37,9 +37,7 @@ const SessionManagement: any = ({ children }: any) => {
   useEffect(() => {
     const interval = setInterval(() => {
       const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
-      console.log("Time Remaining: " + (logoutTime - currentTime))
-
-      if (logoutTime - currentTime <= 3530 && cookies.user) {
+      if (logoutTime - currentTime <= 1800 && cookies.user) {
         const userTokenFromCookie: string = cookies.user;
         const refreshToken: string = cookies["refresh-token"];
 
@@ -62,12 +60,6 @@ const SessionManagement: any = ({ children }: any) => {
 
   return (
     <>
-      {/* {showSnackbarInfo && cookies.user && (
-        <SnackbarInfo message="Your session will automatically expire in 5 minutes." />
-      )}
-      {showSnackbarWarning && cookies.user && (
-        <SnackbarWarning message="Your session will automatically expire in 2 minutes. Please log back in as progress will not be saved." />
-      )} */}
       {children}
     </>
   );

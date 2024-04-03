@@ -8,8 +8,6 @@ import { getMatchups } from "../../apiCalls/matchups/getMatchups";
 import { useCookies } from "react-cookie";
 import { useState } from "react";
 import { GoogleDataJson } from "../../types/GoogleDataJson";
-import { DecodedJwtToken } from "../../types/DecodedJwtToken";
-import jwt_decode from "jwt-decode";
 import { Button } from "@mui/material";
 
 export default function GoogleLoginButton({ closeModal }: any) {
@@ -22,7 +20,6 @@ export default function GoogleLoginButton({ closeModal }: any) {
 
 	const login = useGoogleLogin({
 		onSuccess: async (credentialResponse) => {
-			console.log(credentialResponse);
 			if (credentialResponse.code) {
 				try {
 					// Send the code to the server
@@ -38,14 +35,11 @@ export default function GoogleLoginButton({ closeModal }: any) {
 						}
 					);
 					const data: GoogleDataJson = await response.json();
-					console.log("DATA: " + JSON.stringify(data));
 
 					if (!response.ok) {
 						throw new Error("Failed to login");
 					}
 
-					// const token: DecodedJwtToken = jwt_decode(data.id_token);
-					// Assuming the server response includes user information, roles, etc.
 					const user = await dispatch(loginAction(data.id_token));
 					const userJSON = JSON.stringify(user.payload);
 					let role = await dispatch(getUserRole(data.id_token));
@@ -78,7 +72,7 @@ export default function GoogleLoginButton({ closeModal }: any) {
 
 	return (
 		<div>
-			<Button onClick={() => login()}>Login with Google</Button>
+			<Button variant="outlined" onClick={() => login()}>Login with Google</Button>
 			{error && <p style={{ color: "red" }}>{error}</p>}
 		</div>
 	);
