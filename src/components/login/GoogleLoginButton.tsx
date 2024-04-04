@@ -34,12 +34,14 @@ export default function GoogleLoginButton({ closeModal }: any) {
 							body: JSON.stringify({ code: credentialResponse.code }),
 						}
 					);
-					const data: GoogleDataJson = await response.json();
-
+					
 					if (!response.ok) {
 						throw new Error("Failed to login");
 					}
-
+					
+					const data: GoogleDataJson = await response.json();
+					console.log(data);
+					
 					const user = await dispatch(loginAction(data.id_token));
 					const userJSON = JSON.stringify(user.payload);
 					let role = await dispatch(getUserRole(data.id_token));
