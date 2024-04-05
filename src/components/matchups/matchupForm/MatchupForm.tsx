@@ -269,7 +269,7 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 		};
 
 		try {
-			await dispatch(addNewMatchup({ userToken: cookies.user, matchup }));
+			await dispatch(addNewMatchup({ userToken: cookies.user, matchup: matchup }));
 			setNotes("");
 			setSnackbarSuccessMessage("Matchup successfully added!");
 			setSnackbarKey((prevKey) => prevKey + 1);
