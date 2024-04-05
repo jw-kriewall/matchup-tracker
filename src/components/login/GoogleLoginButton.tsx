@@ -41,12 +41,12 @@ export default function GoogleLoginButton({ closeModal }: any) {
 					
 					const data: GoogleDataJson = await response.json();
 					console.log(data);
-					
+
 					const user = await dispatch(loginAction(data.id_token));
 					const userJSON = JSON.stringify(user.payload);
 					let role = await dispatch(getUserRole(data.id_token));
 
-					setCookie("userRole", role, { path: "/", maxAge: 3600 });
+					setCookie("userRole", role.payload, { path: "/", maxAge: 3600 });
 					setCookie("user", userJSON, { path: "/", maxAge: 3600 });
 					setCookie("refresh-token", data.refresh_token, { path: "/", maxAge: 3600 * 24 * 30 });
 
