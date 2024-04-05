@@ -15,9 +15,7 @@ import { useAppDispatch } from "../../../hooks/hooks";
 import { useCookies } from "react-cookie";
 import DeckInputDropdown from "../../shared/deckInputDropdown";
 import SnackbarWarning from "../../snackbarNotifications/SnackbarWarning";
-import { unwrapResult } from "@reduxjs/toolkit";
 import { getDecksForFormat } from "../../shared/getDecksForFormat";
-import { GoogleDataJson } from "../../../types/GoogleDataJson";
 
 interface matchupFormProps {
 	userDeckDisplays: DeckDisplay[];

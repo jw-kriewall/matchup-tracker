@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { DecodedJwtToken } from "../../types/DecodedJwtToken";
-import { GoogleDataJson } from "../../types/GoogleDataJson";
 import jwt_decode from "jwt-decode";
 
 const apiUrl = process.env.REACT_APP_API_URL;

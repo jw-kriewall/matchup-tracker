@@ -41,14 +41,7 @@ const userAuthSlice = createSlice({
 				state.userLoading = true;
 			})
 			.addCase(getUserRole.fulfilled, (state, action) => {
-				// console.log(action.payload);
 				state.userLoading = false;
-				if (state.user) {
-					// state.user.role = action.payload;
-					// Set a cookie with the user's role
-					// createCookie("userRole", action.payload, 3600);
-				}
-				// console.log(document.cookie);
 			})
 			.addCase(getUserRole.rejected, (state) => {
 				state.userLoading = false;

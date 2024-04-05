@@ -4,10 +4,6 @@ import { TableData } from "../../types/TableTypes";
 import { getMatchupRecordsByDeck } from "../../apiCalls/dataTable/getIndividualMatchupRecordsByDeck";
 import { useAppDispatch } from "../../hooks/hooks";
 import { calculateWinPercentage, formatWinPercentage } from "./DataTableUtil";
-import { useSelector } from "react-redux";
-import { selectTableData } from "../../redux/TableDataSlice";
-import { selectMatchups } from "../../redux/MatchupFeedSlice";
-import { GoogleDataJson } from "../../types/GoogleDataJson";
 import "./DataTable.css";
 
 interface DataTableProps {
@@ -18,15 +14,11 @@ interface DataTableProps {
 
 function DataTable({ selectedDecks, userToken, format }: DataTableProps) {
 	const dispatch = useAppDispatch();
-	// const tableDataState = useSelector(selectTableData);
-	// const matchupDataState = useSelector(selectMatchups);
 	const [tableData, setTableData] = useState<TableData>({});
 	const [hoveredCell, setHoveredCell] = useState<string | null>(null);
 
 	useEffect(() => {
 		const fetchData = async () => {
-			// console.log(tableDataState.data)
-			// console.log(matchupDataState.matchups)
 			if (userToken) {
 				try {
 					const response = await dispatch(getMatchupRecordsByDeck({ userToken, format }));

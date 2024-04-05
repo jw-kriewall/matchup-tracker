@@ -40,7 +40,6 @@ export default function GoogleLoginButton({ closeModal }: any) {
 					}
 					
 					const data: GoogleDataJson = await response.json();
-					console.log(data);
 
 					const user = await dispatch(loginAction(data.id_token));
 					const userJSON = JSON.stringify(user.payload);

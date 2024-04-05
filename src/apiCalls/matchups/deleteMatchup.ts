@@ -1,6 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Matchup } from "../../types/MatchupModels";
-import { GoogleDataJson } from "../../types/GoogleDataJson";
 import axios from "axios";
 
 const apiUrl = process.env.REACT_APP_API_URL;
