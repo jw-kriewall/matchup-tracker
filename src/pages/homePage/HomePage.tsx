@@ -7,11 +7,11 @@ import { DeckDisplay } from "../../types/MatchupModels";
 import { getUserDeckDisplay } from "../../apiCalls/users/getUserDeckDisplay";
 import { useAppDispatch } from "../../hooks/hooks";
 import "./HomePage.css";
-import { GoogleDataJson } from "../../types/GoogleDataJson";
 
 export default function HomePage() {
   const [userCookies] = useCookies(["user"]);
   const userToken: string = userCookies["user"];
+  const [cookies, setCookie] = useCookies(["userRole", "user", "format", "refresh-token"]);
 
   const [userDeckDisplays, setUserDeckDisplays] = React.useState<DeckDisplay[]>(
     []
@@ -20,9 +20,10 @@ export default function HomePage() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    // @TODO: persist this if possible. Currently calling the api everytime the home page is hit.
+    // @TODO: persist this if possible. Currently calling the api every time the home page is hit.
     if (userToken && userDeckDisplays.length === 0) {
-      dispatch(getUserDeckDisplay(userToken))
+      const format: string = cookies.format
+      dispatch(getUserDeckDisplay({userToken, format}))
         .unwrap() // Unwrap is used to extract the payload from the fulfilled action
         .then((deckDisplays) => setUserDeckDisplays(deckDisplays))
         .catch((error) =>
