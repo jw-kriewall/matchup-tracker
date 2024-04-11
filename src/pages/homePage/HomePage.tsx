@@ -4,9 +4,9 @@ import PublicFaq from "../../components/publicFaq/PublicFaq";
 import NavBar from "../../components/navBar/NavBar";
 import { useCookies } from "react-cookie";
 import { DeckDisplay } from "../../types/MatchupModels";
-import { getUserDeckDisplay } from "../../apiCalls/users/getUserDeckDisplay";
 import { useAppDispatch } from "../../hooks/hooks";
 import "./HomePage.css";
+import { getUserDeckDisplay } from "../../apiCalls/deckDisplay/getUserDeckDisplay";
 
 export default function HomePage() {
   const [userCookies] = useCookies(["user"]);
