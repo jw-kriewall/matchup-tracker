@@ -15,12 +15,12 @@ export const getUserDeckDisplay = createAsyncThunk(
 	}) => {
 		try {
 			const response = await axios({
-				url: `${apiUrl}/api/${version}/user/deckdisplays/${format}`,
+				url: `${apiUrl}/api/${version}/deckdisplays/${format}`,
 				method: "GET",
 				headers: {
 					"Access-Control-Allow-Origin": "*",
 					"Access-Control-Allow-Methods": "GET",
-					Authorization: "Bearer " + userToken,
+					Authorization: `Bearer ${userToken}`,
 				},
 			});
 			const data = await response.data;

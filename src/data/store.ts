@@ -13,7 +13,7 @@ export const store = configureStore({
 		matchupReducer: matchupFeedReducer,
 		tableDataReducer: TableDataReducer,
 		matchupCountSlice: MatchupCountSlice,
-		deckDisplaySlice: DeckDisplaySlice,
+		deckDisplayReducer: DeckDisplaySlice,
 		// AuthSlice: AuthSlice
 	},
 });

@@ -12,7 +12,6 @@ export default function HomePage() {
   const [userCookies] = useCookies(["user"]);
   const userToken: string = userCookies["user"];
   const [cookies, setCookie] = useCookies(["userRole", "user", "format", "refresh-token"]);
-
   const [userDeckDisplays, setUserDeckDisplays] = React.useState<DeckDisplay[]>(
     []
   );
