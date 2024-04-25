@@ -39,7 +39,11 @@ export const DeckDisplayForm: React.FC<Props> = ({ onSubmit }) => {
 	};
 
 	return (
-		<Box>
+		<Box
+			display="flex"
+            flexDirection="column"
+            alignItems="flex-end"
+			>
 			<TextField
 				label="Deck Name"
 				fullWidth
@@ -70,7 +74,7 @@ export const DeckDisplayForm: React.FC<Props> = ({ onSubmit }) => {
 							value={newDeckDisplay.sprites.join(", ")}
 							onChange={(e) => setNewDeckDisplay({ ...newDeckDisplay, sprites: [] })}
 						/> */}
-			<Button onClick={handleSubmit} color="primary">
+			<Button onClick={handleSubmit} variant="outlined" color="primary" sx={{marginTop: "10px"}}>
 				Submit
 			</Button>
 		</Box>

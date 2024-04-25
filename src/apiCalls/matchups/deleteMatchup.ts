@@ -21,7 +21,7 @@ export const deleteSingleMatchup = createAsyncThunk(
 				headers: {
 					"Access-Control-Allow-Origin": "*",
 					"Access-Control-Allow-Methods": "DELETE",
-					Authorization: "Bearer " + userToken,
+					Authorization: `Bearer ${userToken}`,
 				},
 			});
 		} catch (error) {

@@ -20,6 +20,8 @@ export type Deck = {
 }
 
 export type DeckDisplay = {
+	// id is optional because hardcoded values don't need an id - id's are for specific users.
+	id?: number | undefined,
 	value: string,
 	label: string,
 	format?: string,

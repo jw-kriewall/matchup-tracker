@@ -29,7 +29,7 @@ const deckDisplaySlice = createSlice({
 				state.isLoading = false;
 				state.isSuccess = true;
 			})
-			.addCase(createDeckDisplay.rejected, (state, action) => {
+			.addCase(createDeckDisplay.rejected, (state) => {
 				state.isError = true;
 				state.isLoading = false;
 				state.isSuccess = true;

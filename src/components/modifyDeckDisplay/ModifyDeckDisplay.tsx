@@ -1,22 +1,22 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import {
-	Button,
 	MenuItem,
 	Modal,
 	Box,
 	Typography,
-	TextField,
 	List,
 	ListItem,
 	Tabs,
 	Tab,
+	IconButton,
 } from "@mui/material";
 import { createDeckDisplay } from "../../apiCalls/deckDisplay/createDeckDisplay";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { useCookies } from "react-cookie";
 import { DeckDisplayForm } from "./AddDeckForm";
 import { DeckDisplay } from "../../types/MatchupModels";
+import CloseIcon from "@mui/icons-material/Close";
+import { deleteDeckDisplay } from "../../apiCalls/deckDisplay/deleteDeckDisplay";
 
 export default function ModifyDeckDisplay() {
 	const [open, setOpen] = useState(false);
@@ -31,10 +31,6 @@ export default function ModifyDeckDisplay() {
 	const handleClose = () => setOpen(false);
 
 	const handleFormSubmit = (newDeckDisplay: DeckDisplay) => {
-		// Here you would typically make an API request to your backend
-		// to add the deckDisplay, then dispatch the action to update
-		// the Redux store. For now, we'll directly dispatch.
-		// const userToken: string = cookies.user;
 		dispatch(
 			createDeckDisplay({
 				userToken: cookies.user,
@@ -58,6 +54,19 @@ export default function ModifyDeckDisplay() {
 
 	const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
 		setValue(newValue);
+	};
+
+	const handleDelete = (id?: number) => {
+		if (!id) {
+			console.error("ID is undefined, cannot delete Deck Display");
+			return;
+		}
+		try {
+			dispatch(deleteDeckDisplay({userToken: cookies.user, id}));
+		}
+		catch {
+			console.error("Error deleting user's Deck Display")
+		}
 	};
 
 	interface TabPanelProps {
@@ -110,12 +119,25 @@ export default function ModifyDeckDisplay() {
 					<CustomTabPanel value={value} index={0}>
 						<List>
 							{deckDisplays.map((deckDisplay, index) => (
-								<ListItem key={index}>{deckDisplay.label}</ListItem>
+								<ListItem
+									key={index}
+									secondaryAction={
+										<IconButton
+											edge="start"
+											onClick={() => handleDelete(deckDisplay?.id)}
+											aria-label="delete"
+										>
+											<CloseIcon sx={{ color: "red" }} />
+										</IconButton>
+									}
+								>
+									{deckDisplay.label}
+								</ListItem>
 							))}
 						</List>
 					</CustomTabPanel>
 					<CustomTabPanel value={value} index={1}>
-                        <DeckDisplayForm onSubmit={handleFormSubmit} />
+						<DeckDisplayForm onSubmit={handleFormSubmit} />
 					</CustomTabPanel>
 				</Box>
 			</Modal>
