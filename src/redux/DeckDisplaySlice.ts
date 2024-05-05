@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { DeckDisplay } from "../types/MatchupModels";
 import { createDeckDisplay } from "../apiCalls/deckDisplay/createDeckDisplay";
 import { getUserDeckDisplay } from "../apiCalls/deckDisplay/getUserDeckDisplay";
+import { deleteDeckDisplay } from "../apiCalls/deckDisplay/deleteDeckDisplay";
 
 interface DeckDisplayState {
 	isSuccess: boolean;
@@ -53,6 +54,26 @@ const deckDisplaySlice = createSlice({
 				state.isSuccess = true;
 			})
 			.addCase(getUserDeckDisplay.pending, (state, action) => {
+				state.isError = false;
+				state.isLoading = true;
+				state.isSuccess = false;
+			})
+
+			.addCase(deleteDeckDisplay.fulfilled, (state, action) => {
+				const idToRemove: number = action.payload;
+				state.deckDisplay = state.deckDisplay.filter(
+					(deck: DeckDisplay) => deck.id !== idToRemove
+				);
+				state.isError = false;
+				state.isLoading = false;
+				state.isSuccess = true;
+			})
+			.addCase(deleteDeckDisplay.rejected, (state) => {
+				state.isError = true;
+				state.isLoading = false;
+				state.isSuccess = true;
+			})
+			.addCase(deleteDeckDisplay.pending, (state) => {
 				state.isError = false;
 				state.isLoading = true;
 				state.isSuccess = false;
