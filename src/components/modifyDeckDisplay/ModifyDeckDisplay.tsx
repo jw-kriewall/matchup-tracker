@@ -17,6 +17,8 @@ import { DeckDisplayForm } from "./AddDeckForm";
 import { DeckDisplay } from "../../types/MatchupModels";
 import CloseIcon from "@mui/icons-material/Close";
 import { deleteDeckDisplay } from "../../apiCalls/deckDisplay/deleteDeckDisplay";
+import { useSelector } from "react-redux";
+import { selectMatchups } from "../../redux/MatchupFeedSlice";
 
 export default function ModifyDeckDisplay() {
 	const [open, setOpen] = useState(false);
@@ -56,13 +58,13 @@ export default function ModifyDeckDisplay() {
 		setValue(newValue);
 	};
 
-	const handleDelete = (id?: number) => {
+	const handleDelete = (label: string, id?: number) => {
 		if (!id) {
 			console.error("ID is undefined, cannot delete Deck Display");
 			return;
 		}
 		try {
-			dispatch(deleteDeckDisplay({userToken: cookies.user, id}));
+			dispatch(deleteDeckDisplay({userToken: cookies.user, label: label, id: id}));
 		}
 		catch {
 			console.error("Error deleting user's Deck Display")
@@ -124,7 +126,7 @@ export default function ModifyDeckDisplay() {
 									secondaryAction={
 										<IconButton
 											edge="start"
-											onClick={() => handleDelete(deckDisplay?.id)}
+											onClick={() => handleDelete( deckDisplay.label, deckDisplay?.id )}
 											aria-label="delete"
 										>
 											<CloseIcon sx={{ color: "red" }} />

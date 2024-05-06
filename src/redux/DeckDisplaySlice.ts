@@ -3,6 +3,7 @@ import { DeckDisplay } from "../types/MatchupModels";
 import { createDeckDisplay } from "../apiCalls/deckDisplay/createDeckDisplay";
 import { getUserDeckDisplay } from "../apiCalls/deckDisplay/getUserDeckDisplay";
 import { deleteDeckDisplay } from "../apiCalls/deckDisplay/deleteDeckDisplay";
+// import { removeMatchupsByDeckLabel, selectMatchups } from "./MatchupFeedSlice";
 
 interface DeckDisplayState {
 	isSuccess: boolean;
@@ -60,13 +61,14 @@ const deckDisplaySlice = createSlice({
 			})
 
 			.addCase(deleteDeckDisplay.fulfilled, (state, action) => {
-				const idToRemove: number = action.payload;
-				state.deckDisplay = state.deckDisplay.filter(
-					(deck: DeckDisplay) => deck.id !== idToRemove
-				);
+				const returnObject: { id: number; label: string } = action.payload;
 				state.isError = false;
 				state.isLoading = false;
 				state.isSuccess = true;
+				state.deckDisplay = state.deckDisplay.filter(
+					(deck: DeckDisplay) => deck.id !== returnObject.id
+				);
+				
 			})
 			.addCase(deleteDeckDisplay.rejected, (state) => {
 				state.isError = true;

@@ -6,7 +6,7 @@ const version = process.env.REACT_APP_API_VERSION;
 
 export const deleteDeckDisplay = createAsyncThunk(
 	"deckDisplay/delete",
-	async ({ userToken, id }: { userToken: string | undefined; id: number }) => {
+	async ({ userToken, label, id }: { userToken: string | undefined; label: string, id: number }) => {
 		try {
 			await axios({
 				url: `${apiUrl}/api/${version}/deckdisplays/delete/${id}`,
@@ -17,7 +17,7 @@ export const deleteDeckDisplay = createAsyncThunk(
 					Authorization: `Bearer ${userToken}`,
 				},
 			});
-			return id;
+			return { id, label };
 		} catch (error) {
 			console.log(error);
 			throw error;
