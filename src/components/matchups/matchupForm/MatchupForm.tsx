@@ -359,6 +359,7 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 				<DeckInputDropdown
 					id="outlined-deck-one"
 					label="Player One Deck"
+					// @TODO: Sort alphabetically
 					decks={decks.concat(userDeckDisplays)}
 					value={playerOneDeckName}
 					onChange={(e) => handlePlayerOneDeckChange(e)}
@@ -366,6 +367,7 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 				<DeckInputDropdown
 					id="outlined-deck-two"
 					label="Player Two Deck"
+					// @TODO: Sort alphabetically
 					decks={decks.concat(userDeckDisplays)}
 					value={playerTwoDeckName}
 					onChange={(e) => handlePlayerTwoDeckChange(e)}

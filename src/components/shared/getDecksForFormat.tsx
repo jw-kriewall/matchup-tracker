@@ -6,6 +6,7 @@ export const getDecksForFormat = (format?: string | undefined): DeckDisplay[] =>
     const validFormat = format || 'default';
     
     const formatDecksMapping: { [format: string]: DeckDisplay[] } = {
+      // @TODO: Add BRS-TWilight masquerade
       'BRS-TEF': BRS_TEF_DECKS_CONSTANT,
       'GLC': GLC_DECKS_CONSTANT,
 

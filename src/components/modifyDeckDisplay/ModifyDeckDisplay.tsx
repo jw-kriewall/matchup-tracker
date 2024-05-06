@@ -17,8 +17,6 @@ import { DeckDisplayForm } from "./AddDeckForm";
 import { DeckDisplay } from "../../types/MatchupModels";
 import CloseIcon from "@mui/icons-material/Close";
 import { deleteDeckDisplay } from "../../apiCalls/deckDisplay/deleteDeckDisplay";
-import { useSelector } from "react-redux";
-import { selectMatchups } from "../../redux/MatchupFeedSlice";
 
 export default function ModifyDeckDisplay() {
 	const [open, setOpen] = useState(false);
