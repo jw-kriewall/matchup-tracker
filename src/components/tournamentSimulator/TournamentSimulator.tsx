@@ -490,7 +490,7 @@ function TournamentSimulator({ userToken, filteredDecks, format }: simulatorProp
 													},
 												}}
 												size="small"
-												value={matchupPercentages[deck]?.[opponentDeck]?.valueOf() || '50.0'}
+												value={matchupPercentages[deck]?.[opponentDeck]?.toString() || '50.0'}
 												onChange={(e) =>
 													updateMatchupPercentage(
 														deck,

@@ -5,7 +5,7 @@ import { useCookies } from "react-cookie";
 import "./SimulatorPage.css";
 import PublicFaq from "../../components/publicFaq/PublicFaq";
 import { getDecksForFormat } from "../../components/shared/getDecksForFormat";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectUserDeckDisplays } from "../../redux/DeckDisplaySlice";
 import { getUserDeckDisplay } from "../../apiCalls/deckDisplay/getUserDeckDisplay";
 import { useAppDispatch } from "../../hooks/hooks";
