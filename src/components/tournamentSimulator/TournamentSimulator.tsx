@@ -19,7 +19,6 @@ import ImportExportIcon from "@mui/icons-material/ImportExport";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import ResultsModal from "./ResultsModal";
 import CircularProgress from '@mui/material/CircularProgress';
-import { GoogleDataJson } from "../../types/GoogleDataJson";
 
 interface simulatorProps {
 	userToken: string;
@@ -94,36 +93,37 @@ function TournamentSimulator({ userToken, filteredDecks, format }: simulatorProp
 		}
 	}, [tableData.data, filteredDecks]);
 
-	useEffect(() => {
-		const newMatchupPercentages = initializeMatchupPercentages();
-		setMatchupPercentages(newMatchupPercentages);
-	}, [isActualData, filteredDecks, tableData.data]);
-
-	// Function to initialize matchup percentages
 	const initializeMatchupPercentages = () => {
 		const initialMatchupPercentages: {
 			[deck: string]: { [opponentDeck: string]: number };
 		} = {};
 		filteredDecks.forEach((deck) => {
-			initialMatchupPercentages[deck] = {};
-			filteredDecks.forEach((opponentDeck) => {
-				if (deck !== opponentDeck) {
-					const matchupData = tableData.data[deck]?.[opponentDeck];
-					let matchupPercentage = 50.0; // Default to 50%
-
-					if (isActualData && matchupData) {
-						const [wins, losses, ties] = matchupData.split("-").map(Number);
-						const totalGames = wins + losses;
-						if (totalGames > 0) {
-							matchupPercentage = +((wins / totalGames) * 100).toFixed(1);
-						}
-					}
-					initialMatchupPercentages[deck][opponentDeck] = matchupPercentage;
+		  initialMatchupPercentages[deck] = {};
+		  filteredDecks.forEach((opponentDeck) => {
+			if (deck !== opponentDeck) {
+			  const matchupData = tableData.data[deck]?.[opponentDeck];
+			  let matchupPercentage = 50.0; // Default to 50%
+			  if (matchupData) {
+				const [wins, losses] = matchupData.split("-").map(Number);
+				const totalGames = wins + losses;
+				if (totalGames > 0) {
+				  matchupPercentage = (wins / totalGames) * 100;
 				}
-			});
+			  }
+			  initialMatchupPercentages[deck][opponentDeck] = matchupPercentage;
+			}
+		  });
 		});
 		return initialMatchupPercentages;
-	};
+	  };
+	  
+	  useEffect(() => {
+		const newMatchupPercentages = initializeMatchupPercentages();
+		if (Object.keys(newMatchupPercentages).length > 0) {
+		  setMatchupPercentages(newMatchupPercentages);
+		}
+	  }, [tableData.data, filteredDecks]);
+	  
 
 	const handleSimulation = () => {
 		setIsLoading(true);
@@ -478,10 +478,9 @@ function TournamentSimulator({ userToken, filteredDecks, format }: simulatorProp
 												id="outlined-number"
 												type="number"
 												error={
-													matchupPercentages[deck]?.[opponentDeck].valueOf() >
-														100 ||
-													matchupPercentages[deck]?.[opponentDeck].valueOf() < 0
-												}
+													(matchupPercentages[deck]?.[opponentDeck] ?? 50) > 100 ||
+													(matchupPercentages[deck]?.[opponentDeck] ?? 50) < 0
+												  }
 												InputProps={{
 													style: { minWidth: "5rem" },
 													inputProps: {
@@ -491,7 +490,7 @@ function TournamentSimulator({ userToken, filteredDecks, format }: simulatorProp
 													},
 												}}
 												size="small"
-												value={matchupPercentages[deck]?.[opponentDeck] || '50.0'}
+												value={matchupPercentages[deck]?.[opponentDeck]?.valueOf() || '50.0'}
 												onChange={(e) =>
 													updateMatchupPercentage(
 														deck,

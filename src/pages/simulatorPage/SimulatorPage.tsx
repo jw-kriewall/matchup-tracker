@@ -1,21 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "../../components/navBar/NavBar";
 import TournamentSimulator from "../../components/tournamentSimulator/TournamentSimulator";
 import { useCookies } from "react-cookie";
 import "./SimulatorPage.css";
 import PublicFaq from "../../components/publicFaq/PublicFaq";
 import { getDecksForFormat } from "../../components/shared/getDecksForFormat";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectUserDeckDisplays } from "../../redux/DeckDisplaySlice";
+import { getUserDeckDisplay } from "../../apiCalls/deckDisplay/getUserDeckDisplay";
+import { useAppDispatch } from "../../hooks/hooks";
 
 export default function SimulatorPage() {
-  const [cookies] = useCookies(["format"]);
-  const initialDecks = getDecksForFormat(cookies.format).map((deck) => deck.value);
-  // const [selectedDecks, setSelectedDecks] = useState<string[]>(initialDecks);
-  const [userCookies] = useCookies(["user"]);
-  const userToken = userCookies["user"];
-
   const userDeckDisplays = useSelector(selectUserDeckDisplays);
+  const dispatch = useAppDispatch();
+  
+  const [cookies] = useCookies(["user", "format"]);
+  const userToken = cookies.user;
+  const format = cookies.format;
+
+  useEffect(() => {
+    if(userToken && userDeckDisplays.length === 0) {
+      dispatch(getUserDeckDisplay({ userToken, format}))
+      .catch((error) => console.error("Failed to fetch user deck displays:", error));
+    }
+  }, [userToken, dispatch, userDeckDisplays.length, format]);
+
+  const initialDecks = getDecksForFormat(format).map(deck => deck.value)
+    .concat(userDeckDisplays.map(deck => deck.label))
+    .sort((a, b) => a.localeCompare(b));
 
   if (!userToken) {
     return (
@@ -36,7 +48,7 @@ export default function SimulatorPage() {
 
       <div className="bento-box-sim">
         <div className="data-table-sim">
-          <TournamentSimulator userToken={userToken} filteredDecks={initialDecks.concat(userDeckDisplays.map(deck => deck.label)).sort((a, b) => a.localeCompare(b))} format={cookies.format} />
+          <TournamentSimulator userToken={userToken} filteredDecks={initialDecks} format={cookies.format} />
         </div>
       </div>
     </div>

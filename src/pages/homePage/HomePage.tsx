@@ -3,7 +3,7 @@ import MatchupForm from "../../components/matchups/matchupForm/MatchupForm";
 import PublicFaq from "../../components/publicFaq/PublicFaq";
 import NavBar from "../../components/navBar/NavBar";
 import { useCookies } from "react-cookie";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch } from "../../hooks/hooks";
 import { getUserDeckDisplay } from "../../apiCalls/deckDisplay/getUserDeckDisplay";
 import "./HomePage.css";
 import { useSelector } from "react-redux";
