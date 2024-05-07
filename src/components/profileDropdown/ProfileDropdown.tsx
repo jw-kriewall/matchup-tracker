@@ -17,7 +17,6 @@ import React from "react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { useAppDispatch } from "../../hooks/hooks";
 import { getMatchups } from "../../apiCalls/matchups/getMatchups";
-import { GoogleDataJson } from "../../types/GoogleDataJson";
 import ModifyDeckDisplay from "../modifyDeckDisplay/ModifyDeckDisplay";
 
 export function ProfileDropdown() {

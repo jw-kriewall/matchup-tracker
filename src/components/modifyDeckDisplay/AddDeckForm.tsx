@@ -43,7 +43,7 @@ export const DeckDisplayForm: React.FC<Props> = ({ onSubmit }) => {
 			display="flex"
             flexDirection="column"
             alignItems="flex-end"
-			>
+		>
 			<TextField
 				label="Deck Name"
 				fullWidth

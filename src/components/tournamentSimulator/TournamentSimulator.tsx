@@ -56,7 +56,6 @@ interface TournamentSimulatorInput {
 // @TODO: Suggested number of rounds based on total players
 
 function TournamentSimulator({ userToken, filteredDecks, format }: simulatorProps) {
-	// const [data, setData] = useState<TableData>({});
 	const minPlayers = 0;
 	const maxPlayers = 500;
 	const minRounds = 1;
@@ -478,8 +477,8 @@ function TournamentSimulator({ userToken, filteredDecks, format }: simulatorProp
 												id="outlined-number"
 												type="number"
 												error={
-													(matchupPercentages[deck]?.[opponentDeck] ?? 50) > 100 ||
-													(matchupPercentages[deck]?.[opponentDeck] ?? 50) < 0
+													(matchupPercentages[deck]?.[opponentDeck] ?? 50.0) > 100 ||
+													(matchupPercentages[deck]?.[opponentDeck] ?? 50.0) < 0
 												  }
 												InputProps={{
 													style: { minWidth: "5rem" },

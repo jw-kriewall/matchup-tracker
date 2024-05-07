@@ -8,6 +8,8 @@ import { getUserDeckDisplay } from "../../apiCalls/deckDisplay/getUserDeckDispla
 import "./HomePage.css";
 import { useSelector } from "react-redux";
 import { selectUserDeckDisplays } from "../../redux/DeckDisplaySlice";
+import { getDecksForFormat } from "../../components/shared/getDecksForFormat";
+import { DeckDisplay } from "../../types/MatchupModels";
 
 export default function HomePage() {
   const [userCookies] = useCookies(["user"]);
@@ -16,7 +18,8 @@ export default function HomePage() {
   const dispatch = useAppDispatch();
 
   const userDeckDisplays = useSelector(selectUserDeckDisplays);
-  // .concat(userDeckDisplays.map(deck => deck.label)).sort((a, b) => a.localeCompare(b)))
+  const decks: DeckDisplay[] = getDecksForFormat(cookies.format);
+  const allDecks = decks.concat(userDeckDisplays);
 
   useEffect(() => {
     if (userToken && userDeckDisplays.length === 0) {
@@ -43,7 +46,7 @@ export default function HomePage() {
         <NavBar />
       </div>
       <div className="matchup-form">
-        <MatchupForm userDeckDisplays={userDeckDisplays} />
+        <MatchupForm allDecks={allDecks} />
       </div>
     </div>
   );
