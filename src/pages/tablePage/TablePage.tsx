@@ -15,10 +15,9 @@ import { useAppDispatch } from "../../hooks/hooks";
 
 export default function TablePage() {
   const dispatch = useAppDispatch();
-  const [cookies] = useCookies(["format"]);
   const [selectedDecks, setSelectedDecks] = useState<string[]>([]);
-  const [userCookies] = useCookies(["user"]);
-  const userToken: string = userCookies["user"];
+  const [cookies] = useCookies(["user", "format"]);
+  const userToken = cookies.user;
   const format: string = cookies.format;
 
   const userDeckDisplays = useSelector(selectUserDeckDisplays);
@@ -34,7 +33,6 @@ export default function TablePage() {
     const initialDecks = decks.map(deck => deck.value).concat(userDeckDisplays.map(deck => deck.value));
     initialDecks.sort((a, b) => a.localeCompare(b));
     setSelectedDecks(initialDecks);
-    console.log(initialDecks)
   }, [cookies.format, decks, dispatch, userDeckDisplays, userToken]);
 
   if (!userToken) {
@@ -69,7 +67,7 @@ export default function TablePage() {
           </div> */}
         </div>
         <div className="data-table">
-          <DataTable selectedDecks={selectedDecks} userToken={userToken} format={cookies.format}/>
+          <DataTable selectedDecks={selectedDecks} userToken={userToken} format={format}/>
         </div>
       </div>
     </div>
