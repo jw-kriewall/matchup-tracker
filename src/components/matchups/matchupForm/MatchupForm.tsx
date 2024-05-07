@@ -278,6 +278,20 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 		}
 	};
 
+	function sortDecksAlphabeticallyWithOtherAtEnd(allDecks: DeckDisplay[]) {
+		return allDecks.sort((a, b) => {
+		  // Check if either label is 'Other'
+		  if (a.label === 'Other' && b.label !== 'Other') {
+			return 1; // 'Other' should come later in the list
+		  } else if (a.label !== 'Other' && b.label === 'Other') {
+			return -1; // 'Other' should come later in the list
+		  } else {
+			// If neither label is 'Other', sort alphabetically
+			return a.label.localeCompare(b.label);
+		  }
+		});
+	  }
+
 	return (
 		<Box
 			component="form"
@@ -359,16 +373,14 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 				<DeckInputDropdown
 					id="outlined-deck-one"
 					label="Player One Deck"
-					// @TODO: Sort alphabetically
-					decks={decks.concat(userDeckDisplays)}
+					decks={sortDecksAlphabeticallyWithOtherAtEnd(decks.concat(userDeckDisplays))}
 					value={playerOneDeckName}
 					onChange={(e) => handlePlayerOneDeckChange(e)}
 				/>
 				<DeckInputDropdown
 					id="outlined-deck-two"
 					label="Player Two Deck"
-					// @TODO: Sort alphabetically
-					decks={decks.concat(userDeckDisplays)}
+					decks={sortDecksAlphabeticallyWithOtherAtEnd(decks.concat(userDeckDisplays))}
 					value={playerTwoDeckName}
 					onChange={(e) => handlePlayerTwoDeckChange(e)}
 				/>

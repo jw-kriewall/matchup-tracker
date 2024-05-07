@@ -16,6 +16,7 @@ export default function HomePage() {
   const dispatch = useAppDispatch();
 
   const userDeckDisplays = useSelector(selectUserDeckDisplays);
+  // .concat(userDeckDisplays.map(deck => deck.label)).sort((a, b) => a.localeCompare(b)))
 
   useEffect(() => {
     if (userToken && userDeckDisplays.length === 0) {

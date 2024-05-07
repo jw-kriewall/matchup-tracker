@@ -17,6 +17,7 @@ import { DeckDisplayForm } from "./AddDeckForm";
 import { DeckDisplay } from "../../types/MatchupModels";
 import CloseIcon from "@mui/icons-material/Close";
 import { deleteDeckDisplay } from "../../apiCalls/deckDisplay/deleteDeckDisplay";
+import { getDecksForFormat } from "../shared/getDecksForFormat";
 
 export default function ModifyDeckDisplay() {
 	const [open, setOpen] = useState(false);
@@ -26,11 +27,16 @@ export default function ModifyDeckDisplay() {
 	const [cookies] = useCookies(["userRole", "user", "format"]);
 	const [value, setValue] = React.useState(0);
 	const dispatch = useAppDispatch();
+	const hardCodedDecks = getDecksForFormat(cookies.format).map((deck) => deck.value);
 
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
 
 	const handleFormSubmit = (newDeckDisplay: DeckDisplay) => {
+		if (hardCodedDecks.includes(newDeckDisplay.label)) {
+			alert('This deck label already exists. Please choose a different deck name.');
+			return; 
+		}
 		dispatch(
 			createDeckDisplay({
 				userToken: cookies.user,

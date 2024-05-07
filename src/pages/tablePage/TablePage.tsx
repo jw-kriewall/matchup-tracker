@@ -8,15 +8,18 @@ import "./TablePage.css";
 import PublicFaq from "../../components/publicFaq/PublicFaq";
 import { DeckDisplay } from "../../types/MatchupModels";
 import { getDecksForFormat } from "../../components/shared/getDecksForFormat";
-import { GoogleDataJson } from "../../types/GoogleDataJson";
+import { useSelector } from "react-redux";
+import { selectUserDeckDisplays } from "../../redux/DeckDisplaySlice";
 
 export default function TablePage() {
   const [cookies] = useCookies(["format"]);
   const allDecks: DeckDisplay[] = getDecksForFormat(cookies.format);
-  // const allDecks = decks.map((deck) => deck.value);
   const [selectedDecks, setSelectedDecks] = useState<string[]>([]);
   const [userCookies] = useCookies(["user"]);
   const userToken: string = userCookies["user"];
+
+  const userDeckDisplays = useSelector(selectUserDeckDisplays);
+  // .concat(userDeckDisplays.map(deck => deck.label)).sort((a, b) => a.localeCompare(b)))
 
   useEffect(() => {
     const decks: DeckDisplay[] = getDecksForFormat(cookies.format);
@@ -55,7 +58,8 @@ export default function TablePage() {
           </div>
         </div>
         <div className="data-table">
-          <DataTable selectedDecks={selectedDecks} userToken={userToken} format={cookies.format}/>
+          {/* @TODO: Fix this */}
+          <DataTable selectedDecks={selectedDecks.concat(userDeckDisplays.map(deck => deck.label)).sort((a, b) => a.localeCompare(b))} userToken={userToken} format={cookies.format}/>
         </div>
       </div>
     </div>
