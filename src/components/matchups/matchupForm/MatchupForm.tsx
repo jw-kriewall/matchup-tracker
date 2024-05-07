@@ -16,6 +16,7 @@ import { useCookies } from "react-cookie";
 import DeckInputDropdown from "../../shared/deckInputDropdown";
 import SnackbarWarning from "../../snackbarNotifications/SnackbarWarning";
 import { getDecksForFormat } from "../../shared/getDecksForFormat";
+import sortDecksAlphabeticallyWithOtherAtEnd from "../../shared/sortAlphabeticallyWithOtherAtEnd";
 
 interface matchupFormProps {
 	userDeckDisplays: DeckDisplay[];
@@ -277,20 +278,6 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 			setSnackbarKey((prevKey) => prevKey + 1);
 		}
 	};
-
-	function sortDecksAlphabeticallyWithOtherAtEnd(allDecks: DeckDisplay[]) {
-		return allDecks.sort((a, b) => {
-		  // Check if either label is 'Other'
-		  if (a.label === 'Other' && b.label !== 'Other') {
-			return 1; // 'Other' should come later in the list
-		  } else if (a.label !== 'Other' && b.label === 'Other') {
-			return -1; // 'Other' should come later in the list
-		  } else {
-			// If neither label is 'Other', sort alphabetically
-			return a.label.localeCompare(b.label);
-		  }
-		});
-	  }
 
 	return (
 		<Box
