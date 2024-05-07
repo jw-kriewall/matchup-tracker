@@ -22,7 +22,6 @@ export default function TablePage() {
   const format: string = cookies.format;
 
   const userDeckDisplays = useSelector(selectUserDeckDisplays);
-
   const decks: DeckDisplay[] = getDecksForFormat(format);
 
   useEffect(() => {
