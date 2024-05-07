@@ -10,23 +10,33 @@ import { DeckDisplay } from "../../types/MatchupModels";
 import { getDecksForFormat } from "../../components/shared/getDecksForFormat";
 import { useSelector } from "react-redux";
 import { selectUserDeckDisplays } from "../../redux/DeckDisplaySlice";
+import { getUserDeckDisplay } from "../../apiCalls/deckDisplay/getUserDeckDisplay";
+import { useAppDispatch } from "../../hooks/hooks";
 
 export default function TablePage() {
+  const dispatch = useAppDispatch();
   const [cookies] = useCookies(["format"]);
-  // const allDecks: DeckDisplay[] = getDecksForFormat(cookies.format);
   const [selectedDecks, setSelectedDecks] = useState<string[]>([]);
   const [userCookies] = useCookies(["user"]);
   const userToken: string = userCookies["user"];
+  const format: string = cookies.format;
 
   const userDeckDisplays = useSelector(selectUserDeckDisplays);
 
+  const decks: DeckDisplay[] = getDecksForFormat(format);
+
   useEffect(() => {
-    const decks: DeckDisplay[] = getDecksForFormat(cookies.format);
+    if (userToken && userDeckDisplays.length === 0) {
+      const format: string = cookies.format;
+      dispatch(getUserDeckDisplay({ userToken, format }))
+        .catch((error) => console.error("Failed to fetch user deck displays:", error));
+    }
+  
     const initialDecks = decks.map(deck => deck.value).concat(userDeckDisplays.map(deck => deck.value));
     initialDecks.sort((a, b) => a.localeCompare(b));
     setSelectedDecks(initialDecks);
     console.log(initialDecks)
-  }, [cookies.format, userDeckDisplays]);
+  }, [cookies.format, decks, dispatch, userDeckDisplays, userToken]);
 
   if (!userToken) {
     return (

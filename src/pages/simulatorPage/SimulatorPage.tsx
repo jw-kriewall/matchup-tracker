@@ -9,25 +9,26 @@ import { useSelector } from "react-redux";
 import { selectUserDeckDisplays } from "../../redux/DeckDisplaySlice";
 import { getUserDeckDisplay } from "../../apiCalls/deckDisplay/getUserDeckDisplay";
 import { useAppDispatch } from "../../hooks/hooks";
+import { DeckDisplay } from "../../types/MatchupModels";
 
 export default function SimulatorPage() {
-  const userDeckDisplays = useSelector(selectUserDeckDisplays);
   const dispatch = useAppDispatch();
   
   const [cookies] = useCookies(["user", "format"]);
   const userToken = cookies.user;
   const format = cookies.format;
 
-  useEffect(() => {
-    if(userToken && userDeckDisplays.length === 0) {
-      dispatch(getUserDeckDisplay({ userToken, format}))
-      .catch((error) => console.error("Failed to fetch user deck displays:", error));
-    }
-  }, [userToken, dispatch, userDeckDisplays.length, format]);
+  const userDeckDisplays = useSelector(selectUserDeckDisplays);
+  const decks: DeckDisplay[] = getDecksForFormat(format);
+  const allDecks = decks.concat(userDeckDisplays).map(deck => deck.value).sort((a, b) => a.localeCompare(b));
 
-  const initialDecks = getDecksForFormat(format).map(deck => deck.value)
-    .concat(userDeckDisplays.map(deck => deck.label))
-    .sort((a, b) => a.localeCompare(b));
+  useEffect(() => {
+    if (userToken && userDeckDisplays.length === 0) {
+      const format: string = cookies.format;
+      dispatch(getUserDeckDisplay({ userToken, format }))
+        .catch((error) => console.error("Failed to fetch user deck displays:", error));
+    }
+  }, [userToken, dispatch, userDeckDisplays.length, cookies.format]);
 
   if (!userToken) {
     return (
@@ -48,7 +49,7 @@ export default function SimulatorPage() {
 
       <div className="bento-box-sim">
         <div className="data-table-sim">
-          <TournamentSimulator userToken={userToken} filteredDecks={initialDecks} format={cookies.format} />
+          <TournamentSimulator userToken={userToken} filteredDecks={allDecks} format={cookies.format} />
         </div>
       </div>
     </div>
