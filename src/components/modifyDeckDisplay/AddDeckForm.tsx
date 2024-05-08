@@ -14,6 +14,13 @@ interface Props {
 	onSubmit: (deckDisplay: DeckDisplay) => void; // Prop to handle the submit action
 }
 
+// document.addEventListener('keydown', (event) => {
+//     if (event.key === 'f') {
+//         console.log('f key pressed');
+//         event.preventDefault();
+//     }
+// });
+
 export const DeckDisplayForm: React.FC<Props> = ({ onSubmit }) => {
     const [cookies] = useCookies(["format"]);
 	const [deckDisplay, setDeckDisplay] = useState<DeckDisplay>({
@@ -48,8 +55,9 @@ export const DeckDisplayForm: React.FC<Props> = ({ onSubmit }) => {
 				label="Deck Name"
 				fullWidth
 				margin="normal"
-				value={deckDisplay.value}
+				focused={true}
 				onChange={handleChange("value")}
+				inputProps={{ maxLength: 35 }}
 			/>
 			<TextField
                 disabled
