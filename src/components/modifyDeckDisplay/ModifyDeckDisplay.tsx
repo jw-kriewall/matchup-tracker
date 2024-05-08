@@ -19,8 +19,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import { deleteDeckDisplay } from "../../apiCalls/deckDisplay/deleteDeckDisplay";
 import { getDecksForFormat } from "../shared/getDecksForFormat";
 
-// @TODO: I need this .css-1tsefcj-MuiList-root to have 0px padding-top and 0px padding-bottom
-
 export default function ModifyDeckDisplay() {
 	const [open, setOpen] = useState(false);
 	const deckDisplays = useAppSelector(
