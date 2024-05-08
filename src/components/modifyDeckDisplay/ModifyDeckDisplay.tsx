@@ -19,6 +19,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { deleteDeckDisplay } from "../../apiCalls/deckDisplay/deleteDeckDisplay";
 import { getDecksForFormat } from "../shared/getDecksForFormat";
 
+// @TODO: I need this .css-1tsefcj-MuiList-root to have 0px padding-top and 0px padding-bottom
+
 export default function ModifyDeckDisplay() {
 	const [open, setOpen] = useState(false);
 	const deckDisplays = useAppSelector(
@@ -27,15 +29,25 @@ export default function ModifyDeckDisplay() {
 	const [cookies] = useCookies(["userRole", "user", "format"]);
 	const [value, setValue] = React.useState(0);
 	const dispatch = useAppDispatch();
-	const hardCodedDecks = getDecksForFormat(cookies.format).map((deck) => deck.value);
+	const hardCodedDecks = getDecksForFormat(cookies.format).map(
+		(deck) => deck.value
+	);
 
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
 
 	const handleFormSubmit = (newDeckDisplay: DeckDisplay) => {
-		if (hardCodedDecks.includes(newDeckDisplay.label)) {
-			alert('This deck label already exists. Please choose a different deck name.');
-			return; 
+		// if(more than 10 deckDisplays, don't do anything)
+		if (deckDisplays.length >= 10) {
+			alert("You cannot have more than 10 decks.");
+			return;
+		}
+		if (
+			hardCodedDecks.includes(newDeckDisplay.label) ||
+			deckDisplays.map((deck) => deck.label).includes(newDeckDisplay.label)
+		) {
+			alert("This deck already exists. Please choose a different deck name.");
+			return;
 		}
 		dispatch(
 			createDeckDisplay({
@@ -68,10 +80,11 @@ export default function ModifyDeckDisplay() {
 			return;
 		}
 		try {
-			dispatch(deleteDeckDisplay({userToken: cookies.user, label: label, id: id}));
-		}
-		catch {
-			console.error("Error deleting user's Deck Display")
+			dispatch(
+				deleteDeckDisplay({ userToken: cookies.user, label: label, id: id })
+			);
+		} catch {
+			console.error("Error deleting user's Deck Display");
 		}
 	};
 
@@ -130,7 +143,9 @@ export default function ModifyDeckDisplay() {
 									secondaryAction={
 										<IconButton
 											edge="start"
-											onClick={() => handleDelete( deckDisplay.label, deckDisplay?.id )}
+											onClick={() =>
+												handleDelete(deckDisplay.label, deckDisplay?.id)
+											}
 											aria-label="delete"
 										>
 											<CloseIcon sx={{ color: "red" }} />

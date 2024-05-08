@@ -59,7 +59,7 @@ export const DeckDisplayForm: React.FC<Props> = ({ onSubmit }) => {
 				value={deckDisplay.format}
 				onChange={handleChange("format")}
 			/>
-            
+            {/* @TODO: Add Sprites and autopopulate cards */}
 			{/* <TextField
 							label="Cards"
 							fullWidth
@@ -75,7 +75,7 @@ export const DeckDisplayForm: React.FC<Props> = ({ onSubmit }) => {
 							onChange={(e) => setNewDeckDisplay({ ...newDeckDisplay, sprites: [] })}
 						/> */}
 			<Button onClick={handleSubmit} variant="outlined" color="primary" sx={{marginTop: "10px"}}>
-				Submit
+				Submit Deck
 			</Button>
 		</Box>
 	);

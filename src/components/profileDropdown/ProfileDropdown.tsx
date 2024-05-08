@@ -82,12 +82,14 @@ export function ProfileDropdown() {
 						maxWidth: 360,
 						minWidth: 200,
 						bgcolor: "background.paper",
+						paddingBottom: "0px",
+						paddingTop: "0px"
 					}}
 					component="nav"
 					aria-labelledby="nested-list-subheader"
 				>
 					{/* @TODO: Fix padding on menu dropdown - i.e. remove sx in listItemButton below */}
-					<ListItemButton onClick={handleClick} sx={{paddingBottom: '2px'}}>
+					<ListItemButton onClick={handleClick} sx={{ paddingBottom: '2px' }}>
 						<ListItemText primary="Format" />
 						{open ? <ExpandLess /> : <ExpandMore />}
 					</ListItemButton>
