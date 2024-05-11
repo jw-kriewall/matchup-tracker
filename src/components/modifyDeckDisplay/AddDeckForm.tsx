@@ -14,12 +14,13 @@ interface Props {
 	onSubmit: (deckDisplay: DeckDisplay) => void; // Prop to handle the submit action
 }
 
-// document.addEventListener('keydown', (event) => {
-//     if (event.key === 'f') {
-//         console.log('f key pressed');
-//         event.preventDefault();
-//     }
-// });
+document.addEventListener('keydown', (event) => {
+    // if (event.key === 'f') {
+    //     console.log('f key pressed');
+    //     event.preventDefault();
+    // }
+	console.log(event.key);
+});
 
 export const DeckDisplayForm: React.FC<Props> = ({ onSubmit }) => {
     const [cookies] = useCookies(["format"]);
