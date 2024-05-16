@@ -96,6 +96,14 @@ export function ProfileDropdown() {
 
 					<Collapse in={open} timeout="auto" unmountOnExit>
 						<List component="div" disablePadding>
+						<ListItemButton
+								selected={cookies.format === "BRS-TWM"}
+								sx={{ pl: 4 }}
+								onClick={() => handleFormatOnClick("BRS-TWM")}
+							>
+								<ListItemText primary="BRS-TWM (NAIC Format)" />
+							</ListItemButton>
+
 							<ListItemButton
 								selected={cookies.format === "BRS-TEF"}
 								sx={{ pl: 4 }}
