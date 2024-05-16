@@ -52,7 +52,7 @@ export default function ModifyDeckDisplay() {
 				deckDisplay: newDeckDisplay,
 			})
 		);
-		handleClose();
+		// handleClose();
 	};
 
 	const style = {
