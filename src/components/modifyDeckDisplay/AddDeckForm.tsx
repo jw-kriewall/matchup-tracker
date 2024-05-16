@@ -50,8 +50,8 @@ export const DeckDisplayForm: React.FC<Props> = ({ onSubmit }) => {
 			setError("Deck name cannot be blank.");
 			return;
 		}
-		alert("Deck submitted!");
 		onSubmit(deckDisplay);
+		alert("Deck submitted!");
 	};
 
 	return (
