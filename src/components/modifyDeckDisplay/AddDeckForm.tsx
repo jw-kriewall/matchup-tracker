@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useRef, useEffect } from "react";
 import { Box, TextField, Button } from "@mui/material";
 import { useCookies } from "react-cookie";
 
@@ -14,14 +14,6 @@ interface Props {
 	onSubmit: (deckDisplay: DeckDisplay) => void; // Prop to handle the submit action
 }
 
-// document.addEventListener('keydown', (event) => {
-//     // if (event.key === 'f') {
-//     //     console.log('f key pressed');
-//     //     event.preventDefault();
-//     // }
-// 	console.log(event.key);
-// });
-
 export const DeckDisplayForm: React.FC<Props> = ({ onSubmit }) => {
 	const [cookies] = useCookies(["format"]);
 	const [deckDisplay, setDeckDisplay] = useState<DeckDisplay>({
@@ -31,6 +23,14 @@ export const DeckDisplayForm: React.FC<Props> = ({ onSubmit }) => {
 		cards: [],
 		sprites: [],
 	});
+	const inputRef = useRef<HTMLInputElement>(null);
+	const [error, setError] = useState<string | null>(null);
+
+	useEffect(() => {
+		if (inputRef.current) {
+			inputRef.current.focus();
+		}
+	}, []);
 
 	const handleChange =
 		(prop: keyof DeckDisplay) => (event: ChangeEvent<HTMLInputElement>) => {
@@ -40,9 +40,16 @@ export const DeckDisplayForm: React.FC<Props> = ({ onSubmit }) => {
 				[prop]: newValue,
 				...(prop === "value" && { label: newValue }),
 			}));
+			if (error) {
+				setError(null);
+			}
 		};
 
 	const handleSubmit = () => {
+		if (deckDisplay.value.length < 1) {
+			setError("Deck name cannot be blank.");
+			return;
+		}
 		onSubmit(deckDisplay);
 	};
 
@@ -52,9 +59,11 @@ export const DeckDisplayForm: React.FC<Props> = ({ onSubmit }) => {
 				label="Deck Name"
 				fullWidth
 				margin="normal"
-				// focused={true}
+				inputRef={inputRef} // Set ref to manage focus
 				onChange={handleChange("value")}
 				inputProps={{ maxLength: 35 }}
+				error={Boolean(error)}
+				helperText={error}
 			/>
 			<TextField
 				disabled
@@ -64,21 +73,6 @@ export const DeckDisplayForm: React.FC<Props> = ({ onSubmit }) => {
 				value={deckDisplay.format}
 				onChange={handleChange("format")}
 			/>
-			{/* @TODO: Add Sprites and autopopulate cards */}
-			{/* <TextField
-							label="Cards"
-							fullWidth
-							margin="normal"
-							value={newDeckDisplay.cards.join(", ")}
-							onChange={(e) => setNewDeckDisplay({ ...newDeckDisplay, cards: []})}
-						/>
-						<TextField
-							label="Sprites"
-							fullWidth
-							margin="normal"
-							value={newDeckDisplay.sprites.join(", ")}
-							onChange={(e) => setNewDeckDisplay({ ...newDeckDisplay, sprites: [] })}
-						/> */}
 			<Button
 				onClick={handleSubmit}
 				variant="outlined"

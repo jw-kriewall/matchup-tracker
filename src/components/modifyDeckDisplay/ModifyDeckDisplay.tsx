@@ -25,7 +25,7 @@ export default function ModifyDeckDisplay() {
 		(state) => state.deckDisplayReducer.deckDisplay
 	);
 	const [cookies] = useCookies(["userRole", "user", "format"]);
-	const [value, setValue] = React.useState(0);
+	const [value, setValue] = useState(0);
 	const dispatch = useAppDispatch();
 	const hardCodedDecks = getDecksForFormat(cookies.format).map(
 		(deck) => deck.value
@@ -35,7 +35,6 @@ export default function ModifyDeckDisplay() {
 	const handleClose = () => setOpen(false);
 
 	const handleFormSubmit = (newDeckDisplay: DeckDisplay) => {
-		// if(more than 10 deckDisplays, don't do anything)
 		if (deckDisplays.length >= 10) {
 			alert("You cannot have more than 10 decks.");
 			return;
@@ -53,7 +52,7 @@ export default function ModifyDeckDisplay() {
 				deckDisplay: newDeckDisplay,
 			})
 		);
-		// handleClose();
+		handleClose();
 	};
 
 	const style = {
@@ -120,8 +119,9 @@ export default function ModifyDeckDisplay() {
 				onClose={handleClose}
 				aria-labelledby="modal-title"
 				aria-describedby="modal-description"
+				onKeyDown={(e) => e.stopPropagation()} // Stop propagation of key events
 			>
-				<Box sx={style} tabIndex={-1}>
+				<Box sx={style} onKeyDown={(e) => e.stopPropagation()}>
 					<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
 						<Tabs
 							value={value}
