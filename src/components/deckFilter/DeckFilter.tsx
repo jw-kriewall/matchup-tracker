@@ -32,7 +32,7 @@ function DeckFilter({
     onSelectedDecksChange(value);
   };
 
-  const dynamicDecks = [...selectedDecks];
+  // const dynamicDecks = [...selectedDecks];
 
   return (
     <FormControl fullWidth>

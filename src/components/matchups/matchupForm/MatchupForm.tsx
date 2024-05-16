@@ -15,13 +15,13 @@ import { useAppDispatch } from "../../../hooks/hooks";
 import { useCookies } from "react-cookie";
 import DeckInputDropdown from "../../shared/deckInputDropdown";
 import SnackbarWarning from "../../snackbarNotifications/SnackbarWarning";
-import { getDecksForFormat } from "../../shared/getDecksForFormat";
+import sortDecksAlphabeticallyWithOtherAtEnd from "../../shared/sortAlphabeticallyWithOtherAtEnd";
 
 interface matchupFormProps {
-	userDeckDisplays: DeckDisplay[];
+	allDecks: DeckDisplay[];
 }
 
-export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
+export default function MatchupForm({ allDecks }: matchupFormProps) {
 	const [playerOneName, setPlayerOneName] = React.useState<string>("");
 	const [playerTwoName, setPlayerTwoName] = React.useState<string>("");
 	const [playerOneDeckName, setPlayerOneDeckName] = React.useState<string>("");
@@ -45,8 +45,6 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 		string[]
 	>([]);
 	  
-	const decks: DeckDisplay[] = getDecksForFormat(cookies.format);
-
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
@@ -75,7 +73,7 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 		let bestMatches: string[] = [];
 		let highestMatchCount = 0;
 
-		for (const deck of decks) {
+		for (const deck of allDecks) {
 			const matchCount = deck.cards.reduce(
 				(count, card) => (cards.has(card) ? count + 1 : count),
 				0
@@ -108,7 +106,7 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 		let currentPlayer = "";
 
 		const allCardNames = new Set<string>();
-		decks.forEach((deck) => {
+		allDecks.forEach((deck) => {
 			deck.cards.forEach((card) => allCardNames.add(card));
 		});
 
@@ -359,14 +357,14 @@ export default function MatchupForm({ userDeckDisplays }: matchupFormProps) {
 				<DeckInputDropdown
 					id="outlined-deck-one"
 					label="Player One Deck"
-					decks={decks.concat(userDeckDisplays)}
+					decks={sortDecksAlphabeticallyWithOtherAtEnd(allDecks)}
 					value={playerOneDeckName}
 					onChange={(e) => handlePlayerOneDeckChange(e)}
 				/>
 				<DeckInputDropdown
 					id="outlined-deck-two"
 					label="Player Two Deck"
-					decks={decks.concat(userDeckDisplays)}
+					decks={sortDecksAlphabeticallyWithOtherAtEnd(allDecks)}
 					value={playerTwoDeckName}
 					onChange={(e) => handlePlayerTwoDeckChange(e)}
 				/>

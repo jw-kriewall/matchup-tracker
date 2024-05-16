@@ -8,21 +8,32 @@ import "./TablePage.css";
 import PublicFaq from "../../components/publicFaq/PublicFaq";
 import { DeckDisplay } from "../../types/MatchupModels";
 import { getDecksForFormat } from "../../components/shared/getDecksForFormat";
-import { GoogleDataJson } from "../../types/GoogleDataJson";
+import { useSelector } from "react-redux";
+import { selectUserDeckDisplays } from "../../redux/DeckDisplaySlice";
+import { getUserDeckDisplay } from "../../apiCalls/deckDisplay/getUserDeckDisplay";
+import { useAppDispatch } from "../../hooks/hooks";
 
 export default function TablePage() {
-  const [cookies] = useCookies(["format"]);
-  const allDecks: DeckDisplay[] = getDecksForFormat(cookies.format);
-  // const allDecks = decks.map((deck) => deck.value);
+  const dispatch = useAppDispatch();
   const [selectedDecks, setSelectedDecks] = useState<string[]>([]);
-  const [userCookies] = useCookies(["user"]);
-  const userToken: string = userCookies["user"];
+  const [cookies] = useCookies(["user", "format"]);
+  const userToken = cookies.user;
+  const format: string = cookies.format;
+
+  const userDeckDisplays = useSelector(selectUserDeckDisplays);
+  const decks: DeckDisplay[] = getDecksForFormat(format);
 
   useEffect(() => {
-    const decks: DeckDisplay[] = getDecksForFormat(cookies.format);
-    const initialDecks = decks.map((deck) => deck.value);
+    if (userToken && userDeckDisplays.length === 0) {
+      const format: string = cookies.format;
+      dispatch(getUserDeckDisplay({ userToken, format }))
+        .catch((error) => console.error("Failed to fetch user deck displays:", error));
+    }
+  
+    const initialDecks = decks.map(deck => deck.value).concat(userDeckDisplays.map(deck => deck.value));
+    initialDecks.sort((a, b) => a.localeCompare(b));
     setSelectedDecks(initialDecks);
-  }, [cookies.format]);
+  }, [cookies.format, decks, dispatch, userDeckDisplays, userToken]);
 
   if (!userToken) {
     return (
@@ -46,16 +57,17 @@ export default function TablePage() {
           <div className="matchup-count">
             <CountMatchups selectedDecks={selectedDecks} user={userToken} />
           </div>
-          <div className="deck-filter">
+          {/* @TODO: Filter on x axis and y axis */}
+          {/* <div className="deck-filter">
             <DeckFilter
               selectedDecks={selectedDecks}
               onSelectedDecksChange={setSelectedDecks}
               allDecks={allDecks.map(deck => deck.value)}
             />
-          </div>
+          </div> */}
         </div>
         <div className="data-table">
-          <DataTable selectedDecks={selectedDecks} userToken={userToken} format={cookies.format}/>
+          <DataTable selectedDecks={selectedDecks} userToken={userToken} format={format}/>
         </div>
       </div>
     </div>

@@ -6,15 +6,21 @@ const version = process.env.REACT_APP_API_VERSION;
 
 export const getUserDeckDisplay = createAsyncThunk(
 	"userDeckDisplay/get",
-	async (userToken: string | undefined) => {
+	async ({
+		userToken,
+		format,
+	}: {
+		userToken: string | undefined;
+		format: string;
+	}) => {
 		try {
 			const response = await axios({
-				url: `${apiUrl}/api/${version}/user/deckdisplays`,
+				url: `${apiUrl}/api/${version}/deckdisplays/${format}`,
 				method: "GET",
 				headers: {
 					"Access-Control-Allow-Origin": "*",
 					"Access-Control-Allow-Methods": "GET",
-					Authorization: "Bearer " + userToken,
+					Authorization: `Bearer ${userToken}`,
 				},
 			});
 			const data = await response.data;

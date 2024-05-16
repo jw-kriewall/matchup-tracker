@@ -17,6 +17,7 @@ import React from "react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { useAppDispatch } from "../../hooks/hooks";
 import { getMatchups } from "../../apiCalls/matchups/getMatchups";
+import ModifyDeckDisplay from "../modifyDeckDisplay/ModifyDeckDisplay";
 
 export function ProfileDropdown() {
 	const [open, setOpen] = React.useState(false);
@@ -81,11 +82,14 @@ export function ProfileDropdown() {
 						maxWidth: 360,
 						minWidth: 200,
 						bgcolor: "background.paper",
+						paddingBottom: "0px",
+						paddingTop: "0px"
 					}}
 					component="nav"
 					aria-labelledby="nested-list-subheader"
 				>
-					<ListItemButton onClick={handleClick}>
+					{/* @TODO: Fix padding on menu dropdown - i.e. remove sx in listItemButton below */}
+					<ListItemButton onClick={handleClick} sx={{ paddingBottom: '2px' }}>
 						<ListItemText primary="Format" />
 						{open ? <ExpandLess /> : <ExpandMore />}
 					</ListItemButton>
@@ -118,6 +122,8 @@ export function ProfileDropdown() {
 						</List>
 					</Collapse>
 				</List>
+
+				<ModifyDeckDisplay />
 
 				<LogoutButton />
 			</Menu>

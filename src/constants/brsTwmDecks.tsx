@@ -155,6 +155,22 @@ export const BRS_TWM_DECKS_CONSTANT: DeckDisplay[] = [
 		],
 	},
 	{
+		value: "Festival Lead",
+		label: "Festival Lead",
+		format: "BRS-TWM",
+		cards: [
+			"Applin",
+			"Dipplin",
+			"Grookey",
+			"Thwackey",
+			"Festival Grounds",
+		],
+		sprites: [
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1011.png",
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/811.png",
+		],
+	},
+	{
 		value: "Gardevoir",
 		label: "Gardevoir",
 		format: "BRS-TWM",
@@ -307,6 +323,36 @@ export const BRS_TWM_DECKS_CONSTANT: DeckDisplay[] = [
 			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/908.png",
 		],
 	},
+	{
+		value: "Miraidon",
+		label: "Miraidon",
+		format: "BRS-TWM",
+		cards: [
+			"Miraidon",
+			"Electric Generator",
+			"Iron Hands",
+			"Raikou",
+		],
+		sprites: [
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1008.png",
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/992.png",
+		],
+	},
+	{
+		value: "Pidgeot Control",
+		label: "Pidgeot Control",
+		format: "BRS-TWM",
+		cards: [
+			"Pidgey",
+			"Pidgeot",
+			"Miss Fortune Sisters",
+			"Luxray",
+			"Jigglypuff",
+		],
+		sprites: [
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/18.png",
+		],
+	},
     {
 		value: "Raging Bolt ex / Teal Mask Ogerpon ex",
 		label: "Raging Bolt ex / Teal Mask Ogerpon ex",
@@ -320,6 +366,17 @@ export const BRS_TWM_DECKS_CONSTANT: DeckDisplay[] = [
 		sprites: [
 			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1021.png",
 			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1017.png",
+		],
+	},
+	{
+		value: "Regidrago VStar",
+		label: "Regidrago VStar",
+		format: "BRS-TWM",
+		cards: [
+			"Regidrago",
+		],
+		sprites: [
+			"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/895.png",
 		],
 	},
 	{
