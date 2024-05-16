@@ -15,9 +15,9 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { useCookies } from "react-cookie";
 import { DeckDisplayForm } from "./AddDeckForm";
 import { DeckDisplay } from "../../types/MatchupModels";
-import CloseIcon from "@mui/icons-material/Close";
 import { deleteDeckDisplay } from "../../apiCalls/deckDisplay/deleteDeckDisplay";
 import { getDecksForFormat } from "../shared/getDecksForFormat";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function ModifyDeckDisplay() {
 	const [open, setOpen] = useState(false);
@@ -121,7 +121,7 @@ export default function ModifyDeckDisplay() {
 				aria-labelledby="modal-title"
 				aria-describedby="modal-description"
 			>
-				<Box sx={style}>
+				<Box sx={style} tabIndex={-1}>
 					<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
 						<Tabs
 							value={value}

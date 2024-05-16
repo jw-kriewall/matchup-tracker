@@ -14,16 +14,16 @@ interface Props {
 	onSubmit: (deckDisplay: DeckDisplay) => void; // Prop to handle the submit action
 }
 
-document.addEventListener('keydown', (event) => {
-    // if (event.key === 'f') {
-    //     console.log('f key pressed');
-    //     event.preventDefault();
-    // }
-	console.log(event.key);
-});
+// document.addEventListener('keydown', (event) => {
+//     // if (event.key === 'f') {
+//     //     console.log('f key pressed');
+//     //     event.preventDefault();
+//     // }
+// 	console.log(event.key);
+// });
 
 export const DeckDisplayForm: React.FC<Props> = ({ onSubmit }) => {
-    const [cookies] = useCookies(["format"]);
+	const [cookies] = useCookies(["format"]);
 	const [deckDisplay, setDeckDisplay] = useState<DeckDisplay>({
 		value: "",
 		label: "",
@@ -33,42 +33,38 @@ export const DeckDisplayForm: React.FC<Props> = ({ onSubmit }) => {
 	});
 
 	const handleChange =
-        (prop: keyof DeckDisplay) => (event: ChangeEvent<HTMLInputElement>) => {
-            const newValue = event.target.value;
-            setDeckDisplay(prev => ({
-                ...prev,
-                [prop]: newValue,
-                ...(prop === 'value' && { label: newValue })
-            }));
-        };
+		(prop: keyof DeckDisplay) => (event: ChangeEvent<HTMLInputElement>) => {
+			const newValue = event.target.value;
+			setDeckDisplay((prev) => ({
+				...prev,
+				[prop]: newValue,
+				...(prop === "value" && { label: newValue }),
+			}));
+		};
 
 	const handleSubmit = () => {
 		onSubmit(deckDisplay);
 	};
 
 	return (
-		<Box
-			display="flex"
-            flexDirection="column"
-            alignItems="flex-end"
-		>
+		<Box display="flex" flexDirection="column" alignItems="flex-end">
 			<TextField
 				label="Deck Name"
 				fullWidth
 				margin="normal"
-				focused={true}
+				// focused={true}
 				onChange={handleChange("value")}
 				inputProps={{ maxLength: 35 }}
 			/>
 			<TextField
-                disabled
+				disabled
 				label="Format"
 				fullWidth
 				margin="normal"
 				value={deckDisplay.format}
 				onChange={handleChange("format")}
 			/>
-            {/* @TODO: Add Sprites and autopopulate cards */}
+			{/* @TODO: Add Sprites and autopopulate cards */}
 			{/* <TextField
 							label="Cards"
 							fullWidth
@@ -83,7 +79,12 @@ export const DeckDisplayForm: React.FC<Props> = ({ onSubmit }) => {
 							value={newDeckDisplay.sprites.join(", ")}
 							onChange={(e) => setNewDeckDisplay({ ...newDeckDisplay, sprites: [] })}
 						/> */}
-			<Button onClick={handleSubmit} variant="outlined" color="primary" sx={{marginTop: "10px"}}>
+			<Button
+				onClick={handleSubmit}
+				variant="outlined"
+				color="primary"
+				sx={{ marginTop: "10px" }}
+			>
 				Submit Deck
 			</Button>
 		</Box>
