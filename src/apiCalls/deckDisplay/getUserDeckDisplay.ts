@@ -23,7 +23,7 @@ export const getUserDeckDisplay = createAsyncThunk(
 					Authorization: `Bearer ${userToken}`,
 				},
 			});
-			const data = await response.data;
+			const data = response.data;
 			return data;
 		} catch (error) {
 			console.log(error);
