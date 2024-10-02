@@ -18,6 +18,7 @@
     "axios": "^1.4.0",
     "gapi-script": "^1.2.0",
     "jwt-decode": "^3.1.2",
+    "matchup-tracker": "file:",
     "react": "^18.2.0",
     "react-cookie": "^7.0.1",
     "react-dom": "^18.2.0",
