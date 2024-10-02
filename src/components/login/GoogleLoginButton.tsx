@@ -50,7 +50,7 @@ export default function GoogleLoginButton({ closeModal }: any) {
 					setCookie("refresh-token", data.refresh_token, { path: "/", maxAge: 3600 * 24 * 30 });
 
 					if (!cookies.format) {
-						setCookie("format", "BRS-TEF", {
+						setCookie("format", "BRS-SCR", {
 							path: "/",
 							maxAge: 3600 * 24 * 30,
 						}); // Max Age: 30 days
